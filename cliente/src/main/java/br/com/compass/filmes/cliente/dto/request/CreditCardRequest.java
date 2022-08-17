@@ -21,6 +21,6 @@ public class CreditCardRequest {
     @NotBlank
     private String clientCreditCardMonthExpiration;
     @NotBlank
-    @Pattern(regexp = "^[A-Za-z]*$", message = "Apenas letras devem ser usadas.")
+    @Pattern(regexp = "^[A-Za-z]*$", message = "Only letters can be used.")
     private String clientCreditCardHolderName;
 }
