@@ -1,6 +1,7 @@
 package br.com.compass.filmes.cliente.controller;
 
 import br.com.compass.filmes.cliente.dto.client.request.RequestClient;
+import br.com.compass.filmes.cliente.dto.client.request.RequestClientAccountStatus;
 import br.com.compass.filmes.cliente.dto.client.response.ResponseClient;
 import br.com.compass.filmes.cliente.service.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,13 @@ public class ClientController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseClient> returnClientById(@PathVariable String id) {
         ResponseClient responseClient = clientService.returnClientById(id);
+        return ResponseEntity.ok(responseClient);
+    }
+
+    @PostMapping("/account/{id}")
+    public ResponseEntity<ResponseClient> setClientAccountStatus(@PathVariable String id,
+                                                                 @RequestBody @Valid RequestClientAccountStatus requestClientAccountStatus){
+        ResponseClient responseClient = clientService.setClientAccountStatus(id, requestClientAccountStatus);
         return ResponseEntity.ok(responseClient);
     }
 }
