@@ -1,5 +1,6 @@
 package br.com.compass.filmes.cliente.service;
 
+import br.com.compass.filmes.cliente.dto.client.request.RequestClient;
 import br.com.compass.filmes.cliente.dto.client.response.ResponseClient;
 import br.com.compass.filmes.cliente.entities.ClientEntity;
 import br.com.compass.filmes.cliente.repository.ClientRepository;
@@ -19,6 +20,12 @@ public class ClientService {
     private final ClientRepository clientRepository;
 
     private final ModelMapper modelMapper;
+
+    public ResponseClient post(RequestClient requestCLient){
+        ClientEntity client = modelMapper.map(requestCLient, ClientEntity.class);
+        ClientEntity saveClient = clientRepository.save(client);
+        return modelMapper.map(saveClient, ResponseClient.class);
+    }
 
     public List<ResponseClient> returnAllClients() {
         List<ClientEntity> clientEntityList = clientRepository.findAll();
