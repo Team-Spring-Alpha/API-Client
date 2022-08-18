@@ -37,7 +37,7 @@ public class ClientController {
         return ResponseEntity.ok(responseClient);
     }
 
-    @PostMapping("/account/{id}")
+    @PatchMapping("/account/{id}")
     public ResponseEntity<ResponseClient> setStatusClientAccount(@PathVariable String id,
                                                                  @RequestBody @Valid RequestSetStatusClientAccount requestSetStatusClientAccount){
         ResponseClient responseClient = clientService.setStatusClientAccount(id, requestSetStatusClientAccount);
