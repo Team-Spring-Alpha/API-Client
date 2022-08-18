@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Document(collection = "Client")
@@ -19,6 +19,6 @@ public class ClientEntity {
     private String clientPassword;
     private boolean clientIsBlocked = false;
     private LocalDate clientBirthDate;
-    private Set<CreditCardEntity> creditCards;
-    private Set<ClientCategoryEnum> clientCategory;
+    private List<CreditCardEntity> creditCards;
+    private List<ClientCategoryEnum> clientCategory;
 }

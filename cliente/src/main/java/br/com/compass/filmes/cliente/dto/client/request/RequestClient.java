@@ -1,18 +1,13 @@
 package br.com.compass.filmes.cliente.dto.client.request;
 
-import br.com.compass.filmes.cliente.entities.CreditCardEntity;
-import br.com.compass.filmes.cliente.enums.ClientCategoryEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.hibernate.validator.constraints.CreditCardNumber;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class RequestClient {
@@ -32,7 +27,7 @@ public class RequestClient {
     private String clientCpf;
     @NotNull
     @Size(min = 1)
-    private Set<@Valid RequestCreditCard> creditCards;
+    private List<@Valid RequestCreditCard> creditCards;
     @NotNull
-    private Set<String> clientCategory;
+    private List<String> clientCategory;
 }
