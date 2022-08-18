@@ -32,7 +32,7 @@ public class RequestClient {
     private String clientCpf;
     @NotNull
     @Size(min = 1)
-    private List<@Valid RequestCreditCard> creditCards;
-    @NotBlank
-    private List<String> clientCategory;
+    private Set<@Valid RequestCreditCard> creditCards;
+    @NotNull
+    private Set<String> clientCategory;
 }

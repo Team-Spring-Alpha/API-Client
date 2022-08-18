@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -18,7 +18,7 @@ public class ClientEntity {
     private String clientEmail;
     private String clientPassword;
     private boolean clientIsBlocked = false;
-    private LocalDateTime clientBirthDate;
-    private CreditCardEntity creditCards;
+    private LocalDate clientBirthDate;
+    private Set<CreditCardEntity> creditCards;
     private Set<ClientCategoryEnum> clientCategory;
 }
