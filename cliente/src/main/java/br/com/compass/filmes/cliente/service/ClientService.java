@@ -1,6 +1,7 @@
 package br.com.compass.filmes.cliente.service;
 
 import br.com.compass.filmes.cliente.dto.client.request.RequestClient;
+import br.com.compass.filmes.cliente.dto.client.request.RequestClientUpdate;
 import br.com.compass.filmes.cliente.dto.client.response.ResponseClient;
 import br.com.compass.filmes.cliente.entities.ClientEntity;
 import br.com.compass.filmes.cliente.repository.ClientRepository;
@@ -34,6 +35,13 @@ public class ClientService {
 
     public ResponseClient returnClientById(String id) {
         ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return modelMapper.map(clientEntity, ResponseClient.class);
+    }
+
+    public ResponseClient atualiza(String id, RequestClientUpdate requestClientUpdate) {
+        ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        modelMapper.map(requestClientUpdate, clientEntity);
+        clientRepository.save(clientEntity);
         return modelMapper.map(clientEntity, ResponseClient.class);
     }
 }
