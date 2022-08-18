@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 @Data
 public class ResponseClient {
     private String id;
-    private String ClientName;
-    private LocalDateTime ClientBirthDate;
-    private boolean ClientIsBlocked;
-    private ResponseCreditCard CreditCards;
+    private String clientName;
+    private LocalDateTime clientBirthDate;
+    private boolean clientIsBlocked;
+    private ResponseCreditCard creditCards;
 }

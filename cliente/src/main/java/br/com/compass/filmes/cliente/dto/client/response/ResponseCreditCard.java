@@ -5,5 +5,5 @@ import lombok.Data;
 
 @Data
 public class ResponseCreditCard {
-    private ClientCreditCardBrandEnum ClientCreditCardBrand;
+    private ClientCreditCardBrandEnum clientCreditCardBrand;
 }
