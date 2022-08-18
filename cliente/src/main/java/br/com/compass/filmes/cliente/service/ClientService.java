@@ -38,7 +38,7 @@ public class ClientService {
         return modelMapper.map(clientEntity, ResponseClient.class);
     }
 
-    public ResponseClient atualiza(String id, RequestClientUpdate requestClientUpdate) {
+    public ResponseClient patch(String id, RequestClientUpdate requestClientUpdate) {
         ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(requestClientUpdate, clientEntity);
         clientRepository.save(clientEntity);
