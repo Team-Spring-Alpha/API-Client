@@ -14,16 +14,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class RequestClientUpdate {
 
     @Email
     private String clientEmail;
-    @Pattern(regexp = "^[A-Za-z]*$", message = "Apenas letras devem ser usadas.")
+    @Pattern(regexp = "^[A-Za-z]*$", message = "Only letters should be used. And should be capitalized.")
     private String clientName;
     private String clientPassword;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime clientBirthDate;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate clientBirthDate;
 }

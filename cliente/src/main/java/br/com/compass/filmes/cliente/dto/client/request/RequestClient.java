@@ -16,7 +16,7 @@ public class RequestClient {
     @Email
     private String clientEmail;
     @NotBlank
-    @Pattern(regexp = "^[A-Z][A-Za-z ]*$", message = "Only letter should be used. And should be capitalized")
+    @Pattern(regexp = "^[A-Z][A-Za-z ]*$", message = "Only letters should be used. And should be capitalized")
     private String clientName;
     @NotBlank
     private String clientPassword;
