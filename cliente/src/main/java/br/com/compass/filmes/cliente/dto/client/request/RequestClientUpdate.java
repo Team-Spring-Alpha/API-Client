@@ -18,7 +18,7 @@ public class RequestClientUpdate {
 
     @Email
     private String clientEmail;
-    @Pattern(regexp = "^[A-Za-z]*$", message = "Only letters should be used. And should be capitalized.")
+    @Pattern(regexp = "^[A-Z][A-Za-z ]*$", message = "Only letters should be used. And should be capitalized.")
     private String clientName;
     private String clientPassword;
     @JsonFormat(pattern = "dd/MM/yyyy")
