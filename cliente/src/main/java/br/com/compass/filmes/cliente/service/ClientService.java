@@ -2,6 +2,7 @@ package br.com.compass.filmes.cliente.service;
 
 import br.com.compass.filmes.cliente.dto.client.request.RequestClient;
 import br.com.compass.filmes.cliente.dto.client.request.RequestClientUpdate;
+import br.com.compass.filmes.cliente.dto.client.request.RequestSetStatusClientAccount;
 import br.com.compass.filmes.cliente.dto.client.response.ResponseClient;
 import br.com.compass.filmes.cliente.entities.ClientEntity;
 import br.com.compass.filmes.cliente.repository.ClientRepository;
@@ -38,9 +39,16 @@ public class ClientService {
         return modelMapper.map(clientEntity, ResponseClient.class);
     }
 
+
     public ResponseClient patch(String id, RequestClientUpdate requestClientUpdate) {
+
         ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(requestClientUpdate, clientEntity);
+
+    public ResponseClient setStatusClientAccount(String id, RequestSetStatusClientAccount requestSetStatusClientAccount){
+        ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        boolean clientIsBlocked = requestSetStatusClientAccount.isClientIsBlocked();
+        clientEntity.setClientIsBlocked(clientIsBlocked);
         clientRepository.save(clientEntity);
         return modelMapper.map(clientEntity, ResponseClient.class);
     }
