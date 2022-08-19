@@ -29,5 +29,5 @@ public class RequestClient {
     @Size(min = 1)
     private List<@Valid RequestCreditCard> creditCards;
     @NotNull
-    private List<String> clientCategory;
+    private String clientCategory;
 }
