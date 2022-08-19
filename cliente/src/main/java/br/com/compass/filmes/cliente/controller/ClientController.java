@@ -47,6 +47,7 @@ public class ClientController {
                                                    @RequestBody RequestClientUpdate requestClientUpdate) {
         ResponseClient responseDto = clientService.atualiza(id, requestClientUpdate);
         return ResponseEntity.ok(responseDto);
+    }
 
     @PatchMapping("/account/{id}")
     public ResponseEntity<ResponseClient> setStatusClientAccount(@PathVariable String id,
