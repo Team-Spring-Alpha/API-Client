@@ -30,4 +30,5 @@ public class RequestClient {
     private List<@Valid RequestCreditCard> creditCards;
     @NotNull
     private List<String> clientCategory;
+    private String test;
 }
