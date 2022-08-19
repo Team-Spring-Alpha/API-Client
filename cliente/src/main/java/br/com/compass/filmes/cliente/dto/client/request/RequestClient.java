@@ -16,14 +16,15 @@ public class RequestClient {
     @Email
     private String clientEmail;
     @NotBlank
-    @Pattern(regexp = "^[A-Za-z]*$", message = "Apenas letras devem ser usadas.")
+    @Pattern(regexp = "^[A-Za-z]*$", message = "Only letter should be used")
     private String clientName;
     @NotBlank
     private String clientPassword;
-    @NotBlank
+    @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate clientBirthDate;
     @CPF
+    @NotNull
     private String clientCpf;
     @NotNull
     @Size(min = 1)
