@@ -3,8 +3,10 @@ package br.com.compass.filmes.cliente.service;
 import br.com.compass.filmes.cliente.builders.ClientEntityBuilder;
 import br.com.compass.filmes.cliente.builders.RequestClientBuilder;
 import br.com.compass.filmes.cliente.builders.RequestCreditCardBuilder;
+import br.com.compass.filmes.cliente.builders.RequestSetStatusClientAccountBuilder;
 import br.com.compass.filmes.cliente.dto.client.request.RequestClient;
 import br.com.compass.filmes.cliente.dto.client.request.RequestCreditCard;
+import br.com.compass.filmes.cliente.dto.client.request.RequestSetStatusClientAccount;
 import br.com.compass.filmes.cliente.dto.client.response.ResponseClient;
 import br.com.compass.filmes.cliente.entities.ClientEntity;
 import br.com.compass.filmes.cliente.repository.ClientRepository;
@@ -25,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -185,4 +188,47 @@ class ClientServiceTest {
         Assertions.assertThrows(ResponseStatusException.class, () -> clientService.post(requestClient));
     }
 
+    @Test
+    @DisplayName("should set the client's status account as blocked")
+    void shouldSetTheClientStatusAccountAsBlocked(){
+        RequestClient requestClient = RequestClientBuilder.one().now();
+        ClientEntity clientEntity = ClientEntityBuilder.one().withRequestClient(requestClient).now();
+        RequestSetStatusClientAccount requestSetStatusClientAccount =
+                RequestSetStatusClientAccountBuilder.blocked().now();
+
+        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.of(clientEntity));
+
+        ResponseClient responseClient = clientService.setStatusClientAccount("1",
+                requestSetStatusClientAccount);
+
+        Mockito.verify(clientRepository).save(clientEntity);
+        Assertions.assertTrue(responseClient.isClientIsBlocked());
+    }
+    @Test
+    @DisplayName("should set the client's status account as unlocked")
+    void shouldSetTheClientStatusAccountAsUnlocked(){
+        RequestClient requestClient = RequestClientBuilder.one().now();
+        ClientEntity clientEntity = ClientEntityBuilder.one().withRequestClient(requestClient).now();
+        RequestSetStatusClientAccount requestSetStatusClientAccount =
+                RequestSetStatusClientAccountBuilder.unlocked().now();
+
+        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.of(clientEntity));
+
+        ResponseClient responseClient = clientService.setStatusClientAccount("1",
+                requestSetStatusClientAccount);
+
+        Mockito.verify(clientRepository).save(clientEntity);
+        Assertions.assertFalse(responseClient.isClientIsBlocked());
+    }
+    @Test
+    @DisplayName("should throw exception when try update a client with id nonexistent")
+    void shouldThrowExceptionWhenTryUpdateAClientWithIdNonexistent(){
+        RequestClient requestClient = RequestClientBuilder.one().now();
+        ClientEntity clientEntity = ClientEntityBuilder.one().withRequestClient(requestClient).now();
+        RequestSetStatusClientAccount requestSetStatusClientAccount =
+                RequestSetStatusClientAccountBuilder.blocked().now();
+
+        Assertions.assertThrows(ResponseStatusException.class, () -> clientService
+                .setStatusClientAccount("2", requestSetStatusClientAccount));
+    }
 }

@@ -21,6 +21,7 @@ public class ClientEntityBuilder {
         ClientEntityBuilder builder = new ClientEntityBuilder();
         builder.clientEntity = new ClientEntity();
 
+        builder.clientEntity.setId("1");
         builder.clientEntity.setClientName("Jetosvaldo");
         builder.clientEntity.setClientCpf("686.751.800-12");
         builder.clientEntity.setClientEmail("yosope1626@wnpop.com");
