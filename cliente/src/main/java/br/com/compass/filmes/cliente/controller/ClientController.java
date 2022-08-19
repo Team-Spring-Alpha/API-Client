@@ -1,6 +1,7 @@
 package br.com.compass.filmes.cliente.controller;
 
 import br.com.compass.filmes.cliente.dto.client.request.RequestClient;
+import br.com.compass.filmes.cliente.dto.client.request.RequestClientUpdate;
 import br.com.compass.filmes.cliente.dto.client.request.RequestSetStatusClientAccount;
 import br.com.compass.filmes.cliente.dto.client.response.ResponseClient;
 import br.com.compass.filmes.cliente.service.ClientService;
@@ -40,10 +41,18 @@ public class ClientController {
         return ResponseEntity.ok(responseClient);
     }
 
+    @Transactional
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseClient> atualiza(@PathVariable String id,
+                                                   @RequestBody RequestClientUpdate requestClientUpdate) {
+        ResponseClient responseDto = clientService.atualiza(id, requestClientUpdate);
+        return ResponseEntity.ok(responseDto);
+
     @PatchMapping("/account/{id}")
     public ResponseEntity<ResponseClient> setStatusClientAccount(@PathVariable String id,
                                                                  @RequestBody @Valid RequestSetStatusClientAccount requestSetStatusClientAccount){
         ResponseClient responseClient = clientService.setStatusClientAccount(id, requestSetStatusClientAccount);
         return ResponseEntity.ok(responseClient);
+
     }
 }
