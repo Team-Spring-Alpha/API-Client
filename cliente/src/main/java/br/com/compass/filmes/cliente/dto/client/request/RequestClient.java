@@ -1,18 +1,13 @@
 package br.com.compass.filmes.cliente.dto.client.request;
 
-import br.com.compass.filmes.cliente.entities.CreditCardEntity;
-import br.com.compass.filmes.cliente.enums.ClientCategoryEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.hibernate.validator.constraints.CreditCardNumber;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class RequestClient {
@@ -21,18 +16,18 @@ public class RequestClient {
     @Email
     private String clientEmail;
     @NotBlank
-    @Pattern(regexp = "^[A-Za-z]*$", message = "Apenas letras devem ser usadas.")
+    @Pattern(regexp = "^[A-Z][A-Za-z ]*$", message = "Only letter should be used. And should be capitalized")
     private String clientName;
     @NotBlank
     private String clientPassword;
-    @NotBlank
+    @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate clientBirthDate;
     @CPF
-    private String clientCpf;
     @NotNull
+    private String clientCpf;
     @Size(min = 1)
     private List<@Valid RequestCreditCard> creditCards;
-    @NotBlank
+    @NotNull
     private List<String> clientCategory;
 }

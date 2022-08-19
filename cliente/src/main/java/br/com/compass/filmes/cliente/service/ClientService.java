@@ -6,6 +6,9 @@ import br.com.compass.filmes.cliente.dto.client.request.RequestSetStatusClientAc
 import br.com.compass.filmes.cliente.dto.client.response.ResponseClient;
 import br.com.compass.filmes.cliente.entities.ClientEntity;
 import br.com.compass.filmes.cliente.repository.ClientRepository;
+import br.com.compass.filmes.cliente.util.Md5;
+import br.com.compass.filmes.cliente.util.ValidRequestClient;
+import br.com.compass.filmes.cliente.util.ValidRequestCreditCard;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -23,10 +26,27 @@ public class ClientService {
 
     private final ModelMapper modelMapper;
 
+    private final Md5 md5;
+
+    private final ValidRequestClient validRequestClient;
+
+    private final ValidRequestCreditCard validRequestCreditCard;
+
     public ResponseClient post(RequestClient requestCLient){
+        validRequestClient.validRequestClient(requestCLient);
+        validListOfRequestCreditCards(requestCLient);
+
         ClientEntity client = modelMapper.map(requestCLient, ClientEntity.class);
+        client.setClientPassword(md5.ToMd5(client.getClientPassword()));
+
         ClientEntity saveClient = clientRepository.save(client);
         return modelMapper.map(saveClient, ResponseClient.class);
+    }
+
+    private void validListOfRequestCreditCards(RequestClient requestCLient) {
+        for (int i = 0; i < requestCLient.getCreditCards().size(); i++) {
+            validRequestCreditCard.validRequestCreditCard(requestCLient.getCreditCards().get(i));
+        }
     }
 
     public List<ResponseClient> returnAllClients() {
@@ -44,6 +64,9 @@ public class ClientService {
 
         ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(requestClientUpdate, clientEntity);
+        ClientEntity savedClientEntity = clientRepository.save(clientEntity);
+        return modelMapper.map(savedClientEntity, ResponseClient.class);
+    }
 
     public ResponseClient setStatusClientAccount(String id, RequestSetStatusClientAccount requestSetStatusClientAccount){
         ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
