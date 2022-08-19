@@ -40,9 +40,9 @@ public class ClientController {
 
     @Transactional
     @PatchMapping("/{id}")
-    public ResponseEntity<ResponseClient> atualiza(@PathVariable String id,
+    public ResponseEntity<ResponseClient> patch(@PathVariable String id,
                                                    @RequestBody RequestClientUpdate requestClientUpdate) {
-        ResponseClient responseDto = clientService.atualiza(id, requestClientUpdate);
+        ResponseClient responseDto = clientService.patch(id, requestClientUpdate);
         return ResponseEntity.ok(responseDto);
 
     @PatchMapping("/account/{id}")
