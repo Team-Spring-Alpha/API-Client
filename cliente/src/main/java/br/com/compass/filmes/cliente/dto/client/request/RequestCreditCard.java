@@ -20,6 +20,6 @@ public class RequestCreditCard {
     @NotBlank
     private String clientCreditCardMonthExpiration;
     @NotBlank
-    @Pattern(regexp = "^[A-Za-z]*$", message = "Only letters can be used.")
+    @Pattern(regexp = "^[A-Z][A-Za-z ]*$", message = "Only letters can be used. And should be capitalized")
     private String clientCreditCardHolderName;
 }

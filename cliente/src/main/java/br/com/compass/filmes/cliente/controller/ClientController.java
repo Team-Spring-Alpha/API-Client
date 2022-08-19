@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,9 +22,10 @@ public class ClientController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<ResponseClient> post(@Valid @RequestBody RequestClient requestClient){
+    public ResponseEntity<ResponseClient> post(@Valid @RequestBody RequestClient requestClient, UriComponentsBuilder uriComponentsBuilder){
         ResponseClient responseClient = clientService.post(requestClient);
-        return ResponseEntity.ok(responseClient);
+        URI uri = uriComponentsBuilder.path("/api/client/{id}").buildAndExpand(responseClient.getId()).toUri();
+        return ResponseEntity.created(uri).body(responseClient);
     }
 
     @GetMapping

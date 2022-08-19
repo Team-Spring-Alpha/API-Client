@@ -16,7 +16,7 @@ public class RequestClient {
     @Email
     private String clientEmail;
     @NotBlank
-    @Pattern(regexp = "^[A-Za-z]*$", message = "Only letter should be used")
+    @Pattern(regexp = "^[A-Z][A-Za-z ]*$", message = "Only letter should be used. And should be capitalized")
     private String clientName;
     @NotBlank
     private String clientPassword;
@@ -26,7 +26,6 @@ public class RequestClient {
     @CPF
     @NotNull
     private String clientCpf;
-    @NotNull
     @Size(min = 1)
     private List<@Valid RequestCreditCard> creditCards;
     @NotNull
