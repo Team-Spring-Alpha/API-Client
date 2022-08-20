@@ -26,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -230,5 +231,29 @@ class ClientServiceTest {
 
         Assertions.assertThrows(ResponseStatusException.class, () -> clientService
                 .setStatusClientAccount("2", requestSetStatusClientAccount));
+    }
+
+    @Test
+    @DisplayName("Should bring all client")
+    public void shouldFindAllClient(){
+        List<ResponseClient> list = new ArrayList<>();
+        Mockito.when(clientService.returnAllClients()).thenReturn(list);
+    }
+
+    @Test
+    @DisplayName("Should bring a client by id")
+    public void shouldFindClientById(){
+        RequestClient requestClient = RequestClientBuilder.one().now();
+        ClientEntity clientEntity = ClientEntityBuilder.one().withRequestClient(requestClient).now();
+        Mockito.when(clientRepository.findById(clientEntity.getId())).thenReturn(Optional.of(clientEntity));
+        clientService.returnClientById(clientEntity.getId());
+        Mockito.verify(clientRepository, Mockito.times(1)).findById(clientEntity.getId());
+    }
+
+    @Test
+    @DisplayName("Shouldn't find a client by id and should throw an exception")
+    public void shouldNotFindClientById(){
+        Assertions.assertThrows(ResponseStatusException.class, () -> clientService
+                .returnClientById("2"));
     }
 }
