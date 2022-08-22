@@ -1,10 +1,8 @@
 package br.com.compass.filmes.cliente.service;
 
-import br.com.compass.filmes.cliente.builders.ClientEntityBuilder;
-import br.com.compass.filmes.cliente.builders.RequestClientBuilder;
-import br.com.compass.filmes.cliente.builders.RequestCreditCardBuilder;
-import br.com.compass.filmes.cliente.builders.RequestSetStatusClientAccountBuilder;
+import br.com.compass.filmes.cliente.builders.*;
 import br.com.compass.filmes.cliente.dto.client.request.RequestClient;
+import br.com.compass.filmes.cliente.dto.client.request.RequestClientUpdate;
 import br.com.compass.filmes.cliente.dto.client.request.RequestCreditCard;
 import br.com.compass.filmes.cliente.dto.client.request.RequestSetStatusClientAccount;
 import br.com.compass.filmes.cliente.dto.client.response.ResponseClient;
@@ -221,8 +219,8 @@ class ClientServiceTest {
         Assertions.assertFalse(responseClient.isClientIsBlocked());
     }
     @Test
-    @DisplayName("should throw exception when try update a client with id nonexistent")
-    void shouldThrowExceptionWhenTryUpdateAClientWithIdNonexistent(){
+    @DisplayName("should throw an exception when the setStatusClientAccount method receives a nonexistent id")
+    void shouldThrowAnExceptionWhenTheSetStatusClientAccountMethodReceivesANonexistentId(){
         RequestClient requestClient = RequestClientBuilder.one().now();
         ClientEntity clientEntity = ClientEntityBuilder.one().withRequestClient(requestClient).now();
         RequestSetStatusClientAccount requestSetStatusClientAccount =
@@ -230,5 +228,34 @@ class ClientServiceTest {
 
         Assertions.assertThrows(ResponseStatusException.class, () -> clientService
                 .setStatusClientAccount("2", requestSetStatusClientAccount));
+    }
+
+    @Test
+    @DisplayName("should successful update a client")
+    void shouldSuccessfulUpdateAClient(){
+        RequestClient requestClient = RequestClientBuilder.one().now();
+        ClientEntity clientEntity = ClientEntityBuilder.one().withRequestClient(requestClient).now();
+        RequestClientUpdate clientUpdate = RequestClientUpdateBuilder.one().now();
+
+        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.of(clientEntity));
+        Mockito.when(clientRepository.save(any())).thenReturn(clientEntity);
+
+        ResponseClient responseClient = clientService.patch("idTeste", clientUpdate);
+
+        Assertions.assertEquals(clientEntity.getClientEmail(), clientUpdate.getClientEmail());
+        Assertions.assertEquals(clientEntity.getClientPassword(), clientUpdate.getClientPassword());
+        Assertions.assertEquals(clientEntity.getClientName(), responseClient.getClientName());
+        Assertions.assertEquals(clientEntity.getClientBirthDate(), responseClient.getClientBirthDate());
+    }
+
+    @Test
+    @DisplayName("should throw an exception when the patch method receives a nonexistent id")
+    void shouldThrowAnExceptionWhenThePatchMethodReceivesANonexistentId(){
+        RequestClient requestClient = RequestClientBuilder.one().now();
+        ClientEntity clientEntity = ClientEntityBuilder.one().withRequestClient(requestClient).now();
+        RequestClientUpdate clientUpdate = RequestClientUpdateBuilder.one().now();
+
+        Assertions.assertThrows(ResponseStatusException.class, () -> clientService
+                .patch("2", clientUpdate));
     }
 }
