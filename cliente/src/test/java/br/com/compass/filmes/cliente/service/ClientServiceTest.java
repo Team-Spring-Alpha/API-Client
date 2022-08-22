@@ -24,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -257,5 +258,33 @@ class ClientServiceTest {
 
         Assertions.assertThrows(ResponseStatusException.class, () -> clientService
                 .patch("2", clientUpdate));
+    }
+
+    @Test
+    @DisplayName("Should bring all client")
+    public void shouldFindAllClient(){
+        Mockito.when(clientRepository.findAll()).thenReturn(Arrays.asList(ClientEntityBuilder.one().now()));
+        List<ResponseClient> listClient = clientService.returnAllClients();
+        Assertions.assertNotNull(listClient);
+        Assertions.assertEquals(1, listClient.size());
+        Assertions.assertEquals("Jetosvaldo", listClient.get(0).getClientName());
+    }
+
+    @Test
+    @DisplayName("Should bring a client by id")
+    public void shouldFindClientById(){
+        RequestClient requestClient = RequestClientBuilder.one().now();
+        ClientEntity clientEntity = ClientEntityBuilder.one().withRequestClient(requestClient).now();
+        Mockito.when(clientRepository.findById(clientEntity.getId())).thenReturn(Optional.of(clientEntity));
+        clientService.returnClientById(clientEntity.getId());
+        Mockito.verify(clientRepository, Mockito.times(1)).findById(clientEntity.getId());
+        Assertions.assertEquals("Jetosvaldo", clientEntity.getClientName());
+    }
+
+    @Test
+    @DisplayName("Shouldn't find a client by id and should throw an exception")
+    public void shouldNotFindClientById(){
+        Assertions.assertThrows(ResponseStatusException.class, () -> clientService
+                .returnClientById("2"));
     }
 }
