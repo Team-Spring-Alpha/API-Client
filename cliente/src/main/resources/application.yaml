@@ -1,0 +1,12 @@
+.env:
+  directory: .
+  filename: .env
+  prefix: ""
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  data:
+    mongodb:
+      uri: ${URI}
+      database: FilmesApollo70
