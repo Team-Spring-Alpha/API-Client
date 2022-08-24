@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,6 +31,35 @@ public class SearchService {
                 .queryParam("include_adult", false)
                 .queryParam("page", 1)
                 .queryParam("query", movieName).build()).retrieve().bodyToMono(ResponseApiSearchByName.class).block();
+
+        return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
+    }
+
+    public ResponseApiClient showMovieInfo(String movieName) {
+        ResponseApiSearchByName responseApiSearchByName = webBuider.build().get().uri(uriBuilder -> uriBuilder
+                .scheme("https").host("api.themoviedb.org")
+                .path("/3/search/movie")
+                .queryParam("language", "pt-BR")
+                .queryParam("api_key", apiKey)
+                .queryParam("include_adult", false)
+                .queryParam("page", 1)
+                .queryParam("query", movieName).build()).retrieve().bodyToMono(ResponseApiSearchByName.class).block();
+
+       ResponseApiClient responseApiClient = new ResponseApiClient();
+       return responseApiClient;
+    }
+
+    public List<ResponseApiClient> findMoviesRecommendations(Long movieId) {
+        ResponseApiSearchByName responseApiSearchByName = webBuider.build()
+                .get().uri(uriBuilder -> uriBuilder
+                .scheme("https").host("api.themoviedb.org")
+                .path("/3/movie/" + movieId + "/recommendations")
+                .queryParam("api_key", apiKey)
+                .queryParam("language", "pt-BR")
+                .queryParam("page", 1)
+                .build()).retrieve()
+                .bodyToMono(ResponseApiSearchByName.class)
+                .block();
 
         return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
     }
