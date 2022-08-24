@@ -1,7 +1,6 @@
 package br.com.compass.search.service;
 
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
-import br.com.compass.search.dto.apithemoviedb.searchByDate.ResponseApiSearchByDate;
 import br.com.compass.search.dto.apithemoviedb.searchbyname.ResponseApiSearchByName;
 import br.com.compass.search.utils.ModelMapperUtils;
 import lombok.RequiredArgsConstructor;
@@ -83,7 +82,7 @@ public class SearchService {
     }
 
     public List<ResponseApiClient> findByDate(LocalDate dateGte, LocalDate dateLte) {
-        ResponseApiSearchByDate responseApiSearchByDate = webBuider.build().get().uri(uriBuilder -> uriBuilder
+        ResponseApiSearchByName responseApiSearchByName = webBuider.build().get().uri(uriBuilder -> uriBuilder
                         .scheme("https").host("api.themoviedb.org")
                         .path("/3/discover/movie")
                         .queryParam("api_key", apiKey)
@@ -96,8 +95,8 @@ public class SearchService {
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError,
                         error -> Mono.error(new RuntimeException("Verifique os parâmetros")))
-                .bodyToMono(ResponseApiSearchByDate.class)
+                .bodyToMono(ResponseApiSearchByName.class)
                 .block();
-        return modelMapperUtils.responseSearchByDateToApiClient(responseApiSearchByDate);
+        return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
     }
 }
