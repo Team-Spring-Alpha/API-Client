@@ -13,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class WebClientUtils {
                 .retrieve()
                 .bodyToMono(ResponseApiMovieCredits.class).block();
 
-        for (int i = 0; ; i++) {
+        for (int i = 0; i < Objects.requireNonNull(responseApiMovieCredits).getCast().size(); i++) {
             ResponseApiMovieCreditsCast cast = responseApiMovieCredits.getCast().get(i);
 
             if (cast.getKnownForDepartment().equals("Acting")) {
@@ -60,6 +61,10 @@ public class WebClientUtils {
                         .build())
                 .retrieve()
                 .bodyToMono(ResponseApiMovieProviders.class).block();
+
+        if (responseApiMovieProviders.getResults().getBr() == null) {
+            return null;
+        }
 
         ResponseJustWatch responseJustWatch = new ResponseJustWatch();
         List<ResponseRentAndBuy> responseBuyList = new ArrayList<>();
