@@ -50,4 +50,10 @@ public class SearchController {
         List<ResponseApiClient> responseApiClient = searchService.findByDate(dateGte, dateLte);
         return ResponseEntity.ok(responseApiClient);
     }
+
+    @GetMapping("/movie-actor")
+    public ResponseEntity<List<ResponseApiClient>> getMovieByActor(@RequestParam String movieActor) {
+        List<ResponseApiClient> responseApiClientList = searchService.findByActor(movieActor);
+        return ResponseEntity.ok(responseApiClientList);
+    }
 }
