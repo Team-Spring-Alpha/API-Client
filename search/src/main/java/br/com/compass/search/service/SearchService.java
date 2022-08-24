@@ -1,7 +1,6 @@
 package br.com.compass.search.service;
 
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
-import br.com.compass.search.dto.apiclient.response.ResponseMovieInformation;
 import br.com.compass.search.dto.apithemoviedb.searchbyname.ResponseApiSearchByName;
 import br.com.compass.search.utils.ModelMapperUtils;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,5 +47,19 @@ public class SearchService {
 
        ResponseApiClient responseApiClient = new ResponseApiClient();
        return responseApiClient;
+    }
+
+    public List<ResponseApiClient> findMoviesRecommendations(Long movieId) {
+        ResponseApiSearchByName responseApiSearchByName = webBuider.build()
+                .get().uri(uriBuilder -> uriBuilder
+                .scheme("https").host("api.themoviedb.org")
+                .path("/3/movie").userInfo(movieId.toString()).fragment("recommendations")
+                .queryParam("language", "pt-BR")
+                .queryParam("api_key", apiKey)
+                .build()).retrieve()
+                .bodyToMono(ResponseApiSearchByName.class)
+                .block();
+
+        return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
     }
 }

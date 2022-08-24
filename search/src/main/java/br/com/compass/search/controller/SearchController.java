@@ -5,10 +5,7 @@ import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
 import br.com.compass.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,11 @@ public class SearchController {
     @GetMapping("/movie-info")
     public ResponseEntity<ResponseApiClient> getMovieInfo(@RequestParam String movieName) {
         ResponseApiClient responseApiClientList = searchService.showMovieInfo(movieName);
+        return ResponseEntity.ok(responseApiClientList);
+    }
+    @GetMapping("/{id}/recommendations")
+    public ResponseEntity<List<ResponseApiClient>> getRecommendations(@PathVariable Long id) {
+        List<ResponseApiClient> responseApiClientList = searchService.findMoviesRecommendations(id);
         return ResponseEntity.ok(responseApiClientList);
     }
 }
