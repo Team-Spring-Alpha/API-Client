@@ -1,7 +1,8 @@
 package br.com.compass.search.service;
 
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
-import br.com.compass.search.dto.apithemoviedb.searchbyname.ResponseApiSearchByName;
+import br.com.compass.search.dto.apiTheMoviedb.searchByActor.ResponseApiSearchByActor;
+import br.com.compass.search.dto.apiTheMoviedb.searchBy.ResponseApiSearchBy;
 import br.com.compass.search.utils.ModelMapperUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,34 +27,34 @@ public class SearchService {
     private String apiKey;
 
     public List<ResponseApiClient> findByName(String movieName) {
-        ResponseApiSearchByName responseApiSearchByName = webBuider.build().get().uri(uriBuilder -> uriBuilder
+        ResponseApiSearchBy responseApiSearchBy = webBuider.build().get().uri(uriBuilder -> uriBuilder
                 .scheme("https").host("api.themoviedb.org")
                 .path("/3/search/movie")
                 .queryParam("language", "pt-BR")
                 .queryParam("api_key", apiKey)
                 .queryParam("include_adult", false)
                 .queryParam("page", 1)
-                .queryParam("query", movieName).build()).retrieve().bodyToMono(ResponseApiSearchByName.class).block();
+                .queryParam("query", movieName).build()).retrieve().bodyToMono(ResponseApiSearchBy.class).block();
 
-        return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
+        return modelMapperUtils.responseSearchToApiClient(responseApiSearchBy);
     }
 
     public ResponseApiClient showMovieInfo(String movieName) {
-        ResponseApiSearchByName responseApiSearchByName = webBuider.build().get().uri(uriBuilder -> uriBuilder
+        ResponseApiSearchBy responseApiSearchBy = webBuider.build().get().uri(uriBuilder -> uriBuilder
                 .scheme("https").host("api.themoviedb.org")
                 .path("/3/search/movie")
                 .queryParam("language", "pt-BR")
                 .queryParam("api_key", apiKey)
                 .queryParam("include_adult", false)
                 .queryParam("page", 1)
-                .queryParam("query", movieName).build()).retrieve().bodyToMono(ResponseApiSearchByName.class).block();
+                .queryParam("query", movieName).build()).retrieve().bodyToMono(ResponseApiSearchBy.class).block();
 
        ResponseApiClient responseApiClient = new ResponseApiClient();
        return responseApiClient;
     }
 
     public List<ResponseApiClient> findMoviesRecommendations(Long movieId) {
-        ResponseApiSearchByName responseApiSearchByName = webBuider.build()
+        ResponseApiSearchBy responseApiSearchBy = webBuider.build()
                 .get().uri(uriBuilder -> uriBuilder
                 .scheme("https").host("api.themoviedb.org")
                 .path("/3/movie/" + movieId + "/recommendations")
@@ -61,14 +62,14 @@ public class SearchService {
                 .queryParam("language", "pt-BR")
                 .queryParam("page", 1)
                 .build()).retrieve()
-                .bodyToMono(ResponseApiSearchByName.class)
+                .bodyToMono(ResponseApiSearchBy.class)
                 .block();
 
-        return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
+        return modelMapperUtils.responseSearchToApiClient(responseApiSearchBy);
     }
 
     public List<ResponseApiClient> findByGenre(Long movieGenre) {
-        ResponseApiSearchByName responseApiSearchByName = webBuider.build().get().uri(uriBuilder -> uriBuilder
+        ResponseApiSearchBy responseApiSearchBy = webBuider.build().get().uri(uriBuilder -> uriBuilder
                 .scheme("https").host("api.themoviedb.org")
                 .path("/3/discover/movie")
                 .queryParam("language", "pt-BR")
@@ -76,13 +77,13 @@ public class SearchService {
                 .queryParam("include_adult", false)
                 .queryParam("page", 1)
                 .queryParam("with_genres", movieGenre)
-                .build()).retrieve().bodyToMono(ResponseApiSearchByName.class).block();
+                .build()).retrieve().bodyToMono(ResponseApiSearchBy.class).block();
 
-        return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
+        return modelMapperUtils.responseSearchToApiClient(responseApiSearchBy);
     }
 
     public List<ResponseApiClient> findByDate(LocalDate dateGte, LocalDate dateLte) {
-        ResponseApiSearchByName responseApiSearchByName = webBuider.build().get().uri(uriBuilder -> uriBuilder
+        ResponseApiSearchBy responseApiSearchBy = webBuider.build().get().uri(uriBuilder -> uriBuilder
                         .scheme("https").host("api.themoviedb.org")
                         .path("/3/discover/movie")
                         .queryParam("api_key", apiKey)
@@ -95,8 +96,21 @@ public class SearchService {
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError,
                         error -> Mono.error(new RuntimeException("Verifique os parâmetros")))
-                .bodyToMono(ResponseApiSearchByName.class)
+                .bodyToMono(ResponseApiSearchBy.class)
                 .block();
-        return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
+        return modelMapperUtils.responseSearchToApiClient(responseApiSearchBy);
+    }
+
+    public List<ResponseApiClient> findByActor(String movieActor){
+        ResponseApiSearchByActor responseApiSearchByActor = webBuider.build().get().uri(uriBuilder -> uriBuilder
+                .scheme("https").host("api.themoviedb.org")
+                .path("/3/search/person")
+                .queryParam("language", "pt-BR")
+                .queryParam("api_key", apiKey)
+                .queryParam("include_adult", false)
+                .queryParam("page", 1)
+                .queryParam("query", movieActor).build()).retrieve().bodyToMono(ResponseApiSearchByActor.class).block();
+
+        return modelMapperUtils.responseSearchByActorToApiClient(responseApiSearchByActor);
     }
 }

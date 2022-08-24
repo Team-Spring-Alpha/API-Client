@@ -1,4 +1,4 @@
-package br.com.compass.search.dto.apithemoviedb.moviecredits;
+package br.com.compass.search.dto.apiTheMoviedb.movieCredits;
 
 import lombok.Data;
 
