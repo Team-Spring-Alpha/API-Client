@@ -1,11 +1,14 @@
 package br.com.compass.search.service;
 
-import br.com.compass.search.dto.response.ResponseApiClient;
-import br.com.compass.search.dto.response.ResponseApiSearchByName;
+import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
+import br.com.compass.search.dto.apithemoviedb.searchbyname.ResponseApiSearchByName;
+import br.com.compass.search.utils.ModelMapperUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,10 +16,12 @@ public class SearchService {
 
     private final WebClient.Builder webBuider;
 
+    private final ModelMapperUtils modelMapperUtils;
+
     @Value("${API_KEY}")
     private String apiKey;
 
-    public ResponseApiClient findByName(String movieName) {
+    public List<ResponseApiClient> findByName(String movieName) {
         ResponseApiSearchByName responseApiSearchByName = webBuider.build().get().uri(uriBuilder -> uriBuilder
                 .scheme("https").host("api.themoviedb.org")
                 .path("/3/search/movie")
@@ -26,7 +31,6 @@ public class SearchService {
                 .queryParam("page", 1)
                 .queryParam("query", movieName).build()).retrieve().bodyToMono(ResponseApiSearchByName.class).block();
 
-        ResponseApiClient responseApiClient = new ResponseApiClient();
-        return responseApiClient;
+        return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
     }
 }

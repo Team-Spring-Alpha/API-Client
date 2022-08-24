@@ -1,5 +1,6 @@
-package br.com.compass.search.dto.response;
+package br.com.compass.search.dto.apithemoviedb.searchbyname;
 
+import br.com.compass.search.dto.apithemoviedb.ResponseApiResult;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

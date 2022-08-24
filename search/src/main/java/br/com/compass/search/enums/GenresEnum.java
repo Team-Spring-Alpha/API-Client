@@ -18,4 +18,13 @@ public enum GenresEnum {
     public Long getIdGenrer() {
         return this.idGenrer;
     }
+
+    public static GenresEnum valueOfId(Long idGenrer) {
+        for (GenresEnum genresEnum : values()) {
+            if (genresEnum.idGenrer == idGenrer) {
+                return genresEnum;
+            }
+        }
+        return null;
+    }
 }
