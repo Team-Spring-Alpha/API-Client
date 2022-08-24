@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -60,6 +59,20 @@ public class SearchService {
                 .build()).retrieve()
                 .bodyToMono(ResponseApiSearchByName.class)
                 .block();
+
+        return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
+    }
+
+    public List<ResponseApiClient> findByGenre(Long movieGenre) {
+        ResponseApiSearchByName responseApiSearchByName = webBuider.build().get().uri(uriBuilder -> uriBuilder
+                .scheme("https").host("api.themoviedb.org")
+                .path("/3/discover/movie")
+                .queryParam("language", "pt-BR")
+                .queryParam("api_key", apiKey)
+                .queryParam("include_adult", false)
+                .queryParam("page", 1)
+                .queryParam("with_genres", movieGenre)
+                .build()).retrieve().bodyToMono(ResponseApiSearchByName.class).block();
 
         return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
     }
