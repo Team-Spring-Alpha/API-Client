@@ -2,11 +2,11 @@ package br.com.compass.search.utils;
 
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
 import br.com.compass.search.dto.apiclient.response.ResponseJustWatch;
-import br.com.compass.search.dto.apithemoviedb.ResponseApiResult;
-import br.com.compass.search.dto.apithemoviedb.ResponseApiResultActor;
-import br.com.compass.search.dto.apithemoviedb.searchByActor.ResponseApiResultActorKnownFor;
-import br.com.compass.search.dto.apithemoviedb.searchByActor.ResponseApiSearchByActor;
-import br.com.compass.search.dto.apithemoviedb.searchBy.ResponseApiSearchBy;
+import br.com.compass.search.dto.apiTheMoviedb.ResponseApiResult;
+import br.com.compass.search.dto.apiTheMoviedb.ResponseApiResultActor;
+import br.com.compass.search.dto.apiTheMoviedb.searchByActor.ResponseApiResultActorKnownFor;
+import br.com.compass.search.dto.apiTheMoviedb.searchByActor.ResponseApiSearchByActor;
+import br.com.compass.search.dto.apiTheMoviedb.searchBy.ResponseApiSearchBy;
 import br.com.compass.search.enums.GenresEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

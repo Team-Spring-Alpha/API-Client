@@ -1,18 +1,17 @@
-package br.com.compass.search.dto.apithemoviedb.searchBy;
+package br.com.compass.search.dto.apiTheMoviedb.searchByActor;
 
-import br.com.compass.search.dto.apithemoviedb.ResponseApiResult;
+import br.com.compass.search.dto.apiTheMoviedb.ResponseApiResultActor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ResponseApiSearchBy {
+public class ResponseApiSearchByActor {
     private int page;
-    private List<ResponseApiResult> results;
+    private List<ResponseApiResultActor> results;
     @JsonProperty("total_results")
     private int totalResults;
     @JsonProperty("total_pages")
     private int totalPages;
-
 }

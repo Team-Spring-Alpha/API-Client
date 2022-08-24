@@ -1,4 +1,4 @@
-package br.com.compass.search.dto.apithemoviedb;
+package br.com.compass.search.dto.apiTheMoviedb.searchByActor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ResponseApiResult {
+public class ResponseApiResultActorKnownFor {
     @JsonProperty("poster_path")
     private String posterPath;
     private boolean adult;
@@ -16,6 +16,8 @@ public class ResponseApiResult {
     @JsonProperty("genre_ids")
     private List<Long> genreIds;
     private Long id;
+    @JsonProperty("media_type")
+    private String mediaType;
     @JsonProperty("original_title")
     private String originalTitle;
     @JsonProperty("original_language")
@@ -23,7 +25,6 @@ public class ResponseApiResult {
     private String title;
     @JsonProperty("backdrop_path")
     private String backdropPath;
-    private Double popularity;
     @JsonProperty("vote_count")
     private int voteCount;
     private boolean video;

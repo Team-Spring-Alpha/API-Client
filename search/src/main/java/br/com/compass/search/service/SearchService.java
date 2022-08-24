@@ -1,8 +1,8 @@
 package br.com.compass.search.service;
 
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
-import br.com.compass.search.dto.apithemoviedb.searchByActor.ResponseApiSearchByActor;
-import br.com.compass.search.dto.apithemoviedb.searchBy.ResponseApiSearchBy;
+import br.com.compass.search.dto.apiTheMoviedb.searchByActor.ResponseApiSearchByActor;
+import br.com.compass.search.dto.apiTheMoviedb.searchBy.ResponseApiSearchBy;
 import br.com.compass.search.utils.ModelMapperUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
