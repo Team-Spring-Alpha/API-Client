@@ -1,6 +1,7 @@
 package br.com.compass.search.service;
 
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
+import br.com.compass.search.dto.apithemoviedb.searchbyactor.ResponseApiSearchByActor;
 import br.com.compass.search.dto.apithemoviedb.searchbyname.ResponseApiSearchByName;
 import br.com.compass.search.utils.ModelMapperUtils;
 import lombok.RequiredArgsConstructor;
@@ -75,5 +76,18 @@ public class SearchService {
                 .build()).retrieve().bodyToMono(ResponseApiSearchByName.class).block();
 
         return modelMapperUtils.responseSearchByNameToApiClient(responseApiSearchByName);
+    }
+
+    public List<ResponseApiClient> findByActor(String movieActor){
+        ResponseApiSearchByActor responseApiSearchByActor = webBuider.build().get().uri(uriBuilder -> uriBuilder
+                .scheme("https").host("api.themoviedb.org")
+                .path("/3/search/person")
+                .queryParam("language", "pt-BR")
+                .queryParam("api_key", apiKey)
+                .queryParam("include_adult", false)
+                .queryParam("page", 1)
+                .queryParam("query", movieActor).build()).retrieve().bodyToMono(ResponseApiSearchByActor.class).block();
+
+        return modelMapperUtils.responseSearchByActorToApiClient(responseApiSearchByActor);
     }
 }

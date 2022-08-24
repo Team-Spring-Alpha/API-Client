@@ -3,6 +3,9 @@ package br.com.compass.search.utils;
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
 import br.com.compass.search.dto.apiclient.response.ResponseJustWatch;
 import br.com.compass.search.dto.apithemoviedb.ResponseApiResult;
+import br.com.compass.search.dto.apithemoviedb.ResponseApiResultActor;
+import br.com.compass.search.dto.apithemoviedb.searchbyactor.ResponseApiResultActorKnownFor;
+import br.com.compass.search.dto.apithemoviedb.searchbyactor.ResponseApiSearchByActor;
 import br.com.compass.search.dto.apithemoviedb.searchbyname.ResponseApiSearchByName;
 import br.com.compass.search.enums.GenresEnum;
 import lombok.RequiredArgsConstructor;
@@ -53,8 +56,35 @@ public class ModelMapperUtils {
         return genresEnumList;
     }
 
+    public List<ResponseApiClient> responseSearchByActorToApiClient(ResponseApiSearchByActor apiSearchByActor) {
+        List<ResponseApiClient> responseApiClientList = new ArrayList<>();
 
+        for (int i = 0; i < apiSearchByActor.getResults().size(); i++) {
+            ResponseApiResultActor responseApiResultActor = apiSearchByActor.getResults().get(i);
+            List<ResponseApiResultActorKnownFor> results = responseApiResultActor.getResults();
 
+            for (ResponseApiResultActorKnownFor responseApiResult : results) {
+                if (responseApiResult.getMediaType().equals("movie")){
+                    ResponseApiClient responseApiClient = new ResponseApiClient();
+                    List<GenresEnum> genresEnumList = genresIdToGenresString(responseApiResult.getGenreIds());
 
+                    List<String> actors = webClientUtils.getActorsByMovieId(responseApiResult.getId());
+                    String yearRelease = responseApiResult.getReleaseDate().substring(0, 4);
+                    Double rentPrice = this.rentPrice.getRentPriceFromYear(yearRelease);
+                    ResponseJustWatch responseJustWatch = webClientUtils.getJustWatchDataFromMovieIdAndRentPrice(responseApiResult.getId(), rentPrice);
 
+                    responseApiClient.setTitle(responseApiResult.getTitle());
+                    responseApiClient.setGenrers(genresEnumList);
+                    responseApiClient.setReleaseYear(yearRelease);
+                    responseApiClient.setActors(actors);
+                    responseApiClient.setOverview(responseApiResult.getOverview());
+                    responseApiClient.setPoster(responseApiResult.getPosterPath());
+                    responseApiClient.setJustWatch(responseJustWatch);
+
+                    responseApiClientList.add(responseApiClient);
+                }
+            }
+        }
+        return responseApiClientList;
+    }
 }

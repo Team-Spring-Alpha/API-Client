@@ -39,4 +39,10 @@ public class SearchController {
         List<ResponseApiClient> responseApiClientList = searchService.findByGenre(movieGenre.getIdGenrer());
         return ResponseEntity.ok(responseApiClientList);
     }
+
+    @GetMapping("/movie-actor")
+    public ResponseEntity<List<ResponseApiClient>> getMovieByActor(@RequestParam String movieActor) {
+        List<ResponseApiClient> responseApiClientList = searchService.findByActor(movieActor);
+        return ResponseEntity.ok(responseApiClientList);
+    }
 }
