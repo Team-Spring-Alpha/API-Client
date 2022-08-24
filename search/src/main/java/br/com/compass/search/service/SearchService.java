@@ -53,7 +53,7 @@ public class SearchService {
         ResponseApiSearchByName responseApiSearchByName = webBuider.build()
                 .get().uri(uriBuilder -> uriBuilder
                 .scheme("https").host("api.themoviedb.org")
-                .path("/3/movie").userInfo(movieId.toString()).fragment("recommendations")
+                .path("/3/search/movie").userInfo(movieId.toString()).fragment("recommendations")
                 .queryParam("language", "pt-BR")
                 .queryParam("api_key", apiKey)
                 .build()).retrieve()
