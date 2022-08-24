@@ -5,9 +5,12 @@ import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
 import br.com.compass.search.enums.GenresEnum;
 import br.com.compass.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -38,5 +41,13 @@ public class SearchController {
     public ResponseEntity<List<ResponseApiClient>> getMovieByGenre(@RequestParam GenresEnum movieGenre) {
         List<ResponseApiClient> responseApiClientList = searchService.findByGenre(movieGenre.getIdGenrer());
         return ResponseEntity.ok(responseApiClientList);
+    }
+
+    @GetMapping("/movie-date")
+    public ResponseEntity<List<ResponseApiClient>> getMovieByDate
+            (@RequestParam(required = false) @Valid @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateGte,
+             @RequestParam(required = false) @Valid @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateLte) {
+        List<ResponseApiClient> responseApiClient = searchService.findByDate(dateGte, dateLte);
+        return ResponseEntity.ok(responseApiClient);
     }
 }

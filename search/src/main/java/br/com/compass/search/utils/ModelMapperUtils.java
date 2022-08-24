@@ -52,9 +52,4 @@ public class ModelMapperUtils {
         }
         return genresEnumList;
     }
-
-
-
-
-
 }
