@@ -2,6 +2,7 @@ package br.com.compass.search.controller;
 
 
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
+import br.com.compass.search.enums.GenresEnum;
 import br.com.compass.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,18 @@ public class SearchController {
     @GetMapping("/{id}/recommendations")
     public ResponseEntity<List<ResponseApiClient>> getRecommendations(@PathVariable Long id) {
         List<ResponseApiClient> responseApiClientList = searchService.findMoviesRecommendations(id);
+        return ResponseEntity.ok(responseApiClientList);
+    }
+
+    @GetMapping("/movie-genre")
+    public ResponseEntity<List<ResponseApiClient>> getMovieByGenre(@RequestParam GenresEnum movieGenre) {
+        List<ResponseApiClient> responseApiClientList = searchService.findByGenre(movieGenre.getIdGenrer());
+        return ResponseEntity.ok(responseApiClientList);
+    }
+
+    @GetMapping("/movie-actor")
+    public ResponseEntity<List<ResponseApiClient>> getMovieByActor(@RequestParam String movieActor) {
+        List<ResponseApiClient> responseApiClientList = searchService.findByActor(movieActor);
         return ResponseEntity.ok(responseApiClientList);
     }
 }
