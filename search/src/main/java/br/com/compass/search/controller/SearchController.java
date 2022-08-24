@@ -24,4 +24,10 @@ public class SearchController {
         List<ResponseApiClient> responseApiClientList = searchService.findByName(movieName);
         return ResponseEntity.ok(responseApiClientList);
     }
+
+    @GetMapping("/movie-info")
+    public ResponseEntity<ResponseApiClient> getMovieInfo(@RequestParam String movieName) {
+        ResponseApiClient responseApiClientList = searchService.showMovieInfo(movieName);
+        return ResponseEntity.ok(responseApiClientList);
+    }
 }
