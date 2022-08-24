@@ -1,9 +1,9 @@
-package br.com.compass.search.dto.response;
+package br.com.compass.search.dto.apithemoviedb;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.HashSet;
+import java.util.List;
 
 @Data
 public class ResponseApiResult {
@@ -14,7 +14,7 @@ public class ResponseApiResult {
     @JsonProperty("release_date")
     private String releaseDate;
     @JsonProperty("genre_ids")
-    private HashSet<Integer> genreIds;
+    private List<Long> genreIds;
     private Long id;
     @JsonProperty("original_title")
     private String originalTitle;
