@@ -3,6 +3,7 @@ package br.com.compass.search.service;
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
 import br.com.compass.search.dto.apiTheMoviedb.searchByActor.ResponseApiSearchByActor;
 import br.com.compass.search.dto.apiTheMoviedb.searchBy.ResponseApiSearchBy;
+import br.com.compass.search.enums.ProvidersEnum;
 import br.com.compass.search.utils.ModelMapperUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -112,5 +113,20 @@ public class SearchService {
                 .queryParam("query", movieActor).build()).retrieve().bodyToMono(ResponseApiSearchByActor.class).block();
 
         return modelMapperUtils.responseSearchByActorToApiClient(responseApiSearchByActor);
+    }
+
+    public List<ResponseApiClient> findByProvider(ProvidersEnum movieProvider) {
+        ResponseApiSearchBy responseApiSearchBy = webBuider.build().get().uri(uriBuilder -> uriBuilder
+                .scheme("https").host("api.themoviedb.org")
+                .path("/3/discover/movie")
+                .queryParam("language", "pt-BR")
+                .queryParam("api_key", apiKey)
+                .queryParam("include_adult", false)
+                .queryParam("page", 1)
+                .queryParam("watch_region", "BR")
+                .queryParam("with_watch_providers", movieProvider.getIdProvider())
+                .build()).retrieve().bodyToMono(ResponseApiSearchBy.class).block();
+
+        return modelMapperUtils.responseSearchToApiClient(responseApiSearchBy);
     }
 }

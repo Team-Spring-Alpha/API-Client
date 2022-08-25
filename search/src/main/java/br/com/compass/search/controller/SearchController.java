@@ -3,6 +3,7 @@ package br.com.compass.search.controller;
 
 import br.com.compass.search.dto.apiclient.response.ResponseApiClient;
 import br.com.compass.search.enums.GenresEnum;
+import br.com.compass.search.enums.ProvidersEnum;
 import br.com.compass.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -54,6 +55,12 @@ public class SearchController {
     @GetMapping("/movie-actor")
     public ResponseEntity<List<ResponseApiClient>> getMovieByActor(@RequestParam String movieActor) {
         List<ResponseApiClient> responseApiClientList = searchService.findByActor(movieActor);
+        return ResponseEntity.ok(responseApiClientList);
+    }
+
+    @GetMapping("/movie-provider")
+    public ResponseEntity<List<ResponseApiClient>> getMovieByProvider(@RequestParam ProvidersEnum movieProvider) {
+        List<ResponseApiClient> responseApiClientList = searchService.findByProvider(movieProvider);
         return ResponseEntity.ok(responseApiClientList);
     }
 }
