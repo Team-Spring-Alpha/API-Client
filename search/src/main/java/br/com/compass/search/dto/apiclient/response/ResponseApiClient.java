@@ -8,6 +8,8 @@ import java.util.List;
 
 @Data
 public class ResponseApiClient {
+    @JsonProperty("movie_id")
+    private Long movieId;
     private String title;
     private List<GenresEnum> genrers;
     @JsonProperty("release_year")

@@ -34,6 +34,7 @@ public class ModelMapperUtils {
             Double rentPrice = this.rentPrice.getRentPriceFromYear(yearRelease);
             ResponseJustWatch responseJustWatch = webClientUtils.getJustWatchDataFromMovieIdAndRentPrice(responseApiResult.getId(), rentPrice);
 
+            responseApiClient.setMovieId(responseApiResult.getId());
             responseApiClient.setTitle(responseApiResult.getTitle());
             responseApiClient.setGenrers(genresEnumList);
             responseApiClient.setReleaseYear(yearRelease);
@@ -73,6 +74,7 @@ public class ModelMapperUtils {
                     Double rentPrice = this.rentPrice.getRentPriceFromYear(yearRelease);
                     ResponseJustWatch responseJustWatch = webClientUtils.getJustWatchDataFromMovieIdAndRentPrice(responseApiResult.getId(), rentPrice);
 
+                    responseApiClient.setMovieId(responseApiResult.getId());
                     responseApiClient.setTitle(responseApiResult.getTitle());
                     responseApiClient.setGenrers(genresEnumList);
                     responseApiClient.setReleaseYear(yearRelease);
