@@ -22,7 +22,7 @@ public class RequestCreditCardBuilder {
 
         builder.requestCreditCard.setClientCreditCardNumber("5181652903041943");
         builder.requestCreditCard.setClientCreditCardHolderName("Jetosvaldo");
-        builder.requestCreditCard.setClientCreditCardBrand("MASTER_CARD");
+        builder.requestCreditCard.setClientCreditCardBrand("MASTERCARD");
         builder.requestCreditCard.setClientCreditCardSecurityCode("613");
         builder.requestCreditCard.setClientCreditCardMonthExpiration("8");
         builder.requestCreditCard.setClientCreditCardYearExpiration(yearNowString);
