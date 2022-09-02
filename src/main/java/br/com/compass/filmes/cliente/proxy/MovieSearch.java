@@ -1,6 +1,7 @@
 package br.com.compass.filmes.cliente.proxy;
 
 import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseApiMovieManager;
+import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseMovieById;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -28,4 +29,7 @@ public interface MovieSearch {
                                                     @RequestParam(name = "movie_provider", required = false) ProvidersEnum movieProvider,
                                                     @RequestParam(name = "movie_peoples", required = false) List<String> moviePeoples,
                                                     @RequestParam(name = "movie_name", required = false) String movieName);
+
+    @GetMapping(value = "movie/{movieId}")
+    List<ResponseMovieById> getMovieById(@PathVariable("movieId") Long movieId);
 }

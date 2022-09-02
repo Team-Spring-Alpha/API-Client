@@ -1,6 +1,7 @@
 package br.com.compass.filmes.cliente.controller;
 
 import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseApiMovieManager;
+import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseMovieById;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import br.com.compass.filmes.cliente.service.MovieService;
@@ -21,7 +22,7 @@ import java.util.List;
 @RequestMapping("/api/movie_search")
 public class MovieSearchController {
     @Autowired
-    MovieService service;
+    private MovieService service;
 
     @GetMapping("/{id}/recommendations")
     public ResponseEntity<List<ResponseApiMovieManager>> getRecommendations(@PathVariable Long id) {
@@ -40,5 +41,11 @@ public class MovieSearchController {
         List<ResponseApiMovieManager> responseApiMovieManager = service.findByFilters(movieGenre, dateGte, dateLte, movieProvider,
                                                                                         moviePeoples, movieName);
         return ResponseEntity.ok(responseApiMovieManager);
+    }
+
+    @GetMapping("{id}/movie")
+    public ResponseEntity<List<ResponseMovieById>> getMovieById(@PathVariable Long movieId){
+        List<ResponseMovieById> responseMovieByIds = service.findMovieById(movieId);
+        return ResponseEntity.ok(responseMovieByIds);
     }
 }

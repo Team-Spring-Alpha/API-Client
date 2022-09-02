@@ -1,6 +1,7 @@
 package br.com.compass.filmes.cliente.proxy;
 
 import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseApiMovieManager;
+import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseMovieById;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,9 @@ public class MovieSearchProxy {
 
     public List<ResponseApiMovieManager> getMovieByRecommendation(Long movieId) {
         return movieManager.getMovieByRecommendations(movieId);
+    }
+
+    public List<ResponseMovieById> getMovieById(Long movieId){
+        return movieManager.getMovieById(movieId);
     }
 }
