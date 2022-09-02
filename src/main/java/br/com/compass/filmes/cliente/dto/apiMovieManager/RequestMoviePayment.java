@@ -16,6 +16,7 @@ public class RequestMoviePayment {
     @NotBlank
     @JsonProperty("credit_card_number")
     private String creditCardNumber;
+    @NotBlank
     @JsonProperty("user_id")
     private String userId;
 }
