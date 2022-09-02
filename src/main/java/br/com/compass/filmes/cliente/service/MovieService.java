@@ -4,25 +4,26 @@ import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseApiMov
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
 public class MovieService {
-
-    private final ModelMapper modelMapper;
-
     @Autowired
     MovieSearchProxy movieSearchProxy;
 
     public List<ResponseApiMovieManager> findMoviesRecommendations(Long movieId) {
-        return movieSearchProxy.getMovieByRecommendation(movieId);
+        try {
+            return movieSearchProxy.getMovieByRecommendation(movieId);
+        } catch (FeignException.FeignClientException.NotFound exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     public List<ResponseApiMovieManager> findByFilters(GenresEnum movieGenre, LocalDate dateGte, LocalDate dateLte, ProvidersEnum movieProvider,
