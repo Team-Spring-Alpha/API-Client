@@ -10,7 +10,7 @@ public class RequestAllocation {
     @JsonProperty("user_id")
     private String userId;
     @JsonProperty("card_number")
-    private int cardNumber;
+    private String cardNumber;
     private List<RequestAllocationMovie> movies;
     @JsonProperty("payment_status")
     private String paymentStatus;

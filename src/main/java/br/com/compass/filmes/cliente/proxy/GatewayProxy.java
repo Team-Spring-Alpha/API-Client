@@ -21,6 +21,6 @@ public class GatewayProxy {
     }
 
     public ResponsePayment getPayment(String bearerToken, RequestPayment requestPayment) {
-        return gateway.getPayment(bearerToken, requestPayment);
+        return gateway.getPayment("Bearer " + bearerToken, requestPayment);
     }
 }

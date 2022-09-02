@@ -1,6 +1,6 @@
-package br.com.compass.filmes.cliente.dto.client.request.apiMovieManager;
+package br.com.compass.filmes.cliente.dto.apiMovieManager;
 
-import br.com.compass.filmes.cliente.dto.client.response.ResponseRentOrBuy;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
@@ -14,5 +14,8 @@ public class RequestMoviePayment {
     private RequestRentOrBuy movies;
     @CreditCardNumber
     @NotBlank
+    @JsonProperty("credit_card_number")
     private String creditCardNumber;
+    @JsonProperty("user_id")
+    private String userId;
 }

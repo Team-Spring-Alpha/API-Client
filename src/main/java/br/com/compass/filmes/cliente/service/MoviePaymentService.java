@@ -1,24 +1,45 @@
 package br.com.compass.filmes.cliente.service;
 
-import br.com.compass.filmes.cliente.dto.client.request.apiMovieManager.RequestMoviePayment;
-import br.com.compass.filmes.cliente.dto.client.response.ResponseMoviePayment;
+import br.com.compass.filmes.cliente.dto.apiAllocationHistory.RequestAllocation;
+import br.com.compass.filmes.cliente.dto.apiAllocationHistory.RequestAllocationMovie;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPayment;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCreditCard;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCustomer;
+import br.com.compass.filmes.cliente.dto.apiPayment.response.*;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePayment;
+import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseMovieById;
 import br.com.compass.filmes.cliente.entities.ClientEntity;
-import br.com.compass.filmes.cliente.entities.ClientPaymentEntity;
-import br.com.compass.filmes.cliente.repository.ClientPaymentRepository;
+import br.com.compass.filmes.cliente.entities.CreditCardEntity;
+import br.com.compass.filmes.cliente.enums.ClientEnum;
+import br.com.compass.filmes.cliente.enums.MovieLinks;
+import br.com.compass.filmes.cliente.proxy.GatewayProxy;
+import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;
+import br.com.compass.filmes.cliente.rabbitMq.MessageHistory;
+import br.com.compass.filmes.cliente.repository.ClientRepository;
 import br.com.compass.filmes.cliente.util.Md5;
-import br.com.compass.filmes.cliente.util.ValidRequestCreditCard;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class MoviePaymentService {
+
+    private LocalTime tokenExpirationTime;
+    private String authToken;
     private final ModelMapper modelMapper;
+    private final ClientRepository clientRepository;
+    private final MovieSearchProxy movieSearchProxy;
+    private final GatewayProxy gatewayProxy;
+    private final MessageHistory messageHistory;
     private final Md5 md5;
-    private final ClientService clientService;
-    private final ValidRequestCreditCard validRequestCreditCard;
-    private final ClientPaymentRepository paymentRepository;
 
     public ResponseGatewayReproved post(RequestMoviePayment requestMoviePayment) {
         ClientEntity clientEntity = clientRepository.findById(requestMoviePayment.getUserId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -27,36 +48,41 @@ public class MoviePaymentService {
         List<ResponseMoviePaymentProcess> moviePaymentProcessList = new ArrayList<>();
         Double amount = 0.0;
 
-        for (int i = 0; i < requestMoviePayment.getMovies().getBuy().size(); i++) {
-            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getBuy().get(i));
-            try {
-                Double buyPrice = proxyMovieById.getJustWatch().getBuy().get(0).getPrice();
-                amount += buyPrice;
-                buildMoviesProcessBuy(requestMoviePayment, moviePaymentProcessList, i, proxyMovieById);
+        if (requestMoviePayment.getMovies().getBuy() != null) {
+            for (int i = 0; i < requestMoviePayment.getMovies().getBuy().size(); i++) {
+                ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getBuy().get(i));
+                try {
+                    Double buyPrice = proxyMovieById.getJustWatch().getBuy().get(0).getPrice();
+                    amount += buyPrice;
+                    buildMoviesProcessBuy(requestMoviePayment, moviePaymentProcessList, i, proxyMovieById);
 
-            } catch (NullPointerException nullPointerException) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                } catch (NullPointerException nullPointerException) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                }
             }
         }
 
-        for (int i = 0; i < requestMoviePayment.getMovies().getRent().size(); i++) {
-            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getRent().get(i));
-            try {
-                Double rentPrice = proxyMovieById.getJustWatch().getRent().get(0).getPrice();
-                amount += rentPrice;
-                buildMoviesProcessRent(requestMoviePayment, moviePaymentProcessList, i, proxyMovieById);
+        if (requestMoviePayment.getMovies().getRent() != null) {
+            for (int i = 0; i < requestMoviePayment.getMovies().getRent().size(); i++) {
+                ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getRent().get(i));
+                try {
+                    Double rentPrice = proxyMovieById.getJustWatch().getRent().get(0).getPrice();
+                    amount += rentPrice;
+                    buildMoviesProcessRent(requestMoviePayment, moviePaymentProcessList, i, proxyMovieById);
 
-            } catch (NullPointerException nullPointerException) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                } catch (NullPointerException nullPointerException) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                }
             }
         }
+
 
         ClientEnum randomClientEnum = ClientEnum.getRandomClientEnum();
-        if (tokenTime == null) {
+        if (this.tokenExpirationTime == null) {
             getToken(randomClientEnum);
         }
 
-        if (tokenTime.isAfter(tokenExpirationTime)) {
+        if (LocalTime.now().isAfter(tokenExpirationTime)) {
             getToken(randomClientEnum);
         }
 
@@ -84,11 +110,16 @@ public class MoviePaymentService {
         return responseGatewayOk;
     }
 
+    private MovieLinks getMovieLinkFromlabel(String label) {
+        return MovieLinks.valueOfLabel(label);
+    }
+
     private void buildMoviesProcessBuy(RequestMoviePayment requestMoviePayment, List<ResponseMoviePaymentProcess> moviePaymentProcessList, int i, ResponseMovieById proxyMovieById) {
         ResponseMoviePaymentProcess moviePaymentProcess = new ResponseMoviePaymentProcess();
         moviePaymentProcess.setMovieId(requestMoviePayment.getMovies().getBuy().get(i));
         moviePaymentProcess.setTitle(proxyMovieById.getMovieName());
-        moviePaymentProcess.setLink(MovieLinks.valueOf(proxyMovieById.getJustWatch().getBuy().get(0).getStore()).getLink());
+        MovieLinks movieLinks = getMovieLinkFromlabel(proxyMovieById.getJustWatch().getBuy().get(0).getStore());
+        moviePaymentProcess.setLink(movieLinks.getLink());
         moviePaymentProcessList.add(moviePaymentProcess);
     }
 
@@ -96,7 +127,8 @@ public class MoviePaymentService {
         ResponseMoviePaymentProcess moviePaymentProcess = new ResponseMoviePaymentProcess();
         moviePaymentProcess.setMovieId(requestMoviePayment.getMovies().getRent().get(i));
         moviePaymentProcess.setTitle(proxyMovieById.getMovieName());
-        moviePaymentProcess.setLink(MovieLinks.valueOf(proxyMovieById.getJustWatch().getRent().get(0).getStore()).getLink());
+        MovieLinks movieLinks = getMovieLinkFromlabel(proxyMovieById.getJustWatch().getRent().get(0).getStore());
+        moviePaymentProcess.setLink(movieLinks.getLink());
         moviePaymentProcessList.add(moviePaymentProcess);
     }
 
@@ -120,8 +152,7 @@ public class MoviePaymentService {
 
     private void getToken(ClientEnum randomClientEnum) {
         ResponseAuth authToken = gatewayProxy.getAuthToken(randomClientEnum);
-        tokenTime = LocalDateTime.now();
-        tokenExpirationTime = LocalDateTime.now().plusSeconds(Long.getLong(authToken.getExpiresIn()));
+        this.tokenExpirationTime = LocalTime.now().plusSeconds(Long.parseLong(authToken.getExpiresIn()));
         this.authToken = authToken.getToken();
     }
 
@@ -130,7 +161,8 @@ public class MoviePaymentService {
         requestPayment.setSellerId(randomClientEnum.getSellerId());
         requestPayment.setCustomer(paymentCustomer);
         requestPayment.setTransactionAmount(amount);
-        RequestCreditCard requestCreditCard = modelMapper.map(creditCard, RequestCreditCard.class);
+        RequestPaymentCreditCard requestCreditCard = modelMapper.map(creditCard, RequestPaymentCreditCard.class);
+        requestCreditCard.setClientCreditCardNumber(md5.ToMd5(creditCard.getClientCreditCardNumber()));
         requestPayment.setCard(requestCreditCard);
         return requestPayment;
     }

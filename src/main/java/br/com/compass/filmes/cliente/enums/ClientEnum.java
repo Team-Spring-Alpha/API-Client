@@ -27,10 +27,10 @@ public enum ClientEnum {
     }
 
     public String getClientId() {
-        return this.getClientId();
+        return this.clientId;
     }
 
     public String getSellerId() {
-        return this.getSellerId();
+        return this.sellerId;
     }
 }

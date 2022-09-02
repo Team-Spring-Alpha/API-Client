@@ -1,6 +1,5 @@
 package br.com.compass.filmes.cliente.dto.apiPayment.request;
 
-import br.com.compass.filmes.cliente.dto.client.request.RequestCreditCard;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -22,5 +21,5 @@ public class RequestPayment {
     @JsonProperty("transaction_amount")
     private double transactionAmount;
     @NotBlank
-    private RequestCreditCard card;
+    private RequestPaymentCreditCard card;
 }

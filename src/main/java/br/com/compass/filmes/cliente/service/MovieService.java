@@ -31,12 +31,4 @@ public class MovieService {
                                                        List<String> moviePeoples, String movieName) {
         return movieSearchProxy.getMovieSearchByFilters(movieGenre, dateGte, dateLte, movieProvider, moviePeoples, movieName);
     }
-
-    public List<ResponseMovieById> findMovieById(Long movieId){
-        try{
-            return movieSearchProxy.getMovieById(movieId);
-        }catch (FeignException.FeignClientException.NotFound e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-    }
 }

@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.dto.client.request.apiMovieManager;
+package br.com.compass.filmes.cliente.dto.apiMovieManager;
 
 import lombok.Data;
 
@@ -10,8 +10,8 @@ import java.util.List;
 public class RequestRentOrBuy {
     @NotNull
     @NotEmpty
-    private List<String> rent;
+    private List<Long> rent;
     @NotNull
     @NotEmpty
-    private List<String> buy;
+    private List<Long> buy;
 }

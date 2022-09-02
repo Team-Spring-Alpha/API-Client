@@ -5,13 +5,11 @@ import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseMovieB
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -31,5 +29,5 @@ public interface MovieSearch {
                                                     @RequestParam(name = "movie_name", required = false) String movieName);
 
     @GetMapping(value = "movie/{movieId}")
-    List<ResponseMovieById> getMovieById(@PathVariable("movieId") Long movieId);
+    ResponseMovieById getMovieById(@PathVariable("movieId") Long movieId);
 }

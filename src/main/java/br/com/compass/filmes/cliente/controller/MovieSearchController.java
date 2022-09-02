@@ -42,10 +42,4 @@ public class MovieSearchController {
                                                                                         moviePeoples, movieName);
         return ResponseEntity.ok(responseApiMovieManager);
     }
-
-    @GetMapping("{id}/movie")
-    public ResponseEntity<List<ResponseMovieById>> getMovieById(@PathVariable Long movieId){
-        List<ResponseMovieById> responseMovieByIds = service.findMovieById(movieId);
-        return ResponseEntity.ok(responseMovieByIds);
-    }
 }

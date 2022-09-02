@@ -14,7 +14,7 @@ public class ResponseAllocation {
     @JsonProperty("allocation_number")
     private String allocationNumber;
     @JsonProperty("card_number")
-    private int cardNumber;
+    private String cardNumber;
     private List<ResponseAllocationMovie> movies;
     @JsonProperty("payment_status")
     private String paymentStatus;

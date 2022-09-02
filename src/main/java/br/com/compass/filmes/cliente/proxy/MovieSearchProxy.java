@@ -26,7 +26,7 @@ public class MovieSearchProxy {
         return movieManager.getMovieByRecommendations(movieId);
     }
 
-    public List<ResponseMovieById> getMovieById(Long movieId){
+    public ResponseMovieById getMovieById(Long movieId){
         return movieManager.getMovieById(movieId);
     }
 }
