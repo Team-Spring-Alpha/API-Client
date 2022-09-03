@@ -1,11 +1,15 @@
 package br.com.compass.filmes.cliente.dto.apiPayment.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
-@Data
+@Getter
 public class ResponseGatewayOk extends ResponseGatewayReproved{
-    private List<ResponseMoviePaymentProcess> movies;
+    private final List<ResponseMoviePaymentProcess> movies;
+
+    public ResponseGatewayOk(List<ResponseMoviePaymentProcess> moviePaymentProcessList) {
+        super("APPROVED", "approved");
+        this.movies = moviePaymentProcessList;
+    }
 }

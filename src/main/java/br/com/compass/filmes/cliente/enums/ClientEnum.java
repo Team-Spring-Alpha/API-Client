@@ -3,8 +3,8 @@ package br.com.compass.filmes.cliente.enums;
 import java.util.Random;
 
 public enum ClientEnum {
-    PEDRO("adde23eb-2bc3-437f-bdba-f8f96f8c4014", "client_id_pedro", "2ef97ff2-1df7-471a-9b6a-8a296790aa69"),
-    NOEEME("036dbc65-d1e3-4070-ba99-d7b658fb216b", "client_id_noeeme","5a90a7ec-dd17-470e-9f12-b4a8143c9cc0");
+    NOEEME("036dbc65-d1e3-4070-ba99-d7b658fb216b", "client_id_noeeme", "5a90a7ec-dd17-470e-9f12-b4a8143c9cc0"),
+    PEDRO("adde23eb-2bc3-437f-bdba-f8f96f8c4014", "client_id_pedro", "2ef97ff2-1df7-471a-9b6a-8a296790aa69");
 
     private String apiKey;
     private String clientId;
@@ -33,4 +33,4 @@ public enum ClientEnum {
     public String getSellerId() {
         return this.sellerId;
     }
-}
+    }

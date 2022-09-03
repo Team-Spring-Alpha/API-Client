@@ -2,16 +2,17 @@ package br.com.compass.filmes.cliente.service;
 
 import br.com.compass.filmes.cliente.dto.apiAllocationHistory.RequestAllocation;
 import br.com.compass.filmes.cliente.dto.apiAllocationHistory.RequestAllocationMovie;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePayment;
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPayment;
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCreditCard;
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCustomer;
 import br.com.compass.filmes.cliente.dto.apiPayment.response.*;
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePayment;
 import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseMovieById;
 import br.com.compass.filmes.cliente.entities.ClientEntity;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
 import br.com.compass.filmes.cliente.enums.ClientEnum;
 import br.com.compass.filmes.cliente.enums.MovieLinks;
+import br.com.compass.filmes.cliente.exceptions.*;
 import br.com.compass.filmes.cliente.proxy.GatewayProxy;
 import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;
 import br.com.compass.filmes.cliente.rabbitMq.MessageHistory;
@@ -19,9 +20,7 @@ import br.com.compass.filmes.cliente.repository.ClientRepository;
 import br.com.compass.filmes.cliente.util.Md5;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -42,38 +41,25 @@ public class MoviePaymentService {
     private final Md5 md5;
 
     public ResponseGatewayReproved post(RequestMoviePayment requestMoviePayment) {
-        ClientEntity clientEntity = clientRepository.findById(requestMoviePayment.getUserId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        ClientEntity clientEntity = clientRepository.findById(requestMoviePayment.getUserId()).orElseThrow(() -> new ClientNotFoundException("userId: "+ requestMoviePayment.getUserId()));
         CreditCardEntity creditCard = getCreditCard(requestMoviePayment, clientEntity);
 
         List<ResponseMoviePaymentProcess> moviePaymentProcessList = new ArrayList<>();
         Double amount = 0.0;
+        boolean movieBuyOrRentListIsEmpty = true;
 
         if (requestMoviePayment.getMovies().getBuy() != null) {
-            for (int i = 0; i < requestMoviePayment.getMovies().getBuy().size(); i++) {
-                ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getBuy().get(i));
-                try {
-                    Double buyPrice = proxyMovieById.getJustWatch().getBuy().get(0).getPrice();
-                    amount += buyPrice;
-                    buildMoviesProcessBuy(requestMoviePayment, moviePaymentProcessList, i, proxyMovieById);
-
-                } catch (NullPointerException nullPointerException) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-                }
-            }
+            amount = processTheBuyMovieList(requestMoviePayment, moviePaymentProcessList, amount);
+            movieBuyOrRentListIsEmpty = false;
         }
 
         if (requestMoviePayment.getMovies().getRent() != null) {
-            for (int i = 0; i < requestMoviePayment.getMovies().getRent().size(); i++) {
-                ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getRent().get(i));
-                try {
-                    Double rentPrice = proxyMovieById.getJustWatch().getRent().get(0).getPrice();
-                    amount += rentPrice;
-                    buildMoviesProcessRent(requestMoviePayment, moviePaymentProcessList, i, proxyMovieById);
+            amount = processTheRentMovieList(requestMoviePayment, moviePaymentProcessList, amount);
+            movieBuyOrRentListIsEmpty = false;
+        }
 
-                } catch (NullPointerException nullPointerException) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-                }
-            }
+        if (movieBuyOrRentListIsEmpty) {
+            throw new RentAndBuyMoviesEmptyException();
         }
 
 
@@ -98,40 +84,60 @@ public class MoviePaymentService {
         messageHistory.sendMessage(requestAllocation);
 
         if (payment.getStatus().equals("REPROVED")) {
-            ResponseGatewayReproved response = new ResponseGatewayReproved();
-            response.setCause(payment.getAuthorization().getReasonMessage());
-            return response;
+            String cause = payment.getAuthorization().getReasonMessage();
+            return new ResponseGatewayReproved(cause);
         }
 
-        ResponseGatewayOk responseGatewayOk = new ResponseGatewayOk();
-        responseGatewayOk.setMovies(moviePaymentProcessList);
-        responseGatewayOk.setPaymentStatus("APPROVED");
-        responseGatewayOk.setCause("approved");
-        return responseGatewayOk;
+        return new ResponseGatewayOk(moviePaymentProcessList);
+    }
+
+    private Double processTheRentMovieList(RequestMoviePayment requestMoviePayment, List<ResponseMoviePaymentProcess> moviePaymentProcessList, Double amount) {
+        for (int i = 0; i < requestMoviePayment.getMovies().getRent().size(); i++) {
+            Long movieId = requestMoviePayment.getMovies().getRent().get(i);
+            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getRent().get(i));
+            String movieTitle = proxyMovieById.getMovieName();
+            try {
+                String movieStore = proxyMovieById.getJustWatch().getBuy().get(0).getStore();
+                Double rentPrice = proxyMovieById.getJustWatch().getRent().get(0).getPrice();
+                amount += rentPrice;
+                buildMoviesProcessList(movieId, movieTitle, movieStore, moviePaymentProcessList);
+
+            } catch (NullPointerException exception) {
+                throw new RentMovieNotFoundException("movie id: "+ movieId);
+            }
+        }
+        return amount;
+    }
+
+    private Double processTheBuyMovieList(RequestMoviePayment requestMoviePayment, List<ResponseMoviePaymentProcess> moviePaymentProcessList, Double amount) {
+        for (int i = 0; i < requestMoviePayment.getMovies().getBuy().size(); i++) {
+            Long movieId = requestMoviePayment.getMovies().getBuy().get(i);
+            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getBuy().get(i));
+            String movieTitle = proxyMovieById.getMovieName();
+            try {
+                String movieStore = proxyMovieById.getJustWatch().getBuy().get(0).getStore();
+                Double buyPrice = proxyMovieById.getJustWatch().getBuy().get(0).getPrice();
+                amount += buyPrice;
+                buildMoviesProcessList(movieId, movieTitle, movieStore, moviePaymentProcessList);
+            } catch (NullPointerException exception) {
+                throw new BuyMovieNotFoundException("movie id: " + movieId);
+            }
+        }
+        return amount;
     }
 
     private MovieLinks getMovieLinkFromlabel(String label) {
         return MovieLinks.valueOfLabel(label);
     }
 
-    private void buildMoviesProcessBuy(RequestMoviePayment requestMoviePayment, List<ResponseMoviePaymentProcess> moviePaymentProcessList, int i, ResponseMovieById proxyMovieById) {
+    private void buildMoviesProcessList(Long movieId, String movieTitle, String movieStore, List<ResponseMoviePaymentProcess> moviePaymentProcessList) {
         ResponseMoviePaymentProcess moviePaymentProcess = new ResponseMoviePaymentProcess();
-        moviePaymentProcess.setMovieId(requestMoviePayment.getMovies().getBuy().get(i));
-        moviePaymentProcess.setTitle(proxyMovieById.getMovieName());
-        MovieLinks movieLinks = getMovieLinkFromlabel(proxyMovieById.getJustWatch().getBuy().get(0).getStore());
+        moviePaymentProcess.setMovieId(movieId);
+        moviePaymentProcess.setTitle(movieTitle);
+        MovieLinks movieLinks = getMovieLinkFromlabel(movieStore);
         moviePaymentProcess.setLink(movieLinks.getLink());
         moviePaymentProcessList.add(moviePaymentProcess);
     }
-
-    private void buildMoviesProcessRent(RequestMoviePayment requestMoviePayment, List<ResponseMoviePaymentProcess> moviePaymentProcessList, int i, ResponseMovieById proxyMovieById) {
-        ResponseMoviePaymentProcess moviePaymentProcess = new ResponseMoviePaymentProcess();
-        moviePaymentProcess.setMovieId(requestMoviePayment.getMovies().getRent().get(i));
-        moviePaymentProcess.setTitle(proxyMovieById.getMovieName());
-        MovieLinks movieLinks = getMovieLinkFromlabel(proxyMovieById.getJustWatch().getRent().get(0).getStore());
-        moviePaymentProcess.setLink(movieLinks.getLink());
-        moviePaymentProcessList.add(moviePaymentProcess);
-    }
-
     private List<RequestAllocationMovie> getRequestAllocationMovies(List<ResponseMoviePaymentProcess> response) {
         List<RequestAllocationMovie> requestAllocationMovieList = new ArrayList<>();
         for (ResponseMoviePaymentProcess responseMoviePaymentProcess : response) {
@@ -142,12 +148,10 @@ public class MoviePaymentService {
     }
 
     private RequestAllocation buildRequestAllocation(RequestMoviePayment requestMoviePayment, ClientEntity clientEntity, ResponsePayment payment, List<RequestAllocationMovie> requestAllocationMovieList) {
-        RequestAllocation requestAllocation = new RequestAllocation();
-        requestAllocation.setMovies(requestAllocationMovieList);
-        requestAllocation.setPaymentStatus(payment.getStatus());
-        requestAllocation.setCardNumber(requestMoviePayment.getCreditCardNumber());
-        requestAllocation.setUserId(clientEntity.getId());
-        return requestAllocation;
+        String userId = clientEntity.getId();
+        String cardNumber = requestMoviePayment.getCreditCardNumber();
+        String status = payment.getStatus();
+        return new RequestAllocation(userId, cardNumber, requestAllocationMovieList, status);
     }
 
     private void getToken(ClientEnum randomClientEnum) {
@@ -173,14 +177,10 @@ public class MoviePaymentService {
                 return clientEntity.getCreditCards().get(i);
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        throw new CreditCardNotFoundException("credit card id: " + requestMoviePayment.getCreditCardNumber());
     }
 
     private RequestPaymentCustomer buildCustomer(ClientEntity clientEntity) {
-        RequestPaymentCustomer paymentCustomer = new RequestPaymentCustomer();
-        paymentCustomer.setDocumentNumber(clientEntity.getClientCpf());
-        return paymentCustomer;
+        return new RequestPaymentCustomer(clientEntity.getClientCpf());
     }
-
-
 }
