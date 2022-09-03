@@ -24,7 +24,7 @@ public class CreditCardEntityBuilder {
         builder.creditCardEntity.setClientCreditCardHolderName("Jetosvaldo");
         builder.creditCardEntity.setClientCreditCardNumber("5181652903041943");
         builder.creditCardEntity.setClientCreditSecurityCode("613");
-        builder.creditCardEntity.setClientCreditCardBrand(ClientCreditCardBrandEnum.MASTER_CARD);
+        builder.creditCardEntity.setClientCreditCardBrand(ClientCreditCardBrandEnum.MASTERCARD);
         builder.creditCardEntity.setClientCreditCardMonthExpiration("8");
         builder.creditCardEntity.setClientCreditCardYearExpiration(yearNowString);
 

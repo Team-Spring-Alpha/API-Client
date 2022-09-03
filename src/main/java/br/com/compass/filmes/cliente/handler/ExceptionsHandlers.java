@@ -1,5 +1,6 @@
 package br.com.compass.filmes.cliente.handler;
 
+import br.com.compass.filmes.cliente.exceptions.*;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -47,5 +48,48 @@ public class ExceptionsHandlers {
         return ResponseEntity.status(status).body(new ExceptionResponseDto(String.valueOf(status.value()), errorMessage));
 
     }
+
+    @ExceptionHandler(CreditCardNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerCreditCardNotFoundException(CreditCardNotFoundException creditCardNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(creditCardNotFoundException.getMessage(), "credit_card_number");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
+
+    @ExceptionHandler(RentAndBuyMoviesEmptyException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerRentAndBuyMoviesEmptyException(RentAndBuyMoviesEmptyException rentAndBuyMoviesEmptyException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto( "movies buy list and rent list is empty. Either list must be filled", "movies");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerClientNotFoundException(ClientNotFoundException clientNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(clientNotFoundException.getMessage(), "user_id");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
+
+    @ExceptionHandler(BuyMovieNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerBuyMovieNotFoundException(BuyMovieNotFoundException buyMovieNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(buyMovieNotFoundException.getMessage(), "movie.buy");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
+
+    @ExceptionHandler(RentMovieNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerRentMovieNotFoundException(RentMovieNotFoundException rentMovieNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(rentMovieNotFoundException.getMessage(), "movie.rent");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
+
+    @ExceptionHandler(MovieNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerMovieNotFoundException(MovieNotFoundException movieNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(movieNotFoundException.getMessage(), "movie");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
+
 
 }
