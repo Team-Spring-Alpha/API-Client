@@ -4,7 +4,7 @@ public enum MovieLinks {
     NETFLIX("https://www.justwatch.com/br/provedor/netflix", "Netflix"),
     AMAZON_PRIME_VIDEO("https://www.justwatch.com/br/provedor/amazon-video", "Amazon Prime Video"),
     AMAZON_PRIME("https://www.justwatch.com/br/provedor/amazon-prime-video", "Amazon Prime"),
-    APPLE_ITUNES("https://www.justwatch.com/br/provedor/apple-itunes", "Apple iTune"),
+    APPLE_ITUNES("https://www.justwatch.com/br/provedor/apple-itunes", "Apple iTunes"),
     GOOGLE_PLAY_MOVIES("https://www.justwatch.com/br/provedor/google-play-movies", "Google Play Movie"),
     SUN_NXT("https://www.justwatch.com/us/provider/sun-nxt", "Sun Nxt"),
     MUBI("https://www.justwatch.com/br/provedor/mubi", "Mubi"),
