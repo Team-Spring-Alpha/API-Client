@@ -12,6 +12,9 @@ import br.com.compass.filmes.cliente.util.ValidRequestCreditCard;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class ClientService {
+public class ClientService implements UserDetailsService {
 
     private final ClientRepository clientRepository;
 
@@ -74,5 +77,16 @@ public class ClientService {
         clientEntity.setClientIsBlocked(clientIsBlocked);
         clientRepository.save(clientEntity);
         return modelMapper.map(clientEntity, ResponseClient.class);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        var user = clientRepository.findByClientEmail(email);
+        System.out.println("O valor de User em ClientServer é : " + user);
+        if (user != null) {
+            return user;
+        } else {
+            throw new UsernameNotFoundException("Email " + email + " not found!");
+        }
     }
 }
