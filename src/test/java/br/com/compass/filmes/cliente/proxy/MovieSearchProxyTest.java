@@ -36,4 +36,12 @@ class MovieSearchProxyTest {
 
         Mockito.verify(movieManager).getMovieByRecommendations(1L);
     }
+
+    @Test
+    @DisplayName("should get movie info by search by id")
+    void getMovieById() {
+        movieSearchProxy.getMovieById(1L);
+
+        Mockito.verify(movieManager).getMovieById(1L);
+    }
 }

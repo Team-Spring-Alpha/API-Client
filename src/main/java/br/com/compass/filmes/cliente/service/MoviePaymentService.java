@@ -12,12 +12,16 @@ import br.com.compass.filmes.cliente.entities.ClientEntity;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
 import br.com.compass.filmes.cliente.enums.ClientEnum;
 import br.com.compass.filmes.cliente.enums.MovieLinks;
-import br.com.compass.filmes.cliente.exceptions.*;
+import br.com.compass.filmes.cliente.exceptions.BuyMovieNotFoundException;
+import br.com.compass.filmes.cliente.exceptions.ClientNotFoundException;
+import br.com.compass.filmes.cliente.exceptions.CreditCardNotFoundException;
+import br.com.compass.filmes.cliente.exceptions.RentMovieNotFoundException;
 import br.com.compass.filmes.cliente.proxy.GatewayProxy;
 import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;
 import br.com.compass.filmes.cliente.rabbitMq.MessageHistory;
 import br.com.compass.filmes.cliente.repository.ClientRepository;
 import br.com.compass.filmes.cliente.util.Md5;
+import br.com.compass.filmes.cliente.util.ValidRequestMoviePayment;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -39,29 +43,23 @@ public class MoviePaymentService {
     private final GatewayProxy gatewayProxy;
     private final MessageHistory messageHistory;
     private final Md5 md5;
+    private final ValidRequestMoviePayment validRequestMoviePayment;
 
     public ResponseGatewayReproved post(RequestMoviePayment requestMoviePayment) {
+        validRequestMoviePayment.validRequestMoviePayment(requestMoviePayment);
         ClientEntity clientEntity = clientRepository.findById(requestMoviePayment.getUserId()).orElseThrow(() -> new ClientNotFoundException("userId: "+ requestMoviePayment.getUserId()));
         CreditCardEntity creditCard = getCreditCard(requestMoviePayment, clientEntity);
 
         List<ResponseMoviePaymentProcess> moviePaymentProcessList = new ArrayList<>();
         Double amount = 0.0;
-        boolean movieBuyOrRentListIsEmpty = true;
 
         if (requestMoviePayment.getMovies().getBuy() != null) {
             amount = processTheBuyMovieList(requestMoviePayment, moviePaymentProcessList, amount);
-            movieBuyOrRentListIsEmpty = false;
         }
 
         if (requestMoviePayment.getMovies().getRent() != null) {
             amount = processTheRentMovieList(requestMoviePayment, moviePaymentProcessList, amount);
-            movieBuyOrRentListIsEmpty = false;
         }
-
-        if (movieBuyOrRentListIsEmpty) {
-            throw new RentAndBuyMoviesEmptyException();
-        }
-
 
         ClientEnum randomClientEnum = ClientEnum.getRandomClientEnum();
         if (this.tokenExpirationTime == null) {
@@ -97,7 +95,7 @@ public class MoviePaymentService {
             ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getRent().get(i));
             String movieTitle = proxyMovieById.getMovieName();
             try {
-                String movieStore = proxyMovieById.getJustWatch().getBuy().get(0).getStore();
+                String movieStore = proxyMovieById.getJustWatch().getRent().get(0).getStore();
                 Double rentPrice = proxyMovieById.getJustWatch().getRent().get(0).getPrice();
                 amount += rentPrice;
                 buildMoviesProcessList(movieId, movieTitle, movieStore, moviePaymentProcessList);
@@ -112,7 +110,7 @@ public class MoviePaymentService {
     private Double processTheBuyMovieList(RequestMoviePayment requestMoviePayment, List<ResponseMoviePaymentProcess> moviePaymentProcessList, Double amount) {
         for (int i = 0; i < requestMoviePayment.getMovies().getBuy().size(); i++) {
             Long movieId = requestMoviePayment.getMovies().getBuy().get(i);
-            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getBuy().get(i));
+            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(movieId);
             String movieTitle = proxyMovieById.getMovieName();
             try {
                 String movieStore = proxyMovieById.getJustWatch().getBuy().get(0).getStore();
