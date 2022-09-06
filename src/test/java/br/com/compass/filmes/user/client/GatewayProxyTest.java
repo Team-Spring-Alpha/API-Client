@@ -1,7 +1,7 @@
-package br.com.compass.filmes.user.proxy;
+package br.com.compass.filmes.user.client;
 
-import br.com.compass.filmes.user.dto.apiPayment.request.RequestAuth;
-import br.com.compass.filmes.user.dto.apiPayment.request.RequestPayment;
+import br.com.compass.filmes.user.dto.payment.request.RequestAuth;
+import br.com.compass.filmes.user.dto.payment.request.RequestPayment;
 import br.com.compass.filmes.user.enums.UserEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

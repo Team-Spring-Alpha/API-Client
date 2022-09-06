@@ -1,4 +1,4 @@
-package br.com.compass.filmes.user.proxy;
+package br.com.compass.filmes.user.client;
 
 import br.com.compass.filmes.user.dto.user.response.apiAllocationHistory.ResponseAllocation;
 import org.springframework.beans.factory.annotation.Autowired;

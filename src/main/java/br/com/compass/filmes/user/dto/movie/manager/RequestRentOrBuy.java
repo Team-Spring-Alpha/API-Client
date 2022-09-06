@@ -1,4 +1,4 @@
-package br.com.compass.filmes.user.dto.apiMovieManager;
+package br.com.compass.filmes.user.dto.movie.manager;
 
 import lombok.Data;
 

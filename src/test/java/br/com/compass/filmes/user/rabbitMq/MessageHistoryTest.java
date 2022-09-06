@@ -1,7 +1,7 @@
 package br.com.compass.filmes.user.rabbitMq;
 
-import br.com.compass.filmes.user.dto.apiAllocationHistory.RequestAllocation;
-import br.com.compass.filmes.user.dto.apiAllocationHistory.RequestAllocationMovie;
+import br.com.compass.filmes.user.dto.allocation.history.RequestAllocation;
+import br.com.compass.filmes.user.dto.allocation.history.RequestAllocationMovie;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

@@ -1,8 +1,8 @@
 package br.com.compass.filmes.user.util;
 
 import br.com.compass.filmes.user.builders.RequestRentOrBuyBuilder;
-import br.com.compass.filmes.user.dto.apiMovieManager.RequestMoviePayment;
-import br.com.compass.filmes.user.dto.apiMovieManager.RequestRentOrBuy;
+import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePayment;
+import br.com.compass.filmes.user.dto.movie.manager.RequestRentOrBuy;
 import br.com.compass.filmes.user.exceptions.RentAndBuyMoviesEmptyException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

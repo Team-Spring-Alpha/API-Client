@@ -1,9 +1,9 @@
-package br.com.compass.filmes.user.proxy;
+package br.com.compass.filmes.user.client;
 
-import br.com.compass.filmes.user.dto.apiPayment.request.RequestAuth;
-import br.com.compass.filmes.user.dto.apiPayment.request.RequestPayment;
-import br.com.compass.filmes.user.dto.apiPayment.response.ResponseAuth;
-import br.com.compass.filmes.user.dto.apiPayment.response.ResponsePayment;
+import br.com.compass.filmes.user.dto.payment.request.RequestAuth;
+import br.com.compass.filmes.user.dto.payment.request.RequestPayment;
+import br.com.compass.filmes.user.dto.payment.response.ResponseAuth;
+import br.com.compass.filmes.user.dto.payment.response.ResponsePayment;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;

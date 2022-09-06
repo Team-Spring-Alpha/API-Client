@@ -1,6 +1,6 @@
 package br.com.compass.filmes.user.builders;
 
-import br.com.compass.filmes.user.dto.apiMovieManager.RequestRentOrBuy;
+import br.com.compass.filmes.user.dto.movie.manager.RequestRentOrBuy;
 
 import java.util.ArrayList;
 import java.util.List;

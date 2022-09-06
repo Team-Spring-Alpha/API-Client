@@ -1,4 +1,4 @@
-package br.com.compass.filmes.user.dto.apiPayment.response;
+package br.com.compass.filmes.user.dto.payment.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

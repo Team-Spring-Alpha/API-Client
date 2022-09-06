@@ -1,6 +1,6 @@
 package br.com.compass.filmes.user.rabbitMq;
 
-import br.com.compass.filmes.user.dto.apiAllocationHistory.RequestAllocation;
+import br.com.compass.filmes.user.dto.allocation.history.RequestAllocation;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package br.com.compass.filmes.user.controller;
 
-import br.com.compass.filmes.user.dto.apiPayment.response.ResponseGatewayReproved;
-import br.com.compass.filmes.user.dto.apiMovieManager.RequestMoviePayment;
+import br.com.compass.filmes.user.dto.payment.response.ResponseGatewayReproved;
+import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePayment;
 import br.com.compass.filmes.user.service.MoviePaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
