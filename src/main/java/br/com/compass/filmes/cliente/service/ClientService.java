@@ -9,7 +9,7 @@ import br.com.compass.filmes.cliente.repository.ClientRepository;
 import br.com.compass.filmes.cliente.util.Md5;
 import br.com.compass.filmes.cliente.util.ValidRequestClient;
 import br.com.compass.filmes.cliente.util.ValidRequestCreditCard;
-import br.com.compass.filmes.cliente.util.serialization.Encript;
+import br.com.compass.filmes.cliente.util.EncryptPassword;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,7 @@ public class ClientService implements UserDetailsService {
 
     private final Md5 md5;
 
-    private final Encript encript;
+    private final EncryptPassword encryptPassword;
 
     private final ValidRequestClient validRequestClient;
 
@@ -43,8 +43,7 @@ public class ClientService implements UserDetailsService {
         validListOfRequestCreditCards(requestCLient);
 
         ClientEntity client = modelMapper.map(requestCLient, ClientEntity.class);
-        //client.setClientPassword(md5.ToMd5(client.getClientPassword()));
-        client.setClientPassword(encript.ToEncript(client.getClientPassword()));
+        client.setClientPassword(encryptPassword.encrypt(client.getClientPassword()));
 
         ClientEntity saveClient = clientRepository.save(client);
         return modelMapper.map(saveClient, ResponseClient.class);
@@ -86,7 +85,6 @@ public class ClientService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         var user = clientRepository.findByClientEmail(email);
-        System.out.println("O valor de User em ClientServer é : " + user);
         if (user != null) {
             return user;
         } else {

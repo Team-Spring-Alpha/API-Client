@@ -43,7 +43,7 @@ public class AuthService {
             }
             return ResponseEntity.ok(tokenResponse);
         } catch (Exception e) {
-            throw new BadCredentialsException("Invalid email/password supplied!");
+            throw new BadCredentialsException("Invalid email / password supplied!");
         }
     }
 

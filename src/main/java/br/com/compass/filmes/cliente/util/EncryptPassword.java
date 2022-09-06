@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.util.serialization;
+package br.com.compass.filmes.cliente.util;
 
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class Encript {
-    public String ToEncript(String beEncrypted) {
+public class EncryptPassword {
+    public String encrypt(String beEncrypted) {
         Map<String, PasswordEncoder> encoders = new HashMap<>();
         encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
         DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
