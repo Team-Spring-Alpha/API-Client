@@ -9,6 +9,7 @@ import br.com.compass.filmes.cliente.repository.ClientRepository;
 import br.com.compass.filmes.cliente.util.Md5;
 import br.com.compass.filmes.cliente.util.ValidRequestClient;
 import br.com.compass.filmes.cliente.util.ValidRequestCreditCard;
+import br.com.compass.filmes.cliente.util.serialization.Encript;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,8 @@ public class ClientService implements UserDetailsService {
 
     private final Md5 md5;
 
+    private final Encript encript;
+
     private final ValidRequestClient validRequestClient;
 
     private final ValidRequestCreditCard validRequestCreditCard;
@@ -40,7 +43,8 @@ public class ClientService implements UserDetailsService {
         validListOfRequestCreditCards(requestCLient);
 
         ClientEntity client = modelMapper.map(requestCLient, ClientEntity.class);
-        client.setClientPassword(md5.ToMd5(client.getClientPassword()));
+        //client.setClientPassword(md5.ToMd5(client.getClientPassword()));
+        client.setClientPassword(encript.ToEncript(client.getClientPassword()));
 
         ClientEntity saveClient = clientRepository.save(client);
         return modelMapper.map(saveClient, ResponseClient.class);

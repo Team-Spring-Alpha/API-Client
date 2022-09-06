@@ -30,19 +30,11 @@ public class AuthService {
         try {
             var email = data.getEmail();
             var password = data.getPassword();
-            log.info("METODO SIGNIN, AccountCredentials: " + data);
 
-            //o problemas esta aqui, não esta autenticando ta dando bad credentials
-            //****** Possivel problema no banco que nao esta atualizado! *******
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password));
 
-            log.info("FOI AUTENTICADO!");
-
             var user = repository.findByClientEmail(email);
-
-            log.info("O valor de User é: " + user);
-
             var tokenResponse = new Token();
             if (user != null) {
                 tokenResponse = tokenProvider.createAccessToken(email, user.getRoles());
@@ -51,10 +43,6 @@ public class AuthService {
             }
             return ResponseEntity.ok(tokenResponse);
         } catch (Exception e) {
-            System.out.println("LANÇOU AQUI");
-            System.out.println(e.getMessage());
-            System.out.println(e.getCause());
-            System.out.println(e.getLocalizedMessage());
             throw new BadCredentialsException("Invalid email/password supplied!");
         }
     }

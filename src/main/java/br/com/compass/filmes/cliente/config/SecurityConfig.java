@@ -22,13 +22,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
-    /*
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return super.userDetailsService();
-    }
-     */
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         Map<String, PasswordEncoder> encoders = new HashMap<>();
