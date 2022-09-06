@@ -8,6 +8,7 @@ import br.com.compass.filmes.cliente.dto.user.request.RequestSetStatusUserAccoun
 import br.com.compass.filmes.cliente.dto.user.response.ResponseUser;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.repository.UserRepository;
+import br.com.compass.filmes.cliente.util.EncryptPassword;
 import br.com.compass.filmes.cliente.util.Md5;
 import br.com.compass.filmes.cliente.util.ValidRequestUser;
 import br.com.compass.filmes.cliente.util.ValidRequestCreditCard;
@@ -41,6 +42,9 @@ class UserServiceTest {
 
     @MockBean
     private Md5 md5;
+
+    @MockBean
+    private EncryptPassword encryptPassword;
 
     @SpyBean
     private ModelMapper modelMapper;
