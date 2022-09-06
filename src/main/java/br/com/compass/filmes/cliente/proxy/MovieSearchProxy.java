@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.proxy;
 
-import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseApiMovieManager;
-import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseMovieById;
+import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseApiMovieManager;
+import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseMovieById;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import br.com.compass.filmes.cliente.exceptions.MovieNotFoundException;

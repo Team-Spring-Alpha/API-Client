@@ -1,49 +1,49 @@
 package br.com.compass.filmes.cliente.builders;
 
-import br.com.compass.filmes.cliente.dto.client.request.RequestClientUpdate;
+import br.com.compass.filmes.cliente.dto.user.request.RequestUserUpdate;
 
 import java.time.LocalDate;
 
 public class RequestClientUpdateBuilder {
-    private RequestClientUpdate requestClientUpdate;
+    private RequestUserUpdate requestUserUpdate;
 
     public RequestClientUpdateBuilder() {
     }
 
     public static RequestClientUpdateBuilder one(){
         RequestClientUpdateBuilder builder = new RequestClientUpdateBuilder();
-        builder.requestClientUpdate = new RequestClientUpdate();
+        builder.requestUserUpdate = new RequestUserUpdate();
 
-        builder.requestClientUpdate.setClientEmail("yosope1626@uptade.com");
-        builder.requestClientUpdate.setClientName("Jetosvaldo Update");
-        builder.requestClientUpdate.setClientPassword("lala12");
-        builder.requestClientUpdate.setClientBirthDate(LocalDate.now().plusYears(1));
+        builder.requestUserUpdate.setEmail("yosope1626@uptade.com");
+        builder.requestUserUpdate.setName("Jetosvaldo Update");
+        builder.requestUserUpdate.setPassword("lala12");
+        builder.requestUserUpdate.setBirthDate(LocalDate.now().plusYears(1));
 
         return builder;
     }
 
     public RequestClientUpdateBuilder withName(String name) {
-        this.requestClientUpdate.setClientName(name);
+        this.requestUserUpdate.setName(name);
         return this;
     }
 
     public RequestClientUpdateBuilder withEmail(String email) {
-        this.requestClientUpdate.setClientEmail(email);
+        this.requestUserUpdate.setEmail(email);
         return this;
     }
 
     public RequestClientUpdateBuilder withPassword(String password) {
-        this.requestClientUpdate.setClientPassword(password);
+        this.requestUserUpdate.setPassword(password);
         return this;
     }
 
     public RequestClientUpdateBuilder withBirthDate(LocalDate birthDate) {
-        this.requestClientUpdate.setClientBirthDate(birthDate);
+        this.requestUserUpdate.setBirthDate(birthDate);
         return this;
     }
 
 
-    public RequestClientUpdate now() {
-        return this.requestClientUpdate;
+    public RequestUserUpdate now() {
+        return this.requestUserUpdate;
     }
 }

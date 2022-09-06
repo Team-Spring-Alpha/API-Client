@@ -7,17 +7,21 @@ import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPayment;
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCreditCard;
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCustomer;
 import br.com.compass.filmes.cliente.dto.apiPayment.response.*;
-import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseMovieById;
-import br.com.compass.filmes.cliente.entities.ClientEntity;
+import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseMovieById;
+import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
-import br.com.compass.filmes.cliente.enums.ClientEnum;
+import br.com.compass.filmes.cliente.enums.UserEnum;
 import br.com.compass.filmes.cliente.enums.MovieLinks;
-import br.com.compass.filmes.cliente.exceptions.*;
+import br.com.compass.filmes.cliente.exceptions.BuyMovieNotFoundException;
+import br.com.compass.filmes.cliente.exceptions.UserNotFoundException;
+import br.com.compass.filmes.cliente.exceptions.CreditCardNotFoundException;
+import br.com.compass.filmes.cliente.exceptions.RentMovieNotFoundException;
 import br.com.compass.filmes.cliente.proxy.GatewayProxy;
 import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;
 import br.com.compass.filmes.cliente.rabbitMq.MessageHistory;
-import br.com.compass.filmes.cliente.repository.ClientRepository;
+import br.com.compass.filmes.cliente.repository.UserRepository;
 import br.com.compass.filmes.cliente.util.Md5;
+import br.com.compass.filmes.cliente.util.ValidRequestMoviePayment;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -34,53 +38,47 @@ public class MoviePaymentService {
     private LocalTime tokenExpirationTime;
     private String authToken;
     private final ModelMapper modelMapper;
-    private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
     private final MovieSearchProxy movieSearchProxy;
     private final GatewayProxy gatewayProxy;
     private final MessageHistory messageHistory;
     private final Md5 md5;
+    private final ValidRequestMoviePayment validRequestMoviePayment;
 
     public ResponseGatewayReproved post(RequestMoviePayment requestMoviePayment) {
-        ClientEntity clientEntity = clientRepository.findById(requestMoviePayment.getUserId()).orElseThrow(() -> new ClientNotFoundException("userId: "+ requestMoviePayment.getUserId()));
-        CreditCardEntity creditCard = getCreditCard(requestMoviePayment, clientEntity);
+        validRequestMoviePayment.validRequestMoviePayment(requestMoviePayment);
+        UserEntity userEntity = userRepository.findById(requestMoviePayment.getUserId()).orElseThrow(() -> new UserNotFoundException("userId: "+ requestMoviePayment.getUserId()));
+        CreditCardEntity creditCard = getCreditCard(requestMoviePayment, userEntity);
 
         List<ResponseMoviePaymentProcess> moviePaymentProcessList = new ArrayList<>();
         Double amount = 0.0;
-        boolean movieBuyOrRentListIsEmpty = true;
 
         if (requestMoviePayment.getMovies().getBuy() != null) {
             amount = processTheBuyMovieList(requestMoviePayment, moviePaymentProcessList, amount);
-            movieBuyOrRentListIsEmpty = false;
         }
 
         if (requestMoviePayment.getMovies().getRent() != null) {
             amount = processTheRentMovieList(requestMoviePayment, moviePaymentProcessList, amount);
-            movieBuyOrRentListIsEmpty = false;
         }
 
-        if (movieBuyOrRentListIsEmpty) {
-            throw new RentAndBuyMoviesEmptyException();
-        }
-
-
-        ClientEnum randomClientEnum = ClientEnum.getRandomClientEnum();
+        UserEnum randomUserEnum = UserEnum.getRandomClientEnum();
         if (this.tokenExpirationTime == null) {
-            getToken(randomClientEnum);
+            getToken(randomUserEnum);
         }
 
         if (LocalTime.now().isAfter(tokenExpirationTime)) {
-            getToken(randomClientEnum);
+            getToken(randomUserEnum);
         }
 
 
-        RequestPaymentCustomer paymentCustomer = buildCustomer(clientEntity);
+        RequestPaymentCustomer paymentCustomer = buildCustomer(userEntity);
 
-        RequestPayment requestPayment = buildRequesPayment(creditCard, amount, randomClientEnum, paymentCustomer);
+        RequestPayment requestPayment = buildRequesPayment(creditCard, amount, randomUserEnum, paymentCustomer);
 
         ResponsePayment payment = gatewayProxy.getPayment(this.authToken, requestPayment);
 
         List<RequestAllocationMovie> requestAllocationMovieList = getRequestAllocationMovies(moviePaymentProcessList);
-        RequestAllocation requestAllocation = buildRequestAllocation(requestMoviePayment, clientEntity, payment, requestAllocationMovieList);
+        RequestAllocation requestAllocation = buildRequestAllocation(requestMoviePayment, userEntity, payment, requestAllocationMovieList);
         messageHistory.sendMessage(requestAllocation);
 
         if (payment.getStatus().equals("REPROVED")) {
@@ -97,7 +95,7 @@ public class MoviePaymentService {
             ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getRent().get(i));
             String movieTitle = proxyMovieById.getMovieName();
             try {
-                String movieStore = proxyMovieById.getJustWatch().getBuy().get(0).getStore();
+                String movieStore = proxyMovieById.getJustWatch().getRent().get(0).getStore();
                 Double rentPrice = proxyMovieById.getJustWatch().getRent().get(0).getPrice();
                 amount += rentPrice;
                 buildMoviesProcessList(movieId, movieTitle, movieStore, moviePaymentProcessList);
@@ -112,7 +110,7 @@ public class MoviePaymentService {
     private Double processTheBuyMovieList(RequestMoviePayment requestMoviePayment, List<ResponseMoviePaymentProcess> moviePaymentProcessList, Double amount) {
         for (int i = 0; i < requestMoviePayment.getMovies().getBuy().size(); i++) {
             Long movieId = requestMoviePayment.getMovies().getBuy().get(i);
-            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getBuy().get(i));
+            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(movieId);
             String movieTitle = proxyMovieById.getMovieName();
             try {
                 String movieStore = proxyMovieById.getJustWatch().getBuy().get(0).getStore();
@@ -147,40 +145,40 @@ public class MoviePaymentService {
         return requestAllocationMovieList;
     }
 
-    private RequestAllocation buildRequestAllocation(RequestMoviePayment requestMoviePayment, ClientEntity clientEntity, ResponsePayment payment, List<RequestAllocationMovie> requestAllocationMovieList) {
-        String userId = clientEntity.getId();
+    private RequestAllocation buildRequestAllocation(RequestMoviePayment requestMoviePayment, UserEntity userEntity, ResponsePayment payment, List<RequestAllocationMovie> requestAllocationMovieList) {
+        String userId = userEntity.getId();
         String cardNumber = requestMoviePayment.getCreditCardNumber();
         String status = payment.getStatus();
         return new RequestAllocation(userId, cardNumber, requestAllocationMovieList, status);
     }
 
-    private void getToken(ClientEnum randomClientEnum) {
-        ResponseAuth authToken = gatewayProxy.getAuthToken(randomClientEnum);
+    private void getToken(UserEnum randomUserEnum) {
+        ResponseAuth authToken = gatewayProxy.getAuthToken(randomUserEnum);
         this.tokenExpirationTime = LocalTime.now().plusSeconds(Long.parseLong(authToken.getExpiresIn()));
         this.authToken = authToken.getToken();
     }
 
-    private RequestPayment buildRequesPayment(CreditCardEntity creditCard, Double amount, ClientEnum randomClientEnum, RequestPaymentCustomer paymentCustomer) {
+    private RequestPayment buildRequesPayment(CreditCardEntity creditCard, Double amount, UserEnum randomUserEnum, RequestPaymentCustomer paymentCustomer) {
         RequestPayment requestPayment = new RequestPayment();
-        requestPayment.setSellerId(randomClientEnum.getSellerId());
+        requestPayment.setSellerId(randomUserEnum.getSellerId());
         requestPayment.setCustomer(paymentCustomer);
         requestPayment.setTransactionAmount(amount);
         RequestPaymentCreditCard requestCreditCard = modelMapper.map(creditCard, RequestPaymentCreditCard.class);
-        requestCreditCard.setClientCreditCardNumber(md5.ToMd5(creditCard.getClientCreditCardNumber()));
+        requestCreditCard.setClientCreditCardNumber(md5.ToMd5(creditCard.getNumber()));
         requestPayment.setCard(requestCreditCard);
         return requestPayment;
     }
 
-    private CreditCardEntity getCreditCard(RequestMoviePayment requestMoviePayment, ClientEntity clientEntity) {
-        for (int i = 0; i < clientEntity.getCreditCards().size(); i++) {
-            if (Objects.equals(clientEntity.getCreditCards().get(i).getClientCreditCardNumber(), requestMoviePayment.getCreditCardNumber())) {
-                return clientEntity.getCreditCards().get(i);
+    private CreditCardEntity getCreditCard(RequestMoviePayment requestMoviePayment, UserEntity userEntity) {
+        for (int i = 0; i < userEntity.getCards().size(); i++) {
+            if (Objects.equals(userEntity.getCards().get(i).getNumber(), requestMoviePayment.getCreditCardNumber())) {
+                return userEntity.getCards().get(i);
             }
         }
         throw new CreditCardNotFoundException("credit card id: " + requestMoviePayment.getCreditCardNumber());
     }
 
-    private RequestPaymentCustomer buildCustomer(ClientEntity clientEntity) {
-        return new RequestPaymentCustomer(clientEntity.getClientCpf());
+    private RequestPaymentCustomer buildCustomer(UserEntity userEntity) {
+        return new RequestPaymentCustomer(userEntity.getCpf());
     }
 }

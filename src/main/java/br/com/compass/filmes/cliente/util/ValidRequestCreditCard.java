@@ -1,6 +1,6 @@
 package br.com.compass.filmes.cliente.util;
 
-import br.com.compass.filmes.cliente.dto.client.request.RequestCreditCard;
+import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCard;
 import br.com.compass.filmes.cliente.enums.ClientCreditCardBrandEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class ValidRequestCreditCard {
 
     private void validRequestCreditCardBrand(RequestCreditCard requestCreditCard) {
         try {
-            ClientCreditCardBrandEnum.valueOf(requestCreditCard.getClientCreditCardBrand());
+            ClientCreditCardBrandEnum.valueOf(requestCreditCard.getBrand());
         } catch (IllegalArgumentException illegalArgumentException) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -31,7 +31,7 @@ public class ValidRequestCreditCard {
     private void validRequestCreditCardSecurityCode(RequestCreditCard requestCreditCard) {
         String regexStringSecurityCode = "[0-9]{3}";
 
-        if (!requestCreditCard.getClientCreditCardSecurityCode().matches(regexStringSecurityCode)) {
+        if (!requestCreditCard.getSecurityCode().matches(regexStringSecurityCode)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
@@ -39,7 +39,7 @@ public class ValidRequestCreditCard {
     private void validRequestCreditCardMonthExpiration(RequestCreditCard requestCreditCard) {
         String regexStringMonthExpiration = "^[1-9]{1}|^1[0-2]{1}";
 
-        if (!requestCreditCard.getClientCreditCardMonthExpiration().matches(regexStringMonthExpiration)) {
+        if (!requestCreditCard.getMonthExpiration().matches(regexStringMonthExpiration)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
@@ -48,9 +48,9 @@ public class ValidRequestCreditCard {
         String regexStringAnoExpiracao = "^[0-9]{4}";
         boolean yearCreditCardIsValid = false;
 
-        if (requestCreditCard.getClientCreditCardYearExpiration().matches(regexStringAnoExpiracao)) {
+        if (requestCreditCard.getYearExpiration().matches(regexStringAnoExpiracao)) {
             int yearNow = LocalDate.now().getYear();
-            int requestYear = Integer.parseInt(requestCreditCard.getClientCreditCardYearExpiration());
+            int requestYear = Integer.parseInt(requestCreditCard.getYearExpiration());
 
             boolean requestYearIsAfterOrEqualYearNow = requestYear >= yearNow;
             boolean requestYearIsBeforeOrEqualYearNowMinusFive = requestYear <= (yearNow + 5);

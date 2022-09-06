@@ -63,9 +63,9 @@ public class ExceptionsHandlers {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
     }
 
-    @ExceptionHandler(ClientNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDto> handlerClientNotFoundException(ClientNotFoundException clientNotFoundException) {
-        ExceptionResponseDto responseDto = new ExceptionResponseDto(clientNotFoundException.getMessage(), "user_id");
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerClientNotFoundException(UserNotFoundException userNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(userNotFoundException.getMessage(), "user_id");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }

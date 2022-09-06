@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.util;
 
 import br.com.compass.filmes.cliente.builders.RequestCreditCardBuilder;
-import br.com.compass.filmes.cliente.dto.client.request.RequestCreditCard;
+import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
