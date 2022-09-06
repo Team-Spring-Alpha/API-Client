@@ -8,7 +8,7 @@ import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDT
 import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.repository.UserRepository;
-import br.com.compass.filmes.user.util.Md5;
+import br.com.compass.filmes.user.util.EncriptPasswordUtil;
 import br.com.compass.filmes.user.util.ValidRequestUser;
 import br.com.compass.filmes.user.util.ValidRequestCreditCard;
 import org.junit.jupiter.api.Assertions;
@@ -40,7 +40,7 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @MockBean
-    private Md5 md5;
+    private EncriptPasswordUtil encriptPasswordUtil;
 
     @SpyBean
     private ModelMapper modelMapper;

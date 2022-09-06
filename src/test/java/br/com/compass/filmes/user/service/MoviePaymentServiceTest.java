@@ -21,7 +21,7 @@ import br.com.compass.filmes.user.client.GatewayProxy;
 import br.com.compass.filmes.user.client.MovieSearchProxy;
 import br.com.compass.filmes.user.rabbitMq.MessageHistory;
 import br.com.compass.filmes.user.repository.UserRepository;
-import br.com.compass.filmes.user.util.Md5;
+import br.com.compass.filmes.user.util.EncriptPasswordUtil;
 import br.com.compass.filmes.user.util.ValidRequestMoviePayment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -61,7 +61,7 @@ class MoviePaymentServiceTest {
     private  MessageHistory messageHistory;
 
     @MockBean
-    private  Md5 md5;
+    private EncriptPasswordUtil encriptPasswordUtil;
 
     @MockBean
     private ValidRequestMoviePayment validRequestMoviePayment;

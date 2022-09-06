@@ -6,7 +6,7 @@ import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDT
 import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.repository.UserRepository;
-import br.com.compass.filmes.user.util.Md5;
+import br.com.compass.filmes.user.util.EncriptPasswordUtil;
 import br.com.compass.filmes.user.util.ValidRequestUser;
 import br.com.compass.filmes.user.util.ValidRequestCreditCard;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class UserService {
 
     private final ModelMapper modelMapper;
 
-    private final Md5 md5;
+    private final EncriptPasswordUtil encriptPasswordUtil;
 
     private final ValidRequestUser validRequestUser;
 
@@ -37,7 +37,7 @@ public class UserService {
         validListOfRequestCreditCards(requestUserDTO);
 
         UserEntity user = modelMapper.map(requestUserDTO, UserEntity.class);
-        user.setPassword(md5.ToMd5(user.getPassword()));
+        user.setPassword(encriptPasswordUtil.EncriptPassword(user.getPassword()));
 
         UserEntity saveUser = userRepository.save(user);
         return modelMapper.map(saveUser, ResponseUserDTO.class);

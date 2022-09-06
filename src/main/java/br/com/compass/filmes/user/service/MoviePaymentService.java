@@ -20,7 +20,7 @@ import br.com.compass.filmes.user.client.GatewayProxy;
 import br.com.compass.filmes.user.client.MovieSearchProxy;
 import br.com.compass.filmes.user.rabbitMq.MessageHistory;
 import br.com.compass.filmes.user.repository.UserRepository;
-import br.com.compass.filmes.user.util.Md5;
+import br.com.compass.filmes.user.util.EncriptPasswordUtil;
 import br.com.compass.filmes.user.util.ValidRequestMoviePayment;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -42,7 +42,7 @@ public class MoviePaymentService {
     private final MovieSearchProxy movieSearchProxy;
     private final GatewayProxy gatewayProxy;
     private final MessageHistory messageHistory;
-    private final Md5 md5;
+    private final EncriptPasswordUtil encriptPasswordUtil;
     private final ValidRequestMoviePayment validRequestMoviePayment;
 
     public ResponseGatewayReprovedDTO post(RequestMoviePaymentDTO requestMoviePaymentDTO) {
@@ -164,7 +164,7 @@ public class MoviePaymentService {
         requestPaymentDTO.setCustomer(paymentCustomer);
         requestPaymentDTO.setTransactionAmount(amount);
         RequestPaymentCreditCardDTO requestCreditCard = modelMapper.map(creditCard, RequestPaymentCreditCardDTO.class);
-        requestCreditCard.setClientCreditCardNumber(md5.ToMd5(creditCard.getNumber()));
+        requestCreditCard.setClientCreditCardNumber(encriptPasswordUtil.EncriptPassword(creditCard.getNumber()));
         requestPaymentDTO.setCard(requestCreditCard);
         return requestPaymentDTO;
     }
