@@ -1,9 +1,9 @@
 package br.com.compass.filmes.user.client;
 
-import br.com.compass.filmes.user.dto.payment.request.RequestAuth;
-import br.com.compass.filmes.user.dto.payment.request.RequestPayment;
-import br.com.compass.filmes.user.dto.payment.response.ResponseAuth;
-import br.com.compass.filmes.user.dto.payment.response.ResponsePayment;
+import br.com.compass.filmes.user.dto.payment.request.RequestAuthDTO;
+import br.com.compass.filmes.user.dto.payment.request.RequestPaymentDTO;
+import br.com.compass.filmes.user.dto.payment.response.ResponseAuthDTO;
+import br.com.compass.filmes.user.dto.payment.response.ResponsePaymentDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface Gateway {
 
     @GetMapping(value = "auth")
-    ResponseAuth getAuthToken(@RequestBody RequestAuth requestAuth);
+    ResponseAuthDTO getAuthToken(@RequestBody RequestAuthDTO requestAuthDTO);
 
     @GetMapping(value = "payments/credit-card")
-    ResponsePayment getPayment(@RequestHeader("Authorization") String bearerToken, @RequestBody RequestPayment requestPayment);
+    ResponsePaymentDTO getPayment(@RequestHeader("Authorization") String bearerToken, @RequestBody RequestPaymentDTO requestPaymentDTO);
 }

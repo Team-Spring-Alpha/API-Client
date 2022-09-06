@@ -1,9 +1,9 @@
 package br.com.compass.filmes.user.service;
 
-import br.com.compass.filmes.user.dto.user.request.RequestUser;
-import br.com.compass.filmes.user.dto.user.request.RequestUserUpdate;
-import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccount;
-import br.com.compass.filmes.user.dto.user.response.ResponseUser;
+import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
+import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.Md5;
@@ -32,47 +32,47 @@ public class UserService {
 
     private final ValidRequestCreditCard validRequestCreditCard;
 
-    public ResponseUser post(RequestUser requestUser){
-        validRequestUser.validRequestUser(requestUser);
-        validListOfRequestCreditCards(requestUser);
+    public ResponseUserDTO post(RequestUserDTO requestUserDTO){
+        validRequestUser.validRequestUser(requestUserDTO);
+        validListOfRequestCreditCards(requestUserDTO);
 
-        UserEntity user = modelMapper.map(requestUser, UserEntity.class);
+        UserEntity user = modelMapper.map(requestUserDTO, UserEntity.class);
         user.setPassword(md5.ToMd5(user.getPassword()));
 
         UserEntity saveUser = userRepository.save(user);
-        return modelMapper.map(saveUser, ResponseUser.class);
+        return modelMapper.map(saveUser, ResponseUserDTO.class);
     }
 
-    private void validListOfRequestCreditCards(RequestUser requestUser) {
-        for (int i = 0; i < requestUser.getCards().size(); i++) {
-            validRequestCreditCard.validRequestCreditCard(requestUser.getCards().get(i));
+    private void validListOfRequestCreditCards(RequestUserDTO requestUserDTO) {
+        for (int i = 0; i < requestUserDTO.getCards().size(); i++) {
+            validRequestCreditCard.validRequestCreditCard(requestUserDTO.getCards().get(i));
         }
     }
 
-    public List<ResponseUser> returnAllUsers() {
+    public List<ResponseUserDTO> returnAllUsers() {
         List<UserEntity> userEntityList = userRepository.findAll();
-        return userEntityList.stream().map(userEntity -> modelMapper.map(userEntity, ResponseUser.class)).collect(Collectors.toList());
+        return userEntityList.stream().map(userEntity -> modelMapper.map(userEntity, ResponseUserDTO.class)).collect(Collectors.toList());
     }
 
-    public ResponseUser returnUserById(String id) {
+    public ResponseUserDTO returnUserById(String id) {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return modelMapper.map(userEntity, ResponseUser.class);
+        return modelMapper.map(userEntity, ResponseUserDTO.class);
     }
 
 
-    public ResponseUser patch(String id, RequestUserUpdate requestUserUpdate) {
+    public ResponseUserDTO patch(String id, RequestUserUpdateDTO requestUserUpdateDTO) {
 
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        modelMapper.map(requestUserUpdate, userEntity);
+        modelMapper.map(requestUserUpdateDTO, userEntity);
         UserEntity savedUserEntity = userRepository.save(userEntity);
-        return modelMapper.map(savedUserEntity, ResponseUser.class);
+        return modelMapper.map(savedUserEntity, ResponseUserDTO.class);
     }
 
-    public ResponseUser setStatusUserAccount(String id, RequestSetStatusUserAccount requestSetStatusUserAccount){
+    public ResponseUserDTO setStatusUserAccount(String id, RequestSetStatusUserAccountDTO requestSetStatusUserAccountDTO){
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        boolean clientIsBlocked = requestSetStatusUserAccount.isBlocked();
+        boolean clientIsBlocked = requestSetStatusUserAccountDTO.isBlocked();
         userEntity.setBlocked(clientIsBlocked);
         userRepository.save(userEntity);
-        return modelMapper.map(userEntity, ResponseUser.class);
+        return modelMapper.map(userEntity, ResponseUserDTO.class);
     }
 }

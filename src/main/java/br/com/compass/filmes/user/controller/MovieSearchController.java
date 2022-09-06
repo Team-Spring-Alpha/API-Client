@@ -1,6 +1,6 @@
 package br.com.compass.filmes.user.controller;
 
-import br.com.compass.filmes.user.dto.user.response.apiMovie.ResponseApiMovieManager;
+import br.com.compass.filmes.user.dto.user.response.apiMovie.ResponseApiMovieManagerDTO;
 import br.com.compass.filmes.user.enums.GenresEnum;
 import br.com.compass.filmes.user.enums.ProvidersEnum;
 import br.com.compass.filmes.user.service.MovieService;
@@ -24,21 +24,21 @@ public class MovieSearchController {
     private MovieService service;
 
     @GetMapping("/{id}/recommendations")
-    public ResponseEntity<List<ResponseApiMovieManager>> getRecommendations(@PathVariable Long id) {
-        List<ResponseApiMovieManager> responseApiMovieManagerList = service.findMoviesRecommendations(id);
-        return ResponseEntity.ok(responseApiMovieManagerList);
+    public ResponseEntity<List<ResponseApiMovieManagerDTO>> getRecommendations(@PathVariable Long id) {
+        List<ResponseApiMovieManagerDTO> responseApiMovieManagerDTOList = service.findMoviesRecommendations(id);
+        return ResponseEntity.ok(responseApiMovieManagerDTOList);
     }
 
     @GetMapping("/movie-search")
-    public ResponseEntity<List<ResponseApiMovieManager>> getMovieByFilters
+    public ResponseEntity<List<ResponseApiMovieManagerDTO>> getMovieByFilters
             (@RequestParam(required = false, name = "movie_genrer") GenresEnum movieGenre,
              @RequestParam(required = false, name = "release_date_after") @Valid @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateGte,
              @RequestParam(required = false, name = "release_date_before") @Valid @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateLte,
              @RequestParam(required = false, name = "movie_provider") ProvidersEnum movieProvider,
              @RequestParam(required = false, name = "movie_peoples") List<String> moviePeoples,
              @RequestParam(required = false, name = "movie_name")String movieName) {
-        List<ResponseApiMovieManager> responseApiMovieManager = service.findByFilters(movieGenre, dateGte, dateLte, movieProvider,
+        List<ResponseApiMovieManagerDTO> responseApiMovieManagerDTO = service.findByFilters(movieGenre, dateGte, dateLte, movieProvider,
                                                                                         moviePeoples, movieName);
-        return ResponseEntity.ok(responseApiMovieManager);
+        return ResponseEntity.ok(responseApiMovieManagerDTO);
     }
 }

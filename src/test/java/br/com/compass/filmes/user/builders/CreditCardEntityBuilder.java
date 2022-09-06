@@ -1,6 +1,6 @@
 package br.com.compass.filmes.user.builders;
 
-import br.com.compass.filmes.user.dto.user.request.RequestCreditCard;
+import br.com.compass.filmes.user.dto.user.request.RequestCreditCardDTO;
 import br.com.compass.filmes.user.entities.CreditCardEntity;
 import br.com.compass.filmes.user.enums.ClientCreditCardBrandEnum;
 
@@ -61,13 +61,13 @@ public class CreditCardEntityBuilder {
         return this;
     }
 
-    public CreditCardEntityBuilder withRequestCreditCard(RequestCreditCard requestCreditCard) {
-        this.creditCardEntity.setHolderName(requestCreditCard.getHolderName());
-        this.creditCardEntity.setNumber(requestCreditCard.getNumber());
-        this.creditCardEntity.setSecurityCode(requestCreditCard.getSecurityCode());
-        this.creditCardEntity.setMonthExpiration(requestCreditCard.getMonthExpiration());
-        this.creditCardEntity.setYearExpiration(requestCreditCard.getYearExpiration());
-        this.creditCardEntity.setBrand(ClientCreditCardBrandEnum.valueOf(requestCreditCard.getBrand()));
+    public CreditCardEntityBuilder withRequestCreditCard(RequestCreditCardDTO requestCreditCardDTO) {
+        this.creditCardEntity.setHolderName(requestCreditCardDTO.getHolderName());
+        this.creditCardEntity.setNumber(requestCreditCardDTO.getNumber());
+        this.creditCardEntity.setSecurityCode(requestCreditCardDTO.getSecurityCode());
+        this.creditCardEntity.setMonthExpiration(requestCreditCardDTO.getMonthExpiration());
+        this.creditCardEntity.setYearExpiration(requestCreditCardDTO.getYearExpiration());
+        this.creditCardEntity.setBrand(ClientCreditCardBrandEnum.valueOf(requestCreditCardDTO.getBrand()));
 
         return this;
     }

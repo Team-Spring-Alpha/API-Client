@@ -1,6 +1,6 @@
 package br.com.compass.filmes.user.service;
 
-import br.com.compass.filmes.user.dto.user.response.apiMovie.ResponseApiMovieManager;
+import br.com.compass.filmes.user.dto.user.response.apiMovie.ResponseApiMovieManagerDTO;
 import br.com.compass.filmes.user.enums.GenresEnum;
 import br.com.compass.filmes.user.enums.ProvidersEnum;
 import br.com.compass.filmes.user.client.MovieSearchProxy;
@@ -18,7 +18,7 @@ public class MovieService {
     @Autowired
     private MovieSearchProxy movieSearchProxy;
 
-    public List<ResponseApiMovieManager> findMoviesRecommendations(Long movieId) {
+    public List<ResponseApiMovieManagerDTO> findMoviesRecommendations(Long movieId) {
         try {
             return movieSearchProxy.getMovieByRecommendation(movieId);
         } catch (FeignException.FeignClientException.NotFound exception) {
@@ -26,8 +26,8 @@ public class MovieService {
         }
     }
 
-    public List<ResponseApiMovieManager> findByFilters(GenresEnum movieGenre, LocalDate dateGte, LocalDate dateLte, ProvidersEnum movieProvider,
-                                                       List<String> moviePeoples, String movieName) {
+    public List<ResponseApiMovieManagerDTO> findByFilters(GenresEnum movieGenre, LocalDate dateGte, LocalDate dateLte, ProvidersEnum movieProvider,
+                                                          List<String> moviePeoples, String movieName) {
         return movieSearchProxy.getMovieSearchByFilters(movieGenre, dateGte, dateLte, movieProvider, moviePeoples, movieName);
     }
 }

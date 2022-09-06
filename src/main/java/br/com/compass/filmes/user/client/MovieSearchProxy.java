@@ -1,7 +1,7 @@
 package br.com.compass.filmes.user.client;
 
-import br.com.compass.filmes.user.dto.user.response.apiMovie.ResponseApiMovieManager;
-import br.com.compass.filmes.user.dto.user.response.apiMovie.ResponseMovieById;
+import br.com.compass.filmes.user.dto.user.response.apiMovie.ResponseApiMovieManagerDTO;
+import br.com.compass.filmes.user.dto.user.response.apiMovie.ResponseMovieByIdDTO;
 import br.com.compass.filmes.user.enums.GenresEnum;
 import br.com.compass.filmes.user.enums.ProvidersEnum;
 import br.com.compass.filmes.user.exceptions.MovieNotFoundException;
@@ -19,12 +19,12 @@ public class MovieSearchProxy {
     private MovieSearch movieManager;
 
 
-    public List<ResponseApiMovieManager> getMovieSearchByFilters(GenresEnum movieGenre, LocalDate dateGte, LocalDate dateLte,
-                                                                 ProvidersEnum movieProvider, List<String> moviePeoples, String movieName) {
+    public List<ResponseApiMovieManagerDTO> getMovieSearchByFilters(GenresEnum movieGenre, LocalDate dateGte, LocalDate dateLte,
+                                                                    ProvidersEnum movieProvider, List<String> moviePeoples, String movieName) {
         return movieManager.getMovieByFilters(movieGenre, dateGte, dateLte, movieProvider, moviePeoples, movieName);
     }
 
-    public List<ResponseApiMovieManager> getMovieByRecommendation(Long movieId) {
+    public List<ResponseApiMovieManagerDTO> getMovieByRecommendation(Long movieId) {
         try {
             return movieManager.getMovieByRecommendations(movieId);
         } catch (FeignException.FeignClientException.NotFound exception) {
@@ -32,7 +32,7 @@ public class MovieSearchProxy {
         }
     }
 
-    public ResponseMovieById getMovieById(Long movieId){
+    public ResponseMovieByIdDTO getMovieById(Long movieId){
         try {
             return movieManager.getMovieById(movieId);
         } catch (FeignException.FeignClientException.NotFound exception) {

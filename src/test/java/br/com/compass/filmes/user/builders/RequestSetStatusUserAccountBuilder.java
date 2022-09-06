@@ -1,33 +1,33 @@
 package br.com.compass.filmes.user.builders;
 
-import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccount;
+import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
 
 public class RequestSetStatusUserAccountBuilder {
 
-    private RequestSetStatusUserAccount requestSetStatusUserAccount;
+    private RequestSetStatusUserAccountDTO requestSetStatusUserAccountDTO;
 
     public RequestSetStatusUserAccountBuilder(){
     }
 
     public static RequestSetStatusUserAccountBuilder blocked(){
         RequestSetStatusUserAccountBuilder builder = new RequestSetStatusUserAccountBuilder();
-        builder.requestSetStatusUserAccount = new RequestSetStatusUserAccount();
+        builder.requestSetStatusUserAccountDTO = new RequestSetStatusUserAccountDTO();
 
-        builder.requestSetStatusUserAccount.setBlocked(true);
+        builder.requestSetStatusUserAccountDTO.setBlocked(true);
 
         return builder;
     }
 
     public static RequestSetStatusUserAccountBuilder unlocked(){
         RequestSetStatusUserAccountBuilder builder = new RequestSetStatusUserAccountBuilder();
-        builder.requestSetStatusUserAccount = new RequestSetStatusUserAccount();
+        builder.requestSetStatusUserAccountDTO = new RequestSetStatusUserAccountDTO();
 
-        builder.requestSetStatusUserAccount.setBlocked(false);
+        builder.requestSetStatusUserAccountDTO.setBlocked(false);
 
         return builder;
     }
 
-    public RequestSetStatusUserAccount now(){
-        return this.requestSetStatusUserAccount;
+    public RequestSetStatusUserAccountDTO now(){
+        return this.requestSetStatusUserAccountDTO;
     }
 }

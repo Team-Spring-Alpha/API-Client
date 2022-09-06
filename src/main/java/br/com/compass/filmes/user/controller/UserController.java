@@ -1,9 +1,9 @@
 package br.com.compass.filmes.user.controller;
 
-import br.com.compass.filmes.user.dto.user.request.RequestUser;
-import br.com.compass.filmes.user.dto.user.request.RequestUserUpdate;
-import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccount;
-import br.com.compass.filmes.user.dto.user.response.ResponseUser;
+import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
+import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,37 +23,37 @@ public class UserController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<ResponseUser> post(@Valid @RequestBody RequestUser requestUser, UriComponentsBuilder uriComponentsBuilder){
-        ResponseUser responseUser = userService.post(requestUser);
-        URI uri = uriComponentsBuilder.path("/api/user/{id}").buildAndExpand(responseUser.getId()).toUri();
-        return ResponseEntity.created(uri).body(responseUser);
+    public ResponseEntity<ResponseUserDTO> post(@Valid @RequestBody RequestUserDTO requestUserDTO, UriComponentsBuilder uriComponentsBuilder){
+        ResponseUserDTO responseUserDTO = userService.post(requestUserDTO);
+        URI uri = uriComponentsBuilder.path("/api/user/{id}").buildAndExpand(responseUserDTO.getId()).toUri();
+        return ResponseEntity.created(uri).body(responseUserDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseUser>> returnAllUsers() {
-        List<ResponseUser> responseUserList = userService.returnAllUsers();
-        return ResponseEntity.ok(responseUserList);
+    public ResponseEntity<List<ResponseUserDTO>> returnAllUsers() {
+        List<ResponseUserDTO> responseUserDTOList = userService.returnAllUsers();
+        return ResponseEntity.ok(responseUserDTOList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseUser> returnUserById(@PathVariable String id) {
-        ResponseUser responseUser = userService.returnUserById(id);
-        return ResponseEntity.ok(responseUser);
+    public ResponseEntity<ResponseUserDTO> returnUserById(@PathVariable String id) {
+        ResponseUserDTO responseUserDTO = userService.returnUserById(id);
+        return ResponseEntity.ok(responseUserDTO);
     }
 
     @Transactional
     @PatchMapping("/{id}")
-    public ResponseEntity<ResponseUser> patch(@PathVariable String id,
-                                              @RequestBody RequestUserUpdate requestUserUpdate) {
-        ResponseUser responseUser = userService.patch(id, requestUserUpdate);
-        return ResponseEntity.ok(responseUser);
+    public ResponseEntity<ResponseUserDTO> patch(@PathVariable String id,
+                                                 @RequestBody RequestUserUpdateDTO requestUserUpdateDTO) {
+        ResponseUserDTO responseUserDTO = userService.patch(id, requestUserUpdateDTO);
+        return ResponseEntity.ok(responseUserDTO);
     }
 
     @PatchMapping("/account/{id}")
-    public ResponseEntity<ResponseUser> setStatusUserAccount(@PathVariable String id,
-                                                               @RequestBody @Valid RequestSetStatusUserAccount requestSetStatusUserAccount){
-        ResponseUser responseUser = userService.setStatusUserAccount(id, requestSetStatusUserAccount);
-        return ResponseEntity.ok(responseUser);
+    public ResponseEntity<ResponseUserDTO> setStatusUserAccount(@PathVariable String id,
+                                                                @RequestBody @Valid RequestSetStatusUserAccountDTO requestSetStatusUserAccountDTO){
+        ResponseUserDTO responseUserDTO = userService.setStatusUserAccount(id, requestSetStatusUserAccountDTO);
+        return ResponseEntity.ok(responseUserDTO);
 
     }
 }

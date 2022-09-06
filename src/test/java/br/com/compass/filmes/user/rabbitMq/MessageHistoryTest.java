@@ -1,7 +1,7 @@
 package br.com.compass.filmes.user.rabbitMq;
 
-import br.com.compass.filmes.user.dto.allocation.history.RequestAllocation;
-import br.com.compass.filmes.user.dto.allocation.history.RequestAllocationMovie;
+import br.com.compass.filmes.user.dto.allocation.history.RequestAllocationDTO;
+import br.com.compass.filmes.user.dto.allocation.history.RequestAllocationMovieDTO;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -25,14 +25,14 @@ class MessageHistoryTest {
     void shouldSendAMessage() {
         String routingKey = "payment.status";
 
-        RequestAllocationMovie allocationMovie = new RequestAllocationMovie(1L, "movie test");
-        List<RequestAllocationMovie> allocationMovieList = new ArrayList<>();
+        RequestAllocationMovieDTO allocationMovie = new RequestAllocationMovieDTO(1L, "movie test");
+        List<RequestAllocationMovieDTO> allocationMovieList = new ArrayList<>();
         allocationMovieList.add(allocationMovie);
-        RequestAllocation requestAllocation = new RequestAllocation("idTest", "853", allocationMovieList, "approved");
+        RequestAllocationDTO requestAllocationDTO = new RequestAllocationDTO("idTest", "853", allocationMovieList, "approved");
 
-        messageHistory.sendMessage(requestAllocation);
+        messageHistory.sendMessage(requestAllocationDTO);
 
-        Mockito.verify(rabbitTemplate).convertAndSend(routingKey, requestAllocation);
+        Mockito.verify(rabbitTemplate).convertAndSend(routingKey, requestAllocationDTO);
 
     }
 }
