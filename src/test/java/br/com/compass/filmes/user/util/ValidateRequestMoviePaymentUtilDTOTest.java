@@ -12,14 +12,14 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-class ValidRequestMoviePaymentDTOTest {
+class ValidateRequestMoviePaymentUtilDTOTest {
 
-    private ValidRequestMoviePayment validRequestMoviePayment;
+    private ValidateRequestMoviePaymentUtil validateRequestMoviePaymentUtil;
     private RequestMoviePaymentDTO requestMoviePaymentDTO;
 
     @BeforeEach
     void setUp() {
-        this.validRequestMoviePayment = new ValidRequestMoviePayment();
+        this.validateRequestMoviePaymentUtil = new ValidateRequestMoviePaymentUtil();
         this.requestMoviePaymentDTO = new RequestMoviePaymentDTO();
     }
 
@@ -34,7 +34,7 @@ class ValidRequestMoviePaymentDTOTest {
         requestMoviePaymentDTO.setMovies(moviesBuyAndRent);
 
         Assertions.assertThrows(RentAndBuyMoviesEmptyException.class,
-                () -> validRequestMoviePayment.validRequestMoviePayment(requestMoviePaymentDTO));
+                () -> validateRequestMoviePaymentUtil.validRequestMoviePayment(requestMoviePaymentDTO));
     }
 
     @Test
@@ -51,6 +51,6 @@ class ValidRequestMoviePaymentDTOTest {
 
         requestMoviePaymentDTO.setMovies(moviesBuyAndRent);
 
-        validRequestMoviePayment.validRequestMoviePayment(requestMoviePaymentDTO);
+        validateRequestMoviePaymentUtil.validRequestMoviePayment(requestMoviePaymentDTO);
     }
 }

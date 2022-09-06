@@ -11,20 +11,20 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
-class ValidRequestUserDTOTest {
+class ValidateRequestUserUtilDTOTest {
 
-    private ValidRequestUser validRequestUser;
+    private ValidateRequestUserUtil validateRequestUserUtil;
 
     @BeforeEach
     private void setUp() {
-        this.validRequestUser = new ValidRequestUser();
+        this.validateRequestUserUtil = new ValidateRequestUserUtil();
     }
 
     @Test
     @DisplayName("should pass the valid when inform a valid user categories")
     void shouldPassTheValidWhenInformAValidUserCategories() {
         RequestUserDTO requestUserDTO = RequestUserBuilder.one().now();
-        this.validRequestUser.validRequestUser(requestUserDTO);
+        this.validateRequestUserUtil.validRequestUser(requestUserDTO);
     }
 
     @Test
@@ -35,7 +35,7 @@ class ValidRequestUserDTOTest {
         RequestUserDTO requestUserDTO = RequestUserBuilder.one()
                 .withClientCategory(categories)
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestUser.validRequestUser(requestUserDTO));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validateRequestUserUtil.validRequestUser(requestUserDTO));
     }
 
 

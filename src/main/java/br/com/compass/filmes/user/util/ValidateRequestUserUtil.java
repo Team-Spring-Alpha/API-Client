@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ValidRequestUser {
+public class ValidateRequestUserUtil {
 
     public void validRequestUser(RequestUserDTO requestUserDTO) {
         validCategory(requestUserDTO);

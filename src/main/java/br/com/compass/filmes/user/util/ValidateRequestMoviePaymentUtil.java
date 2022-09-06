@@ -5,7 +5,7 @@ import br.com.compass.filmes.user.exceptions.RentAndBuyMoviesEmptyException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidRequestMoviePayment {
+public class ValidateRequestMoviePaymentUtil {
 
     public void validRequestMoviePayment(RequestMoviePaymentDTO requestMoviePaymentDTO) {
         boolean isBuyListInvalid = isBuyListEmptyOrNull(requestMoviePaymentDTO);

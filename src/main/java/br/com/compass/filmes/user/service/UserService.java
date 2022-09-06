@@ -7,8 +7,8 @@ import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
-import br.com.compass.filmes.user.util.ValidRequestUser;
-import br.com.compass.filmes.user.util.ValidRequestCreditCard;
+import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
+import br.com.compass.filmes.user.util.ValidateRequestCreditCardUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -28,12 +28,12 @@ public class UserService {
 
     private final EncriptPasswordUtil encriptPasswordUtil;
 
-    private final ValidRequestUser validRequestUser;
+    private final ValidateRequestUserUtil validateRequestUserUtil;
 
-    private final ValidRequestCreditCard validRequestCreditCard;
+    private final ValidateRequestCreditCardUtil validateRequestCreditCardUtil;
 
     public ResponseUserDTO post(RequestUserDTO requestUserDTO){
-        validRequestUser.validRequestUser(requestUserDTO);
+        validateRequestUserUtil.validRequestUser(requestUserDTO);
         validListOfRequestCreditCards(requestUserDTO);
 
         UserEntity user = modelMapper.map(requestUserDTO, UserEntity.class);
@@ -45,7 +45,7 @@ public class UserService {
 
     private void validListOfRequestCreditCards(RequestUserDTO requestUserDTO) {
         for (int i = 0; i < requestUserDTO.getCards().size(); i++) {
-            validRequestCreditCard.validRequestCreditCard(requestUserDTO.getCards().get(i));
+            validateRequestCreditCardUtil.validRequestCreditCard(requestUserDTO.getCards().get(i));
         }
     }
 

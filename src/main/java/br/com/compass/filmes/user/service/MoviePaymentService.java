@@ -21,7 +21,7 @@ import br.com.compass.filmes.user.client.MovieSearchProxy;
 import br.com.compass.filmes.user.rabbitMq.MessageHistory;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
-import br.com.compass.filmes.user.util.ValidRequestMoviePayment;
+import br.com.compass.filmes.user.util.ValidateRequestMoviePaymentUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -43,10 +43,10 @@ public class MoviePaymentService {
     private final GatewayProxy gatewayProxy;
     private final MessageHistory messageHistory;
     private final EncriptPasswordUtil encriptPasswordUtil;
-    private final ValidRequestMoviePayment validRequestMoviePayment;
+    private final ValidateRequestMoviePaymentUtil validateRequestMoviePaymentUtil;
 
     public ResponseGatewayReprovedDTO post(RequestMoviePaymentDTO requestMoviePaymentDTO) {
-        validRequestMoviePayment.validRequestMoviePayment(requestMoviePaymentDTO);
+        validateRequestMoviePaymentUtil.validRequestMoviePayment(requestMoviePaymentDTO);
         UserEntity userEntity = userRepository.findById(requestMoviePaymentDTO.getUserId()).orElseThrow(() -> new UserNotFoundException("userId: "+ requestMoviePaymentDTO.getUserId()));
         CreditCardEntity creditCard = getCreditCard(requestMoviePaymentDTO, userEntity);
 

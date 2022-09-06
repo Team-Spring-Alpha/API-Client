@@ -9,8 +9,8 @@ import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
-import br.com.compass.filmes.user.util.ValidRequestUser;
-import br.com.compass.filmes.user.util.ValidRequestCreditCard;
+import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
+import br.com.compass.filmes.user.util.ValidateRequestCreditCardUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,10 +46,10 @@ class UserServiceTest {
     private ModelMapper modelMapper;
 
     @SpyBean
-    private ValidRequestCreditCard validRequestCreditCard;
+    private ValidateRequestCreditCardUtil validateRequestCreditCardUtil;
 
     @SpyBean
-    private ValidRequestUser validRequestUser;
+    private ValidateRequestUserUtil validateRequestUserUtil;
 
     @Test
     @DisplayName("should successful create a user")

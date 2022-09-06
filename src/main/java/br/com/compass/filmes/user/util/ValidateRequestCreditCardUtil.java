@@ -9,7 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 
 @Component
-public class ValidRequestCreditCard {
+public class ValidateRequestCreditCardUtil {
 
     public void validRequestCreditCard(RequestCreditCardDTO requestCreditCardDTO) {
 

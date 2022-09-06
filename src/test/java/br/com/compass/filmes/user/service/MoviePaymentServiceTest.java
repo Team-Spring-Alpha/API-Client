@@ -22,7 +22,7 @@ import br.com.compass.filmes.user.client.MovieSearchProxy;
 import br.com.compass.filmes.user.rabbitMq.MessageHistory;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
-import br.com.compass.filmes.user.util.ValidRequestMoviePayment;
+import br.com.compass.filmes.user.util.ValidateRequestMoviePaymentUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +64,7 @@ class MoviePaymentServiceTest {
     private EncriptPasswordUtil encriptPasswordUtil;
 
     @MockBean
-    private ValidRequestMoviePayment validRequestMoviePayment;
+    private ValidateRequestMoviePaymentUtil validateRequestMoviePaymentUtil;
 
     @Test
     @DisplayName("should throw client not found exception when not found a client by id")
