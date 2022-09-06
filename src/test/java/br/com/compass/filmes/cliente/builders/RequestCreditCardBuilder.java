@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.builders;
 
 
-import br.com.compass.filmes.cliente.dto.client.request.RequestCreditCard;
+import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCard;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,43 +20,43 @@ public class RequestCreditCardBuilder {
         int yearNow = LocalDate.now().getYear();
         String yearNowString = Integer.toString(yearNow);
 
-        builder.requestCreditCard.setClientCreditCardNumber("5181652903041943");
-        builder.requestCreditCard.setClientCreditCardHolderName("Jetosvaldo");
-        builder.requestCreditCard.setClientCreditCardBrand("MASTERCARD");
-        builder.requestCreditCard.setClientCreditCardSecurityCode("613");
-        builder.requestCreditCard.setClientCreditCardMonthExpiration("8");
-        builder.requestCreditCard.setClientCreditCardYearExpiration(yearNowString);
+        builder.requestCreditCard.setNumber("5181652903041943");
+        builder.requestCreditCard.setHolderName("Jetosvaldo");
+        builder.requestCreditCard.setBrand("MASTERCARD");
+        builder.requestCreditCard.setSecurityCode("613");
+        builder.requestCreditCard.setMonthExpiration("8");
+        builder.requestCreditCard.setYearExpiration(yearNowString);
 
         return builder;
     }
 
     public RequestCreditCardBuilder withClientCreditCardNumber(String clientCreditCardNumber) {
-        this.requestCreditCard.setClientCreditCardNumber(clientCreditCardNumber);
+        this.requestCreditCard.setNumber(clientCreditCardNumber);
         return this;
     }
 
     public RequestCreditCardBuilder withClientCreditCardHolderName(String clientCreditCardHolderName) {
-        this.requestCreditCard.setClientCreditCardHolderName(clientCreditCardHolderName);
+        this.requestCreditCard.setHolderName(clientCreditCardHolderName);
         return this;
     }
 
     public RequestCreditCardBuilder withClientCreditCardBrand(String clientCreditCardBrand) {
-        this.requestCreditCard.setClientCreditCardBrand(clientCreditCardBrand);
+        this.requestCreditCard.setBrand(clientCreditCardBrand);
         return this;
     }
 
     public RequestCreditCardBuilder withClientCreditCardSecurityCode(String clientCreditCardSecurityCode) {
-        this.requestCreditCard.setClientCreditCardSecurityCode(clientCreditCardSecurityCode);
+        this.requestCreditCard.setSecurityCode(clientCreditCardSecurityCode);
         return this;
     }
 
     public RequestCreditCardBuilder withClientCreditCardMonthExpiration(String clientCreditCardMonthExpiration) {
-        this.requestCreditCard.setClientCreditCardMonthExpiration(clientCreditCardMonthExpiration);
+        this.requestCreditCard.setMonthExpiration(clientCreditCardMonthExpiration);
         return this;
     }
 
     public RequestCreditCardBuilder withClientCreditCardYearExpiration(String clientCreditCardYearExpiration) {
-        this.requestCreditCard.setClientCreditCardYearExpiration(clientCreditCardYearExpiration);
+        this.requestCreditCard.setYearExpiration(clientCreditCardYearExpiration);
         return this;
     }
 

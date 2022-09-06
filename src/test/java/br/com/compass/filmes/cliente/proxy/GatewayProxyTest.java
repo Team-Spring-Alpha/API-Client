@@ -2,7 +2,7 @@ package br.com.compass.filmes.cliente.proxy;
 
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestAuth;
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPayment;
-import br.com.compass.filmes.cliente.enums.ClientEnum;
+import br.com.compass.filmes.cliente.enums.UserEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -21,9 +21,9 @@ class GatewayProxyTest {
     @Test
     @DisplayName("should get auth token sucessful")
     void shouldGetAuthTokenSucessful() {
-        RequestAuth requestAuth = new RequestAuth(ClientEnum.PEDRO.getClientId(), ClientEnum.PEDRO.getApiKey());
+        RequestAuth requestAuth = new RequestAuth(UserEnum.PEDRO.getClientId(), UserEnum.PEDRO.getApiKey());
 
-        gatewayProxy.getAuthToken(ClientEnum.PEDRO);
+        gatewayProxy.getAuthToken(UserEnum.PEDRO);
 
         Mockito.verify(gateway).getAuthToken(requestAuth);
     }
