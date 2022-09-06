@@ -79,4 +79,8 @@ public enum MovieLinks {
     public String getLink() {
         return this.link;
     }
+
+    public String getLabel() {
+        return this.label;
+    }
 }
