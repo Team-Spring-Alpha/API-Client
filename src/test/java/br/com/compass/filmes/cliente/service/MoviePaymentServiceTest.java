@@ -7,20 +7,20 @@ import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseAuth;
 import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseGatewayReproved;
 import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponsePayment;
 import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseProcessPayment;
-import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseJustWatch;
-import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseMovieById;
-import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseRentAndBuy;
-import br.com.compass.filmes.cliente.entities.ClientEntity;
+import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseJustWatch;
+import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseMovieById;
+import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseRentAndBuy;
+import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
 import br.com.compass.filmes.cliente.enums.MovieLinks;
 import br.com.compass.filmes.cliente.exceptions.BuyMovieNotFoundException;
-import br.com.compass.filmes.cliente.exceptions.ClientNotFoundException;
+import br.com.compass.filmes.cliente.exceptions.UserNotFoundException;
 import br.com.compass.filmes.cliente.exceptions.CreditCardNotFoundException;
 import br.com.compass.filmes.cliente.exceptions.RentMovieNotFoundException;
 import br.com.compass.filmes.cliente.proxy.GatewayProxy;
 import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;
 import br.com.compass.filmes.cliente.rabbitMq.MessageHistory;
-import br.com.compass.filmes.cliente.repository.ClientRepository;
+import br.com.compass.filmes.cliente.repository.UserRepository;
 import br.com.compass.filmes.cliente.util.Md5;
 import br.com.compass.filmes.cliente.util.ValidRequestMoviePayment;
 import org.junit.jupiter.api.Assertions;
@@ -49,7 +49,7 @@ class MoviePaymentServiceTest {
     private ModelMapper modelMapper;
 
     @MockBean
-    private ClientRepository clientRepository;
+    private UserRepository userRepository;
 
     @MockBean
     private MovieSearchProxy movieSearchProxy;
@@ -69,11 +69,11 @@ class MoviePaymentServiceTest {
     @Test
     @DisplayName("should throw client not found exception when not found a client by id")
     void shoudThrowClientNotFoundWhenNotFoundAClient() {
-        ClientEntity clientEntity = ClientEntityBuilder.one().withId("1L").now();
+        UserEntity userEntity = UserEntityBuilder.one().withId("1L").now();
         RequestMoviePayment requestMoviePayment = new RequestMoviePayment();
         requestMoviePayment.setUserId("2L");
 
-        Assertions.assertThrows(ClientNotFoundException.class, () -> moviePaymentService.post(requestMoviePayment));
+        Assertions.assertThrows(UserNotFoundException.class, () -> moviePaymentService.post(requestMoviePayment));
     }
 
     @Test
@@ -81,9 +81,9 @@ class MoviePaymentServiceTest {
     void shoudThrowCreditCardNotFoundWhenNotFoundACreditCard() {
         RequestMoviePayment requestMoviePayment = new RequestMoviePayment();
         requestMoviePayment.setCreditCardNumber("not found");
-        ClientEntity clientEntity = ClientEntityBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().now();
 
-        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.ofNullable(clientEntity));
+        Mockito.when(userRepository.findById(any())).thenReturn(Optional.ofNullable(userEntity));
 
         Assertions.assertThrows(CreditCardNotFoundException.class, () -> moviePaymentService.post(requestMoviePayment));
     }
@@ -99,12 +99,12 @@ class MoviePaymentServiceTest {
                 .withRentOrBuy(rentOrBuy)
                 .now();
 
-        ClientEntity clientEntity = buildClientEntityWithCreditCardNumber("test");
+        UserEntity userEntity = buildClientEntityWithCreditCardNumber("test");
 
         ResponseMovieById responseMovieById = buildResponseMovieById();
         responseMovieById.getJustWatch().setBuy(null);
 
-        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.of(clientEntity));
+        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieById);
 
         Assertions.assertThrows(BuyMovieNotFoundException.class, () -> moviePaymentService.post(moviePayment));
@@ -119,12 +119,12 @@ class MoviePaymentServiceTest {
                 .withRentOrBuy(rentOrBuy)
                 .now();
 
-        ClientEntity clientEntity = buildClientEntityWithCreditCardNumber("test");
+        UserEntity userEntity = buildClientEntityWithCreditCardNumber("test");
 
         ResponseMovieById responseMovieById = buildResponseMovieById();
         responseMovieById.getJustWatch().setRent(null);
 
-        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.of(clientEntity));
+        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieById);
 
         Assertions.assertThrows(RentMovieNotFoundException.class, () -> moviePaymentService.post(moviePayment));
@@ -134,14 +134,14 @@ class MoviePaymentServiceTest {
     @DisplayName("should process with sucessful a payment request reproved by gateway")
     void shouldProcessWithSucessfulAPaymentReprovedByGateway() {
         RequestMoviePayment moviePayment = RequestMoviePaymentBuilder.one().withCreditCardNumber("test").now();
-        ClientEntity clientEntity = buildClientEntityWithCreditCardNumber("test");
+        UserEntity userEntity = buildClientEntityWithCreditCardNumber("test");
 
         ResponseMovieById responseMovieById = buildResponseMovieById();
 
         ResponseAuth responseAuth = ResponseAuthBuilder.one().now();
         ResponsePayment responsePayment = buildResponsePaymentFailed();
 
-        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.of(clientEntity));
+        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieById);
         Mockito.when(gatewayProxy.getAuthToken(any())).thenReturn(responseAuth);
         Mockito.when(gatewayProxy.getPayment(any(), any())).thenReturn(responsePayment);
@@ -156,14 +156,14 @@ class MoviePaymentServiceTest {
     @DisplayName("should process with sucessful a payment request approved by gateway")
     void shouldProcessWithSucessfulAPaymentApprovedByGateway() {
         RequestMoviePayment moviePayment = RequestMoviePaymentBuilder.one().withCreditCardNumber("0081").now();
-        ClientEntity clientEntity = buildClientEntityWithCreditCardNumber("0081");
+        UserEntity userEntity = buildClientEntityWithCreditCardNumber("0081");
 
         ResponseMovieById responseMovieById = buildResponseMovieById();
 
         ResponseAuth responseAuth = ResponseAuthBuilder.one().now();
         ResponsePayment responsePayment = buildResponsePaymentApproved();
 
-        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.of(clientEntity));
+        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieById);
         Mockito.when(gatewayProxy.getAuthToken(any())).thenReturn(responseAuth);
         Mockito.when(gatewayProxy.getPayment(any(), any())).thenReturn(responsePayment);
@@ -176,11 +176,11 @@ class MoviePaymentServiceTest {
 
 
 
-    private ClientEntity buildClientEntityWithCreditCardNumber(String creditCardNumber) {
+    private UserEntity buildClientEntityWithCreditCardNumber(String creditCardNumber) {
         CreditCardEntity creditCard = CreditCardEntityBuilder.one().withCreditCardNumber(creditCardNumber).now();
         List<CreditCardEntity> creditCardEntityList = new ArrayList<>();
         creditCardEntityList.add(creditCard);
-        return ClientEntityBuilder.one().withCreditCard(creditCardEntityList).now();
+        return UserEntityBuilder.one().withCreditCard(creditCardEntityList).now();
     }
 
     private ResponsePayment buildResponsePaymentFailed() {
