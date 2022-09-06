@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/movie_search")
+@RequestMapping("/api/movie-manager")
 public class MovieSearchController {
     @Autowired
     private MovieService service;
@@ -29,7 +29,7 @@ public class MovieSearchController {
         return ResponseEntity.ok(responseApiMovieManagerList);
     }
 
-    @GetMapping("/movie-filters")
+    @GetMapping("/movie-search")
     public ResponseEntity<List<ResponseApiMovieManager>> getMovieByFilters
             (@RequestParam(required = false, name = "movie_genrer") GenresEnum movieGenre,
              @RequestParam(required = false, name = "release_date_after") @Valid @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateGte,
