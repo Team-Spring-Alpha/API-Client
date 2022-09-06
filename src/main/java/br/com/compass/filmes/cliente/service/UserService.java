@@ -6,12 +6,16 @@ import br.com.compass.filmes.cliente.dto.user.request.RequestSetStatusUserAccoun
 import br.com.compass.filmes.cliente.dto.user.response.ResponseUser;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.repository.UserRepository;
+import br.com.compass.filmes.cliente.util.EncryptPassword;
 import br.com.compass.filmes.cliente.util.Md5;
 import br.com.compass.filmes.cliente.util.ValidRequestUser;
 import br.com.compass.filmes.cliente.util.ValidRequestCreditCard;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,13 +24,15 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     private final ModelMapper modelMapper;
 
     private final Md5 md5;
+
+    private final EncryptPassword encryptPassword;
 
     private final ValidRequestUser validRequestUser;
 
@@ -37,7 +43,8 @@ public class UserService {
         validListOfRequestCreditCards(requestCLient);
 
         UserEntity client = modelMapper.map(requestCLient, UserEntity.class);
-        client.setPassword(md5.ToMd5(client.getPassword()));
+        //client.setPassword(md5.ToMd5(client.getPassword()));
+        client.setPassword(encryptPassword.encrypt(client.getPassword()));
 
         UserEntity saveClient = userRepository.save(client);
         return modelMapper.map(saveClient, ResponseUser.class);
@@ -74,5 +81,16 @@ public class UserService {
         userEntity.setClientIsBlocked(clientIsBlocked);
         userRepository.save(userEntity);
         return modelMapper.map(userEntity, ResponseUser.class);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        var user = userRepository.findByEmail(email);
+        System.out.println("LoadUserByUsername " + user);
+        if (user != null) {
+            return user;
+        } else {
+            throw new UsernameNotFoundException("Email " + email + " not found!");
+        }
     }
 }
