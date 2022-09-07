@@ -10,24 +10,24 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@Document(collection = "Client")
+@Document(collection = "User")
 public class UserEntity {
     @Id
     private String id;
-    @Field("clientName")
+    @Field("userName")
     private String name;
-    @Field("clientCpf")
+    @Field("userCpf")
     private String cpf;
-    @Field("clientEmail")
+    @Field("userEmail")
     private String email;
-    @Field("clientPassword")
+    @Field("userPassword")
     private String password;
-    @Field("clientIsBlocked")
+    @Field("userIsBlocked")
     private boolean clientIsBlocked = false;
-    @Field("clientBirthDate")
+    @Field("userBirthDate")
     private LocalDate birthDate;
     @Field("creditCards")
     private List<CreditCardEntity> cards;
-    @Field("clientCategory")
+    @Field("userCategories")
     private List<GenresEnum> categories;
 }
