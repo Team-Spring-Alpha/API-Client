@@ -7,7 +7,9 @@ import br.com.compass.filmes.user.enums.ProvidersEnum;
 import br.com.compass.filmes.user.exceptions.MovieNotFoundException;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,7 +23,11 @@ public class MovieSearchProxy {
 
     public List<ResponseApiMovieManagerDTO> getMovieSearchByFilters(GenresEnum movieGenre, LocalDate dateGte, LocalDate dateLte,
                                                                     ProvidersEnum movieProvider, List<String> moviePeoples, String movieName) {
-        return movieManager.getMovieByFilters(movieGenre, dateGte, dateLte, movieProvider, moviePeoples, movieName);
+        try {
+            return movieManager.getMovieByFilters(movieGenre, dateGte, dateLte, movieProvider, moviePeoples, movieName);
+        } catch (FeignException.FeignClientException.NotFound exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     public List<ResponseApiMovieManagerDTO> getMovieByRecommendation(Long movieId) {

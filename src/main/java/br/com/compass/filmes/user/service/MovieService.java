@@ -19,11 +19,7 @@ public class MovieService {
     private MovieSearchProxy movieSearchProxy;
 
     public List<ResponseApiMovieManagerDTO> findMoviesRecommendations(Long movieId) {
-        try {
-            return movieSearchProxy.getMovieByRecommendation(movieId);
-        } catch (FeignException.FeignClientException.NotFound exception) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        return movieSearchProxy.getMovieByRecommendation(movieId);
     }
 
     public List<ResponseApiMovieManagerDTO> findByFilters(GenresEnum movieGenre, LocalDate dateGte, LocalDate dateLte, ProvidersEnum movieProvider,
