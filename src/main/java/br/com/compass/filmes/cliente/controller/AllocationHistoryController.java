@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/allocation-history/history")
+@RequestMapping("/api/allocation-history")
 public class AllocationHistoryController {
 
     @Autowired

@@ -18,7 +18,7 @@ public interface MovieSearch {
     @GetMapping(value = "/{movieId}/recommendations")
     List<ResponseApiMovieManager> getMovieByRecommendations(@PathVariable("movieId") Long movieId);
 
-    @GetMapping(value = "/movie-filters")
+    @GetMapping(value = "/movie-search")
     List<ResponseApiMovieManager> getMovieByFilters(@RequestParam(name = "movie_genrer", required = false) GenresEnum movieGenre,
                                                     @RequestParam(name = "release_date_after", required = false)
                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate releaseDateAfter,
