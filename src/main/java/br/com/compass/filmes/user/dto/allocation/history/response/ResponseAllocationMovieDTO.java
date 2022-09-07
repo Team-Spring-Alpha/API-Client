@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.dto.allocation.history.response;
+package br.com.compass.filmes.user.dto.allocation.history.response;
 
 import lombok.Data;
 

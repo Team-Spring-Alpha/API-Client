@@ -1,6 +1,6 @@
-package br.com.compass.filmes.cliente.handler;
+package br.com.compass.filmes.user.handler;
 
-import br.com.compass.filmes.cliente.exceptions.*;
+import br.com.compass.filmes.user.exceptions.*;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

@@ -1,7 +1,7 @@
-package br.com.compass.filmes.cliente.util;
+package br.com.compass.filmes.user.util;
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestUserDTO;
-import br.com.compass.filmes.cliente.enums.GenresEnum;
+import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.user.enums.GenresEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;

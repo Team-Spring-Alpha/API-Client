@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.enums;
+package br.com.compass.filmes.user.enums;
 
 import java.util.Random;
 

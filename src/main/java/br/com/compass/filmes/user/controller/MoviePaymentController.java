@@ -1,8 +1,8 @@
-package br.com.compass.filmes.cliente.controller;
+package br.com.compass.filmes.user.controller;
 
-import br.com.compass.filmes.cliente.dto.payment.response.ResponseGatewayReprovedDTO;
-import br.com.compass.filmes.cliente.dto.movie.manager.RequestMoviePaymentDTO;
-import br.com.compass.filmes.cliente.service.MoviePaymentService;
+import br.com.compass.filmes.user.dto.payment.response.ResponseGatewayReprovedDTO;
+import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePaymentDTO;
+import br.com.compass.filmes.user.service.MoviePaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

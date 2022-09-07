@@ -1,8 +1,8 @@
-package br.com.compass.filmes.cliente.client;
+package br.com.compass.filmes.user.client;
 
-import br.com.compass.filmes.cliente.dto.payment.request.RequestAuthDTO;
-import br.com.compass.filmes.cliente.dto.payment.request.RequestPaymentDTO;
-import br.com.compass.filmes.cliente.enums.PaymentVendorEnum;
+import br.com.compass.filmes.user.dto.payment.request.RequestAuthDTO;
+import br.com.compass.filmes.user.dto.payment.request.RequestPaymentDTO;
+import br.com.compass.filmes.user.enums.PaymentVendorEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

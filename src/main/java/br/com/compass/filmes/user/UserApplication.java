@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente;
+package br.com.compass.filmes.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

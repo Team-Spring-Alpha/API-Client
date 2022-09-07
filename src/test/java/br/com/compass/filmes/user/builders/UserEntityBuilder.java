@@ -1,9 +1,9 @@
-package br.com.compass.filmes.cliente.builders;
+package br.com.compass.filmes.user.builders;
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestUserDTO;
-import br.com.compass.filmes.cliente.entities.CreditCardEntity;
-import br.com.compass.filmes.cliente.entities.UserEntity;
-import br.com.compass.filmes.cliente.enums.GenresEnum;
+import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.user.entities.CreditCardEntity;
+import br.com.compass.filmes.user.entities.UserEntity;
+import br.com.compass.filmes.user.enums.GenresEnum;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.exceptions;
+package br.com.compass.filmes.user.exceptions;
 
 public class RentMovieNotFoundException extends RuntimeException{
     public RentMovieNotFoundException(String message) {

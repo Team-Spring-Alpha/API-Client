@@ -1,7 +1,7 @@
-package br.com.compass.filmes.cliente.util;
+package br.com.compass.filmes.user.util;
 
-import br.com.compass.filmes.cliente.builders.RequestUserBuilder;
-import br.com.compass.filmes.cliente.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.user.builders.RequestUserBuilder;
+import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

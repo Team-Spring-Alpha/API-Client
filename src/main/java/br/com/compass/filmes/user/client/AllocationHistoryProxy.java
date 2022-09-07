@@ -1,6 +1,6 @@
-package br.com.compass.filmes.cliente.client;
+package br.com.compass.filmes.user.client;
 
-import br.com.compass.filmes.cliente.dto.allocation.history.response.ResponseAllocationDTO;
+import br.com.compass.filmes.user.dto.allocation.history.response.ResponseAllocationDTO;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

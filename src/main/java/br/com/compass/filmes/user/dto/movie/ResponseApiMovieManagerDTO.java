@@ -1,6 +1,6 @@
-package br.com.compass.filmes.cliente.dto.movie;
+package br.com.compass.filmes.user.dto.movie;
 
-import br.com.compass.filmes.cliente.enums.GenresEnum;
+import br.com.compass.filmes.user.enums.GenresEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

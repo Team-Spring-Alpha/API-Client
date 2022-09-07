@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.enums;
+package br.com.compass.filmes.user.enums;
 
 public enum ProvidersEnum {
     NETFLIX, AMAZON_PRIME_VIDEO, AMAZON_PRIME, APPLE_ITUNES,

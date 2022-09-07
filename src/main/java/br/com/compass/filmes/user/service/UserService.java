@@ -1,14 +1,14 @@
-package br.com.compass.filmes.cliente.service;
+package br.com.compass.filmes.user.service;
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestUserDTO;
-import br.com.compass.filmes.cliente.dto.user.request.RequestUserUpdateDTO;
-import br.com.compass.filmes.cliente.dto.user.request.RequestSetStatusUserAccountDTO;
-import br.com.compass.filmes.cliente.dto.user.response.ResponseUserDTO;
-import br.com.compass.filmes.cliente.entities.UserEntity;
-import br.com.compass.filmes.cliente.repository.UserRepository;
-import br.com.compass.filmes.cliente.util.EncriptPasswordUtil;
-import br.com.compass.filmes.cliente.util.ValidateRequestUserUtil;
-import br.com.compass.filmes.cliente.util.ValidateRequestCreditCardUtil;
+import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
+import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
+import br.com.compass.filmes.user.entities.UserEntity;
+import br.com.compass.filmes.user.repository.UserRepository;
+import br.com.compass.filmes.user.util.EncriptPasswordUtil;
+import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
+import br.com.compass.filmes.user.util.ValidateRequestCreditCardUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;

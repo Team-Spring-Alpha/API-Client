@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.client;
+package br.com.compass.filmes.user.client;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

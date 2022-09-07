@@ -1,6 +1,6 @@
-package br.com.compass.filmes.cliente.dto.user.response;
+package br.com.compass.filmes.user.dto.user.response;
 
-import br.com.compass.filmes.cliente.enums.CreditCardBrandEnum;
+import br.com.compass.filmes.user.enums.CreditCardBrandEnum;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,7 @@
-package br.com.compass.filmes.cliente.service;
+package br.com.compass.filmes.user.service;
 
-import br.com.compass.filmes.cliente.dto.allocation.history.response.ResponseAllocationDTO;
-import br.com.compass.filmes.cliente.client.AllocationHistoryProxy;
+import br.com.compass.filmes.user.dto.allocation.history.response.ResponseAllocationDTO;
+import br.com.compass.filmes.user.client.AllocationHistoryProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

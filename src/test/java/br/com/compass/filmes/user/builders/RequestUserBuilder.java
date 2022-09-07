@@ -1,7 +1,7 @@
-package br.com.compass.filmes.cliente.builders;
+package br.com.compass.filmes.user.builders;
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestUserDTO;
-import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCardDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestCreditCardDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

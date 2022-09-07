@@ -1,7 +1,7 @@
-package br.com.compass.filmes.cliente.util;
+package br.com.compass.filmes.user.util;
 
-import br.com.compass.filmes.cliente.dto.movie.manager.RequestMoviePaymentDTO;
-import br.com.compass.filmes.cliente.exceptions.RentAndBuyMoviesEmptyException;
+import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePaymentDTO;
+import br.com.compass.filmes.user.exceptions.RentAndBuyMoviesEmptyException;
 import org.springframework.stereotype.Component;
 
 @Component

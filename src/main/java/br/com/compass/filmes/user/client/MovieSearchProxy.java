@@ -1,10 +1,10 @@
-package br.com.compass.filmes.cliente.client;
+package br.com.compass.filmes.user.client;
 
-import br.com.compass.filmes.cliente.dto.movie.ResponseApiMovieManagerDTO;
-import br.com.compass.filmes.cliente.dto.movie.ResponseMovieByIdDTO;
-import br.com.compass.filmes.cliente.enums.GenresEnum;
-import br.com.compass.filmes.cliente.enums.ProvidersEnum;
-import br.com.compass.filmes.cliente.exceptions.MovieNotFoundException;
+import br.com.compass.filmes.user.dto.movie.ResponseApiMovieManagerDTO;
+import br.com.compass.filmes.user.dto.movie.ResponseMovieByIdDTO;
+import br.com.compass.filmes.user.enums.GenresEnum;
+import br.com.compass.filmes.user.enums.ProvidersEnum;
+import br.com.compass.filmes.user.exceptions.MovieNotFoundException;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

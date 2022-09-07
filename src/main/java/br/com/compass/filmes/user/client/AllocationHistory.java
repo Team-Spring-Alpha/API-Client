@@ -1,6 +1,6 @@
-package br.com.compass.filmes.cliente.client;
+package br.com.compass.filmes.user.client;
 
-import br.com.compass.filmes.cliente.dto.allocation.history.response.ResponseAllocationDTO;
+import br.com.compass.filmes.user.dto.allocation.history.response.ResponseAllocationDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

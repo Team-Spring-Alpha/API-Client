@@ -1,6 +1,6 @@
-package br.com.compass.filmes.cliente.builders;
+package br.com.compass.filmes.user.builders;
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestSetStatusUserAccountDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
 
 public class RequestSetStatusUserAccountBuilder {
 

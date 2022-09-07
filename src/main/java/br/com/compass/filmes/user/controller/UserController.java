@@ -1,10 +1,10 @@
-package br.com.compass.filmes.cliente.controller;
+package br.com.compass.filmes.user.controller;
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestUserDTO;
-import br.com.compass.filmes.cliente.dto.user.request.RequestUserUpdateDTO;
-import br.com.compass.filmes.cliente.dto.user.request.RequestSetStatusUserAccountDTO;
-import br.com.compass.filmes.cliente.dto.user.response.ResponseUserDTO;
-import br.com.compass.filmes.cliente.service.UserService;
+import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
+import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
+import br.com.compass.filmes.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;

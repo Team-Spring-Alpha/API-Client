@@ -1,7 +1,7 @@
-package br.com.compass.filmes.cliente.builders;
+package br.com.compass.filmes.user.builders;
 
-import br.com.compass.filmes.cliente.dto.movie.manager.RequestMoviePaymentDTO;
-import br.com.compass.filmes.cliente.dto.movie.manager.RequestRentOrBuyDTO;
+import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePaymentDTO;
+import br.com.compass.filmes.user.dto.movie.manager.RequestRentOrBuyDTO;
 
 public class RequestMoviePaymentBuilder {
 

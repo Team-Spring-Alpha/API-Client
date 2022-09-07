@@ -1,9 +1,9 @@
-package br.com.compass.filmes.cliente.controller;
+package br.com.compass.filmes.user.controller;
 
-import br.com.compass.filmes.cliente.dto.movie.ResponseApiMovieManagerDTO;
-import br.com.compass.filmes.cliente.enums.GenresEnum;
-import br.com.compass.filmes.cliente.enums.ProvidersEnum;
-import br.com.compass.filmes.cliente.service.MovieService;
+import br.com.compass.filmes.user.dto.movie.ResponseApiMovieManagerDTO;
+import br.com.compass.filmes.user.enums.GenresEnum;
+import br.com.compass.filmes.user.enums.ProvidersEnum;
+import br.com.compass.filmes.user.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;

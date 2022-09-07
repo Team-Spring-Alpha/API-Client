@@ -1,10 +1,10 @@
-package br.com.compass.filmes.cliente.client;
+package br.com.compass.filmes.user.client;
 
-import br.com.compass.filmes.cliente.dto.payment.request.RequestAuthDTO;
-import br.com.compass.filmes.cliente.dto.payment.request.RequestPaymentDTO;
-import br.com.compass.filmes.cliente.dto.payment.response.ResponseAuthDTO;
-import br.com.compass.filmes.cliente.dto.payment.response.ResponsePaymentDTO;
-import br.com.compass.filmes.cliente.enums.PaymentVendorEnum;
+import br.com.compass.filmes.user.dto.payment.request.RequestAuthDTO;
+import br.com.compass.filmes.user.dto.payment.request.RequestPaymentDTO;
+import br.com.compass.filmes.user.dto.payment.response.ResponseAuthDTO;
+import br.com.compass.filmes.user.dto.payment.response.ResponsePaymentDTO;
+import br.com.compass.filmes.user.enums.PaymentVendorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.dto.user.response;
+package br.com.compass.filmes.user.dto.user.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,6 +1,6 @@
-package br.com.compass.filmes.cliente.entities;
+package br.com.compass.filmes.user.entities;
 
-import br.com.compass.filmes.cliente.enums.CreditCardBrandEnum;
+import br.com.compass.filmes.user.enums.CreditCardBrandEnum;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Field;
 

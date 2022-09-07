@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.util;
+package br.com.compass.filmes.user.util;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.enums;
+package br.com.compass.filmes.user.enums;
 
 public enum MovieLinks {
     NETFLIX("https://www.justwatch.com/br/provedor/netflix", "Netflix"),

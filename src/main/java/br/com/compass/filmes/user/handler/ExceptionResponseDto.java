@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.handler;
+package br.com.compass.filmes.user.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

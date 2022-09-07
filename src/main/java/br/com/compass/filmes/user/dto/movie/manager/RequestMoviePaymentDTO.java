@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.dto.movie.manager;
+package br.com.compass.filmes.user.dto.movie.manager;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

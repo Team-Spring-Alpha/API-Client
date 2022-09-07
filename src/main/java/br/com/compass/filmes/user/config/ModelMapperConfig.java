@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.config;
+package br.com.compass.filmes.user.config;
 
 import org.modelmapper.AbstractCondition;
 import org.modelmapper.Condition;

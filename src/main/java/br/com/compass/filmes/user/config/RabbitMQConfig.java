@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.config;
+package br.com.compass.filmes.user.config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
