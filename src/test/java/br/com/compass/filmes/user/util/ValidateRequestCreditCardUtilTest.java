@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
-class ValidateRequestCreditCardUtilDTOTest {
+class ValidateRequestCreditCardUtilTest {
 
     private ValidateRequestCreditCardUtil validateRequestCreditCardUtil;
 

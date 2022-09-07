@@ -1,6 +1,6 @@
 package br.com.compass.filmes.user.service;
 
-import br.com.compass.filmes.user.client.MovieSearchProxy;
+import br.com.compass.filmes.user.proxy.MovieSearchProxy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

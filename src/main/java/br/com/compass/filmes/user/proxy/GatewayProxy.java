@@ -1,4 +1,4 @@
-package br.com.compass.filmes.user.client;
+package br.com.compass.filmes.user.proxy;
 
 import br.com.compass.filmes.user.dto.payment.request.RequestAuthDTO;
 import br.com.compass.filmes.user.dto.payment.request.RequestPaymentDTO;

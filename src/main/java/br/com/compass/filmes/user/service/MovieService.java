@@ -3,12 +3,9 @@ package br.com.compass.filmes.user.service;
 import br.com.compass.filmes.user.dto.user.response.apiMovie.ResponseApiMovieManagerDTO;
 import br.com.compass.filmes.user.enums.GenresEnum;
 import br.com.compass.filmes.user.enums.ProvidersEnum;
-import br.com.compass.filmes.user.client.MovieSearchProxy;
-import feign.FeignException;
+import br.com.compass.filmes.user.proxy.MovieSearchProxy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -25,19 +25,19 @@ public class ExceptionsHandlers {
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<ExceptionResponseDto>> handleInvalidArgument(MethodArgumentNotValidException exception) {
-        List<ExceptionResponseDto> responseDTOList = new ArrayList<>();
+    public ResponseEntity<List<ExceptionResponse>> handleInvalidArgument(MethodArgumentNotValidException exception) {
+        List<ExceptionResponse> responseDTOList = new ArrayList<>();
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
         fieldErrors.forEach(e -> {
             String message = messageSource.getMessage(e, LocaleContextHolder.getLocale());
-            ExceptionResponseDto error = new ExceptionResponseDto(e.getField(), message);
+            ExceptionResponse error = new ExceptionResponse(e.getField(), message);
             responseDTOList.add(error);
         });
         return ResponseEntity.badRequest().body(responseDTOList);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ExceptionResponseDto> handleHttpValidationExceptions(HttpMessageNotReadableException e) {
+    public ResponseEntity<ExceptionResponse> handleHttpValidationExceptions(HttpMessageNotReadableException e) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String errorMessage = "Invalid information";
 
@@ -45,48 +45,48 @@ public class ExceptionsHandlers {
             InvalidFormatException cause = (InvalidFormatException) e.getCause();
             errorMessage = cause.getCause().getMessage();
         }
-        return ResponseEntity.status(status).body(new ExceptionResponseDto(String.valueOf(status.value()), errorMessage));
+        return ResponseEntity.status(status).body(new ExceptionResponse(String.valueOf(status.value()), errorMessage));
 
     }
 
     @ExceptionHandler(CreditCardNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDto> handlerCreditCardNotFoundException(CreditCardNotFoundException creditCardNotFoundException) {
-        ExceptionResponseDto responseDto = new ExceptionResponseDto(creditCardNotFoundException.getMessage(), "credit_card_number");
+    public ResponseEntity<ExceptionResponse> handlerCreditCardNotFoundException(CreditCardNotFoundException creditCardNotFoundException) {
+        ExceptionResponse responseDto = new ExceptionResponse(creditCardNotFoundException.getMessage(), "credit_card_number");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
 
     @ExceptionHandler(RentAndBuyMoviesEmptyException.class)
-    public ResponseEntity<ExceptionResponseDto> handlerRentAndBuyMoviesEmptyException(RentAndBuyMoviesEmptyException rentAndBuyMoviesEmptyException) {
-        ExceptionResponseDto responseDto = new ExceptionResponseDto( "movies buy list and rent list is empty. Either list must be filled", "movies");
+    public ResponseEntity<ExceptionResponse> handlerRentAndBuyMoviesEmptyException(RentAndBuyMoviesEmptyException rentAndBuyMoviesEmptyException) {
+        ExceptionResponse responseDto = new ExceptionResponse( "movies buy list and rent list is empty. Either list must be filled", "movies");
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDto> handlerClientNotFoundException(UserNotFoundException userNotFoundException) {
-        ExceptionResponseDto responseDto = new ExceptionResponseDto(userNotFoundException.getMessage(), "user_id");
+    public ResponseEntity<ExceptionResponse> handlerClientNotFoundException(UserNotFoundException userNotFoundException) {
+        ExceptionResponse responseDto = new ExceptionResponse(userNotFoundException.getMessage(), "user_id");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
 
     @ExceptionHandler(BuyMovieNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDto> handlerBuyMovieNotFoundException(BuyMovieNotFoundException buyMovieNotFoundException) {
-        ExceptionResponseDto responseDto = new ExceptionResponseDto(buyMovieNotFoundException.getMessage(), "movie.buy");
+    public ResponseEntity<ExceptionResponse> handlerBuyMovieNotFoundException(BuyMovieNotFoundException buyMovieNotFoundException) {
+        ExceptionResponse responseDto = new ExceptionResponse(buyMovieNotFoundException.getMessage(), "movie.buy");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
 
     @ExceptionHandler(RentMovieNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDto> handlerRentMovieNotFoundException(RentMovieNotFoundException rentMovieNotFoundException) {
-        ExceptionResponseDto responseDto = new ExceptionResponseDto(rentMovieNotFoundException.getMessage(), "movie.rent");
+    public ResponseEntity<ExceptionResponse> handlerRentMovieNotFoundException(RentMovieNotFoundException rentMovieNotFoundException) {
+        ExceptionResponse responseDto = new ExceptionResponse(rentMovieNotFoundException.getMessage(), "movie.rent");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
 
     @ExceptionHandler(MovieNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDto> handlerMovieNotFoundException(MovieNotFoundException movieNotFoundException) {
-        ExceptionResponseDto responseDto = new ExceptionResponseDto(movieNotFoundException.getMessage(), "movie");
+    public ResponseEntity<ExceptionResponse> handlerMovieNotFoundException(MovieNotFoundException movieNotFoundException) {
+        ExceptionResponse responseDto = new ExceptionResponse(movieNotFoundException.getMessage(), "movie");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }

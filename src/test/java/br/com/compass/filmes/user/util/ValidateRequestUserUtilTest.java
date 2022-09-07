@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
-class ValidateRequestUserUtilDTOTest {
+class ValidateRequestUserUtilTest {
 
     private ValidateRequestUserUtil validateRequestUserUtil;
 
