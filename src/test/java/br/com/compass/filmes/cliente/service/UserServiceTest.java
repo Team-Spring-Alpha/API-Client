@@ -52,10 +52,10 @@ class UserServiceTest {
     private ValidRequestUser validRequestUser;
 
     @Test
-    @DisplayName("should successful create a client")
-    void shouldSuccesfulCreateAClient() {
+    @DisplayName("should successful create a user")
+    void shouldSuccesfulCreateAUser() {
         RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUser).now();
 
         Mockito.when(userRepository.save(any())).thenReturn(userEntity);
 
@@ -68,23 +68,23 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong category")
-    void shouldThrowExceptionWhenCreateAClientWithWrongCategory() {
+    @DisplayName("should throw exception when create a user with a wrong category")
+    void shouldThrowExceptionWhenCreateAUserWithWrongCategory() {
         List<String> categoriesList = new ArrayList<>();
         categoriesList.add("test");
 
         RequestUser requestUser = RequestUserBuilder.one()
-                .withClientCategory(categoriesList)
+                .withCategory(categoriesList)
                 .now();
 
         Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card brand")
-    void shouldThrowExceptionWhenCreateAClientWithWrongCreditCardBrand() {
+    @DisplayName("should throw exception when create a user with a wrong credit card brand")
+    void shouldThrowExceptionWhenCreateAUserWithWrongCreditCardBrand() {
         List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardBrand("test")
+                .withCreditCardBrand("test")
                 .list();
 
         RequestUser requestUser = RequestUserBuilder.one()
@@ -95,10 +95,10 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card security code")
-    void shouldThrowExceptionWhenCreateAClientWithWrongCreditCardSecurityCode() {
+    @DisplayName("should throw exception when create a user with a wrong credit card security code")
+    void shouldThrowExceptionWhenCreateAUserWithWrongCreditCardSecurityCode() {
         List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardSecurityCode("01x")
+                .withCreditCardSecurityCode("01x")
                 .list();
 
         RequestUser requestUser = RequestUserBuilder.one()
@@ -109,10 +109,10 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card security code (missing 1 digit)")
-    void shouldThrowExceptionWhenCreateAClientWithCreditCardSecurityCodeMissingOneDigit() {
+    @DisplayName("should throw exception when create a user with a wrong credit card security code (missing 1 digit)")
+    void shouldThrowExceptionWhenCreateAUserWithCreditCardSecurityCodeMissingOneDigit() {
         List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardSecurityCode("01")
+                .withCreditCardSecurityCode("01")
                 .list();
 
         RequestUser requestUser = RequestUserBuilder.one()
@@ -123,10 +123,10 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card month")
-    void shouldThrowExceptionWhenCreateAClientWithWrongCreditCardMonth() {
+    @DisplayName("should throw exception when create a user with a wrong credit card month")
+    void shouldThrowExceptionWhenCreateAUserWithWrongCreditCardMonth() {
         List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardMonthExpiration("01")
+                .withCreditCardMonthExpiration("01")
                 .list();
 
         RequestUser requestUser = RequestUserBuilder.one()
@@ -143,11 +143,11 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card year (+6 year)")
-    void shouldThrowExceptionWhenCreateClientWithWrongCreditCardYearAfterSixYears() {
+    @DisplayName("should throw exception when create a user with a wrong credit card year (+6 year)")
+    void shouldThrowExceptionWhenCreateUserWithWrongCreditCardYearAfterSixYears() {
         String yearString = LocalDate.now().plusYears(6).toString();
         List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardYearExpiration(yearString)
+                .withCreditCardYearExpiration(yearString)
                 .list();
 
         RequestUser requestUser = RequestUserBuilder.one()
@@ -158,11 +158,11 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card year (-1 year)")
-    void shouldThrowExceptionWhenCreateClientWithCreditCardYearBeforeNow() {
+    @DisplayName("should throw exception when create a user with a wrong credit card year (-1 year)")
+    void shouldThrowExceptionWhenCreateUserWithCreditCardYearBeforeNow() {
         String yearString = LocalDate.now().minusYears(1).toString();
         List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardYearExpiration(yearString)
+                .withCreditCardYearExpiration(yearString)
                 .list();
 
         RequestUser requestUser = RequestUserBuilder.one()
@@ -173,11 +173,11 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card year")
-    void shouldThrowExceptionWhenCreateClientWithCreditCardYear() {
+    @DisplayName("should throw exception when create a user with a wrong credit card year")
+    void shouldThrowExceptionWhenCreateUserWithCreditCardYear() {
         String yearString = "teste";
         List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardYearExpiration(yearString)
+                .withCreditCardYearExpiration(yearString)
                 .list();
 
         RequestUser requestUser = RequestUserBuilder.one()
@@ -188,10 +188,10 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should set the client's status account as blocked")
-    void shouldSetTheClientStatusAccountAsBlocked(){
+    @DisplayName("should set the user's status account as blocked")
+    void shouldSetTheUserStatusAccountAsBlocked(){
         RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUser).now();
         RequestSetStatusUserAccount requestSetStatusUserAccount =
                 RequestSetStatusUserAccountBuilder.blocked().now();
 
@@ -204,10 +204,10 @@ class UserServiceTest {
         Assertions.assertTrue(responseUser.isBlocked());
     }
     @Test
-    @DisplayName("should set the client's status account as unlocked")
-    void shouldSetTheClientStatusAccountAsUnlocked(){
+    @DisplayName("should set the user's status account as unlocked")
+    void shouldSetTheUserStatusAccountAsUnlocked(){
         RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUser).now();
         RequestSetStatusUserAccount requestSetStatusUserAccount =
                 RequestSetStatusUserAccountBuilder.unlocked().now();
 
@@ -220,10 +220,10 @@ class UserServiceTest {
         Assertions.assertFalse(responseUser.isBlocked());
     }
     @Test
-    @DisplayName("should throw an exception when the setStatusClientAccount method receives a nonexistent id")
-    void shouldThrowAnExceptionWhenTheSetStatusClientAccountMethodReceivesANonexistentId(){
+    @DisplayName("should throw an exception when the setStatusUserAccount method receives a nonexistent id")
+    void shouldThrowAnExceptionWhenTheSetStatusUserAccountMethodReceivesANonexistentId(){
         RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUser).now();
         RequestSetStatusUserAccount requestSetStatusUserAccount =
                 RequestSetStatusUserAccountBuilder.blocked().now();
 
@@ -232,19 +232,19 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("should successful update a client")
-    void shouldSuccessfulUpdateAClient(){
+    @DisplayName("should successful update a user")
+    void shouldSuccessfulUpdateAUser(){
         RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
-        RequestUserUpdate clientUpdate = RequestClientUpdateBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUser).now();
+        RequestUserUpdate userUpdate = RequestUserUpdateBuilder.one().now();
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(userRepository.save(any())).thenReturn(userEntity);
 
-        ResponseUser responseUser = userService.patch("idTeste", clientUpdate);
+        ResponseUser responseUser = userService.patch("idTeste", userUpdate);
 
-        Assertions.assertEquals(userEntity.getEmail(), clientUpdate.getEmail());
-        Assertions.assertEquals(userEntity.getPassword(), clientUpdate.getPassword());
+        Assertions.assertEquals(userEntity.getEmail(), userUpdate.getEmail());
+        Assertions.assertEquals(userEntity.getPassword(), userUpdate.getPassword());
         Assertions.assertEquals(userEntity.getName(), responseUser.getName());
         Assertions.assertEquals(userEntity.getBirthDate(), responseUser.getBirthDate());
     }
@@ -253,28 +253,28 @@ class UserServiceTest {
     @DisplayName("should throw an exception when the patch method receives a nonexistent id")
     void shouldThrowAnExceptionWhenThePatchMethodReceivesANonexistentId(){
         RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
-        RequestUserUpdate clientUpdate = RequestClientUpdateBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUser).now();
+        RequestUserUpdate clientUpdate = RequestUserUpdateBuilder.one().now();
 
         Assertions.assertThrows(ResponseStatusException.class, () -> userService
                 .patch("2", clientUpdate));
     }
 
     @Test
-    @DisplayName("Should bring all client")
-    public void shouldFindAllClient(){
+    @DisplayName("Should bring all users")
+    public void shouldFindAllUsers(){
         Mockito.when(userRepository.findAll()).thenReturn(Arrays.asList(UserEntityBuilder.one().now()));
-        List<ResponseUser> listClient = userService.returnAllUsers();
-        Assertions.assertNotNull(listClient);
-        Assertions.assertEquals(1, listClient.size());
-        Assertions.assertEquals("Jetosvaldo", listClient.get(0).getName());
+        List<ResponseUser> userList = userService.returnAllUsers();
+        Assertions.assertNotNull(userList);
+        Assertions.assertEquals(1, userList.size());
+        Assertions.assertEquals("Jetosvaldo", userList.get(0).getName());
     }
 
     @Test
-    @DisplayName("Should bring a client by id")
-    public void shouldFindClientById(){
+    @DisplayName("Should bring a user by id")
+    public void shouldFindUserById(){
         RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUser).now();
         Mockito.when(userRepository.findById(userEntity.getId())).thenReturn(Optional.of(userEntity));
         userService.returnClientById(userEntity.getId());
         Mockito.verify(userRepository, Mockito.times(1)).findById(userEntity.getId());
@@ -282,8 +282,8 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Shouldn't find a client by id and should throw an exception")
-    public void shouldNotFindClientById(){
+    @DisplayName("Shouldn't find a user by id and should throw an exception")
+    public void shouldNotFindUserById(){
         Assertions.assertThrows(ResponseStatusException.class, () -> userService
                 .returnClientById("2"));
     }

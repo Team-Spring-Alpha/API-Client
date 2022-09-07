@@ -4,14 +4,14 @@ import br.com.compass.filmes.cliente.dto.user.request.RequestUserUpdate;
 
 import java.time.LocalDate;
 
-public class RequestClientUpdateBuilder {
+public class RequestUserUpdateBuilder {
     private RequestUserUpdate requestUserUpdate;
 
-    public RequestClientUpdateBuilder() {
+    public RequestUserUpdateBuilder() {
     }
 
-    public static RequestClientUpdateBuilder one(){
-        RequestClientUpdateBuilder builder = new RequestClientUpdateBuilder();
+    public static RequestUserUpdateBuilder one(){
+        RequestUserUpdateBuilder builder = new RequestUserUpdateBuilder();
         builder.requestUserUpdate = new RequestUserUpdate();
 
         builder.requestUserUpdate.setEmail("yosope1626@uptade.com");
@@ -22,22 +22,22 @@ public class RequestClientUpdateBuilder {
         return builder;
     }
 
-    public RequestClientUpdateBuilder withName(String name) {
+    public RequestUserUpdateBuilder withName(String name) {
         this.requestUserUpdate.setName(name);
         return this;
     }
 
-    public RequestClientUpdateBuilder withEmail(String email) {
+    public RequestUserUpdateBuilder withEmail(String email) {
         this.requestUserUpdate.setEmail(email);
         return this;
     }
 
-    public RequestClientUpdateBuilder withPassword(String password) {
+    public RequestUserUpdateBuilder withPassword(String password) {
         this.requestUserUpdate.setPassword(password);
         return this;
     }
 
-    public RequestClientUpdateBuilder withBirthDate(LocalDate birthDate) {
+    public RequestUserUpdateBuilder withBirthDate(LocalDate birthDate) {
         this.requestUserUpdate.setBirthDate(birthDate);
         return this;
     }

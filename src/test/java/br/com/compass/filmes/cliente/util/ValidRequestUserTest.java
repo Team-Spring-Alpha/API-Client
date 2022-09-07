@@ -21,19 +21,19 @@ class ValidRequestUserTest {
     }
 
     @Test
-    @DisplayName("should pass the valid when inform a valid client categories")
-    void shouldPassTheValidWhenInformAValidClientCategories() {
+    @DisplayName("should pass the valid when inform a valid user categories")
+    void shouldPassTheValidWhenInformAValidUserCategories() {
         RequestUser requestUser = RequestUserBuilder.one().now();
         this.validRequestUser.validRequestUser(requestUser);
     }
 
     @Test
-    @DisplayName("shouldnt pass the valid when inform a wrong client categories")
-    void shouldntPassTheValidWhenInformAWrongClientCategories() {
-        List<String> clientCategories = new ArrayList<>();
-        clientCategories.add("test");
+    @DisplayName("shouldnt pass the valid when inform a wrong user categories")
+    void shouldntPassTheValidWhenInformAWrongUserCategories() {
+        List<String> categories = new ArrayList<>();
+        categories.add("test");
         RequestUser requestUser = RequestUserBuilder.one()
-                .withClientCategory(clientCategories)
+                .withCategory(categories)
                 .now();
         Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestUser.validRequestUser(requestUser));
     }

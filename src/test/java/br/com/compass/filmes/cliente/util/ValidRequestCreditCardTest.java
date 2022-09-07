@@ -31,7 +31,7 @@ class ValidRequestCreditCardTest {
     void shouldNotPassWhenInformAWrongCreditCardBrand() {
         RequestCreditCard requestCreditCard = RequestCreditCardBuilder
                 .one()
-                .withClientCreditCardBrand("test")
+                .withCreditCardBrand("test")
                 .now();
         Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCard));
     }
@@ -41,7 +41,7 @@ class ValidRequestCreditCardTest {
     void shouldNotPassWhenInformAWrongCreditCardSecurityCode() {
         RequestCreditCard requestCreditCard = RequestCreditCardBuilder
                 .one()
-                .withClientCreditCardSecurityCode("0x0")
+                .withCreditCardSecurityCode("0x0")
                 .now();
         Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCard));
     }
@@ -51,7 +51,7 @@ class ValidRequestCreditCardTest {
     void shouldNotPassWhenInformAWrongCreditCardMonthExpiration() {
         RequestCreditCard requestCreditCard = RequestCreditCardBuilder
                 .one()
-                .withClientCreditCardMonthExpiration("01")
+                .withCreditCardMonthExpiration("01")
                 .now();
         Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCard));
     }
@@ -62,7 +62,7 @@ class ValidRequestCreditCardTest {
         String dateString = LocalDate.now().plusYears(6).toString();
         RequestCreditCard requestCreditCard = RequestCreditCardBuilder
                 .one()
-                .withClientCreditCardYearExpiration(dateString)
+                .withCreditCardYearExpiration(dateString)
                 .now();
         Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCard));
     }

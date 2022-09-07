@@ -67,8 +67,8 @@ class MoviePaymentServiceTest {
     private ValidRequestMoviePayment validRequestMoviePayment;
 
     @Test
-    @DisplayName("should throw client not found exception when not found a client by id")
-    void shoudThrowClientNotFoundWhenNotFoundAClient() {
+    @DisplayName("should throw user not found exception when not found a user by id")
+    void shoudThrowUserNotFoundWhenNotFoundAUser() {
         UserEntity userEntity = UserEntityBuilder.one().withId("1L").now();
         RequestMoviePayment requestMoviePayment = new RequestMoviePayment();
         requestMoviePayment.setUserId("2L");
@@ -77,7 +77,7 @@ class MoviePaymentServiceTest {
     }
 
     @Test
-    @DisplayName("should throw credit card not found when not found a credt card from that client")
+    @DisplayName("should throw credit card not found when not found a credt card from that user")
     void shoudThrowCreditCardNotFoundWhenNotFoundACreditCard() {
         RequestMoviePayment requestMoviePayment = new RequestMoviePayment();
         requestMoviePayment.setCreditCardNumber("not found");
@@ -227,7 +227,4 @@ class MoviePaymentServiceTest {
 
         return responseMovieById;
     }
-
-
-
 }

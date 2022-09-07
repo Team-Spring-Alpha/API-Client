@@ -37,17 +37,17 @@ public class RequestUserBuilder {
     }
 
     public RequestUserBuilder withCpf(String cpf) {
-        this.requestUser.setName(cpf);
+        this.requestUser.setCpf(cpf);
         return this;
     }
 
     public RequestUserBuilder withEmail(String email) {
-        this.requestUser.setName(email);
+        this.requestUser.setEmail(email);
         return this;
     }
 
     public RequestUserBuilder withPassword(String password) {
-        this.requestUser.setName(password);
+        this.requestUser.setPassword(password);
         return this;
     }
 
@@ -61,7 +61,7 @@ public class RequestUserBuilder {
         return this;
     }
 
-    public RequestUserBuilder withClientCategory(List<String> clientCategory) {
+    public RequestUserBuilder withCategory(List<String> clientCategory) {
         this.requestUser.setCategory(clientCategory);
         return this;
     }

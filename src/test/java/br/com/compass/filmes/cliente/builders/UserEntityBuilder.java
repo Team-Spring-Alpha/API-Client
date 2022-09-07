@@ -44,37 +44,37 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntityBuilder withClientName(String clientName) {
-        this.userEntity.setName(clientName);
+    public UserEntityBuilder withName(String name) {
+        this.userEntity.setName(name);
         return this;
     }
 
-    public UserEntityBuilder withClientCpf(String clientCpf) {
-        this.userEntity.setCpf(clientCpf);
+    public UserEntityBuilder withCpf(String cpf) {
+        this.userEntity.setCpf(cpf);
         return this;
     }
 
-    public UserEntityBuilder withClientEmail(String clientEmail) {
-        this.userEntity.setEmail(clientEmail);
+    public UserEntityBuilder withEmail(String email) {
+        this.userEntity.setEmail(email);
         return this;
     }
 
-    public UserEntityBuilder withClientPassword(String clientPassword) {
-        this.userEntity.setPassword(clientPassword);
+    public UserEntityBuilder withPassword(String password) {
+        this.userEntity.setPassword(password);
         return this;
     }
 
-    public UserEntityBuilder withClientIsBlocked(boolean clientIsBlocked) {
-        this.userEntity.setBlocked(clientIsBlocked);
+    public UserEntityBuilder withIsBlocked(boolean isBlocked) {
+        this.userEntity.setBlocked(isBlocked);
         return this;
     }
 
-    public UserEntityBuilder withClientBirthDate(LocalDate clientBirthDate) {
-        this.userEntity.setBirthDate(clientBirthDate);
+    public UserEntityBuilder withBirthDate(LocalDate birthDate) {
+        this.userEntity.setBirthDate(birthDate);
         return this;
     }
 
-    public UserEntityBuilder withClientCategory(List<GenresEnum> categoryEnumList) {
+    public UserEntityBuilder withCategory(List<GenresEnum> categoryEnumList) {
         this.userEntity.setCategories(categoryEnumList);
         return this;
     }
@@ -84,7 +84,7 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntityBuilder withRequestClient(RequestUser requestUser) {
+    public UserEntityBuilder withRequestUser(RequestUser requestUser) {
         this.userEntity.setId("idTeste");
         this.userEntity.setName(requestUser.getName());
         this.userEntity.setCpf(requestUser.getCpf());

@@ -30,33 +30,33 @@ public class RequestCreditCardBuilder {
         return builder;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardNumber(String clientCreditCardNumber) {
-        this.requestCreditCard.setNumber(clientCreditCardNumber);
+    public RequestCreditCardBuilder withCreditCardNumber(String creditCardNumber) {
+        this.requestCreditCard.setNumber(creditCardNumber);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardHolderName(String clientCreditCardHolderName) {
-        this.requestCreditCard.setHolderName(clientCreditCardHolderName);
+    public RequestCreditCardBuilder withCreditCardHolderName(String creditCardHolderName) {
+        this.requestCreditCard.setHolderName(creditCardHolderName);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardBrand(String clientCreditCardBrand) {
-        this.requestCreditCard.setBrand(clientCreditCardBrand);
+    public RequestCreditCardBuilder withCreditCardBrand(String creditCardBrand) {
+        this.requestCreditCard.setBrand(creditCardBrand);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardSecurityCode(String clientCreditCardSecurityCode) {
-        this.requestCreditCard.setSecurityCode(clientCreditCardSecurityCode);
+    public RequestCreditCardBuilder withCreditCardSecurityCode(String creditCardSecurityCode) {
+        this.requestCreditCard.setSecurityCode(creditCardSecurityCode);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardMonthExpiration(String clientCreditCardMonthExpiration) {
-        this.requestCreditCard.setMonthExpiration(clientCreditCardMonthExpiration);
+    public RequestCreditCardBuilder withCreditCardMonthExpiration(String creditCardMonthExpiration) {
+        this.requestCreditCard.setMonthExpiration(creditCardMonthExpiration);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardYearExpiration(String clientCreditCardYearExpiration) {
-        this.requestCreditCard.setYearExpiration(clientCreditCardYearExpiration);
+    public RequestCreditCardBuilder withCreditCardYearExpiration(String creditCardYearExpiration) {
+        this.requestCreditCard.setYearExpiration(creditCardYearExpiration);
         return this;
     }
 
