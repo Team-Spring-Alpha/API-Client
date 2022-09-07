@@ -91,5 +91,31 @@ public class ExceptionsHandlers {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
 
+    @ExceptionHandler(CreditCardBrandInvalidException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerCreditCardBrandInvalidException(CreditCardBrandInvalidException creditCardBrandInvalidException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(creditCardBrandInvalidException.getMessage(), "cards.brand");
 
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+
+    @ExceptionHandler(CreditCardMonthExpirationInvalidException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerCreditCardMonthExpirationInvalidException(CreditCardMonthExpirationInvalidException creditCardMonthExpirationInvalidException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto("must be between 1-12", "cards.month_expiration");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+
+    @ExceptionHandler(CreditCardSecurityCodeInvalidException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerCreditCardSecurityCodeInvalidException(CreditCardSecurityCodeInvalidException cardSecurityCodeInvalidException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto("must be 3 digits e.g (010)", "cards.security_code");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+
+    @ExceptionHandler(CreditCardYearExpirationInvalidException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerCreditCardYearExpirationInvalidException(CreditCardYearExpirationInvalidException creditCardYearExpirationInvalidException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto("must be a valid year, and between year now and year now + 5", "cards.security_code");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
 }

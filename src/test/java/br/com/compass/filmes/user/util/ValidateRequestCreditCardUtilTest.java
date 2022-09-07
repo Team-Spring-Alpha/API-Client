@@ -2,11 +2,14 @@ package br.com.compass.filmes.user.util;
 
 import br.com.compass.filmes.user.builders.RequestCreditCardBuilder;
 import br.com.compass.filmes.user.dto.user.request.RequestCreditCardDTO;
+import br.com.compass.filmes.user.exceptions.CreditCardBrandInvalidException;
+import br.com.compass.filmes.user.exceptions.CreditCardMonthExpirationInvalidException;
+import br.com.compass.filmes.user.exceptions.CreditCardSecurityCodeInvalidException;
+import br.com.compass.filmes.user.exceptions.CreditCardYearExpirationInvalidException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
@@ -33,7 +36,7 @@ class ValidateRequestCreditCardUtilTest {
                 .one()
                 .withCreditCardBrand("test")
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
+        Assertions.assertThrows(CreditCardBrandInvalidException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
     }
 
     @Test
@@ -43,7 +46,7 @@ class ValidateRequestCreditCardUtilTest {
                 .one()
                 .withCreditCardSecurityCode("0x0")
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
+        Assertions.assertThrows(CreditCardSecurityCodeInvalidException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
     }
 
     @Test
@@ -53,7 +56,7 @@ class ValidateRequestCreditCardUtilTest {
                 .one()
                 .withCreditCardMonthExpiration("01")
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
+        Assertions.assertThrows(CreditCardMonthExpirationInvalidException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
     }
 
     @Test
@@ -64,7 +67,7 @@ class ValidateRequestCreditCardUtilTest {
                 .one()
                 .withCreditCardYearExpiration(dateString)
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
+        Assertions.assertThrows(CreditCardYearExpirationInvalidException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
     }
 
 }

@@ -2,11 +2,16 @@ package br.com.compass.filmes.user.util;
 
 import br.com.compass.filmes.user.dto.user.request.RequestCreditCardDTO;
 import br.com.compass.filmes.user.enums.CreditCardBrandEnum;
+import br.com.compass.filmes.user.exceptions.CreditCardBrandInvalidException;
+import br.com.compass.filmes.user.exceptions.CreditCardMonthExpirationInvalidException;
+import br.com.compass.filmes.user.exceptions.CreditCardSecurityCodeInvalidException;
+import br.com.compass.filmes.user.exceptions.CreditCardYearExpirationInvalidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 @Component
 public class ValidateRequestCreditCardUtil {
@@ -24,7 +29,7 @@ public class ValidateRequestCreditCardUtil {
         try {
             CreditCardBrandEnum.valueOf(requestCreditCardDTO.getBrand());
         } catch (IllegalArgumentException illegalArgumentException) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new CreditCardBrandInvalidException("Brand must be either one of these: " + Arrays.toString(CreditCardBrandEnum.values()));
         }
     }
 
@@ -32,7 +37,7 @@ public class ValidateRequestCreditCardUtil {
         String regexStringSecurityCode = "[0-9]{3}";
 
         if (!requestCreditCardDTO.getSecurityCode().matches(regexStringSecurityCode)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new CreditCardSecurityCodeInvalidException();
         }
     }
 
@@ -40,7 +45,7 @@ public class ValidateRequestCreditCardUtil {
         String regexStringMonthExpiration = "^[1-9]{1}|^1[0-2]{1}";
 
         if (!requestCreditCardDTO.getMonthExpiration().matches(regexStringMonthExpiration)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new CreditCardMonthExpirationInvalidException();
         }
     }
 
@@ -61,7 +66,7 @@ public class ValidateRequestCreditCardUtil {
         }
 
         if (!yearCreditCardIsValid) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new CreditCardYearExpirationInvalidException();
         }
     }
 }
