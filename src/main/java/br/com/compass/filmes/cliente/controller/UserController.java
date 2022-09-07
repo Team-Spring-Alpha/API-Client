@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/client")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -25,18 +25,18 @@ public class UserController {
     @Transactional
     public ResponseEntity<ResponseUser> post(@Valid @RequestBody RequestUser requestUser, UriComponentsBuilder uriComponentsBuilder){
         ResponseUser responseUser = userService.post(requestUser);
-        URI uri = uriComponentsBuilder.path("/api/client/{id}").buildAndExpand(responseUser.getId()).toUri();
+        URI uri = uriComponentsBuilder.path("/api/user/{id}").buildAndExpand(responseUser.getId()).toUri();
         return ResponseEntity.created(uri).body(responseUser);
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseUser>> returnAllClients() {
-        List<ResponseUser> responseUserList = userService.returnAllClients();
+    public ResponseEntity<List<ResponseUser>> returnAllUsers() {
+        List<ResponseUser> responseUserList = userService.returnAllUsers();
         return ResponseEntity.ok(responseUserList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseUser> returnClientById(@PathVariable String id) {
+    public ResponseEntity<ResponseUser> returnUserById(@PathVariable String id) {
         ResponseUser responseUser = userService.returnClientById(id);
         return ResponseEntity.ok(responseUser);
     }
@@ -45,14 +45,14 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<ResponseUser> patch(@PathVariable String id,
                                               @RequestBody RequestUserUpdate requestUserUpdate) {
-        ResponseUser responseDto = userService.patch(id, requestUserUpdate);
-        return ResponseEntity.ok(responseDto);
+        ResponseUser responseUser = userService.patch(id, requestUserUpdate);
+        return ResponseEntity.ok(responseUser);
     }
 
     @PatchMapping("/account/{id}")
-    public ResponseEntity<ResponseUser> setStatusClientAccount(@PathVariable String id,
-                                                               @RequestBody @Valid RequestSetStatusUserAccount requestSetStatusUserAccount){
-        ResponseUser responseUser = userService.setStatusClientAccount(id, requestSetStatusUserAccount);
+    public ResponseEntity<ResponseUser> setStatusUserAccount(@PathVariable String id,
+                                                             @RequestBody @Valid RequestSetStatusUserAccount requestSetStatusUserAccount){
+        ResponseUser responseUser = userService.setStatusUserAccount(id, requestSetStatusUserAccount);
         return ResponseEntity.ok(responseUser);
 
     }

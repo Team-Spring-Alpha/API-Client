@@ -197,11 +197,11 @@ class UserServiceTest {
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
 
-        ResponseUser responseUser = userService.setStatusClientAccount("1",
+        ResponseUser responseUser = userService.setStatusUserAccount("1",
                 requestSetStatusUserAccount);
 
         Mockito.verify(userRepository).save(userEntity);
-        Assertions.assertTrue(responseUser.isClientIsBlocked());
+        Assertions.assertTrue(responseUser.isBlocked());
     }
     @Test
     @DisplayName("should set the client's status account as unlocked")
@@ -213,11 +213,11 @@ class UserServiceTest {
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
 
-        ResponseUser responseUser = userService.setStatusClientAccount("1",
+        ResponseUser responseUser = userService.setStatusUserAccount("1",
                 requestSetStatusUserAccount);
 
         Mockito.verify(userRepository).save(userEntity);
-        Assertions.assertFalse(responseUser.isClientIsBlocked());
+        Assertions.assertFalse(responseUser.isBlocked());
     }
     @Test
     @DisplayName("should throw an exception when the setStatusClientAccount method receives a nonexistent id")
@@ -228,7 +228,7 @@ class UserServiceTest {
                 RequestSetStatusUserAccountBuilder.blocked().now();
 
         Assertions.assertThrows(ResponseStatusException.class, () -> userService
-                .setStatusClientAccount("2", requestSetStatusUserAccount));
+                .setStatusUserAccount("2", requestSetStatusUserAccount));
     }
 
     @Test
@@ -264,7 +264,7 @@ class UserServiceTest {
     @DisplayName("Should bring all client")
     public void shouldFindAllClient(){
         Mockito.when(userRepository.findAll()).thenReturn(Arrays.asList(UserEntityBuilder.one().now()));
-        List<ResponseUser> listClient = userService.returnAllClients();
+        List<ResponseUser> listClient = userService.returnAllUsers();
         Assertions.assertNotNull(listClient);
         Assertions.assertEquals(1, listClient.size());
         Assertions.assertEquals("Jetosvaldo", listClient.get(0).getName());

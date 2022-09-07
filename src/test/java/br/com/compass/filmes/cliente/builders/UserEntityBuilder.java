@@ -26,7 +26,7 @@ public class UserEntityBuilder {
         builder.userEntity.setCpf("686.751.800-12");
         builder.userEntity.setEmail("yosope1626@wnpop.com");
         builder.userEntity.setPassword("123");
-        builder.userEntity.setClientIsBlocked(false);
+        builder.userEntity.setBlocked(false);
         builder.userEntity.setBirthDate(LocalDate.now());
 
         List<GenresEnum> categoryEnumList = new ArrayList<>();
@@ -65,7 +65,7 @@ public class UserEntityBuilder {
     }
 
     public UserEntityBuilder withClientIsBlocked(boolean clientIsBlocked) {
-        this.userEntity.setClientIsBlocked(clientIsBlocked);
+        this.userEntity.setBlocked(clientIsBlocked);
         return this;
     }
 
@@ -90,7 +90,7 @@ public class UserEntityBuilder {
         this.userEntity.setCpf(requestUser.getCpf());
         this.userEntity.setEmail(requestUser.getEmail());
         this.userEntity.setPassword(requestUser.getPassword());
-        this.userEntity.setClientIsBlocked(false);
+        this.userEntity.setBlocked(false);
         this.userEntity.setBirthDate(requestUser.getBirthDate());
 
         this.userEntity.setCategories(requestUser.getCategory().stream().map(

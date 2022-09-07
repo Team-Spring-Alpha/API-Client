@@ -32,26 +32,26 @@ public class UserService {
 
     private final ValidRequestCreditCard validRequestCreditCard;
 
-    public ResponseUser post(RequestUser requestCLient){
-        validRequestUser.validRequestClient(requestCLient);
-        validListOfRequestCreditCards(requestCLient);
+    public ResponseUser post(RequestUser requestUser){
+        validRequestUser.validRequestUser(requestUser);
+        validListOfRequestCreditCards(requestUser);
 
-        UserEntity client = modelMapper.map(requestCLient, UserEntity.class);
-        client.setPassword(md5.ToMd5(client.getPassword()));
+        UserEntity user = modelMapper.map(requestUser, UserEntity.class);
+        user.setPassword(md5.ToMd5(user.getPassword()));
 
-        UserEntity saveClient = userRepository.save(client);
-        return modelMapper.map(saveClient, ResponseUser.class);
+        UserEntity saveUser = userRepository.save(user);
+        return modelMapper.map(saveUser, ResponseUser.class);
     }
 
-    private void validListOfRequestCreditCards(RequestUser requestCLient) {
-        for (int i = 0; i < requestCLient.getCards().size(); i++) {
-            validRequestCreditCard.validRequestCreditCard(requestCLient.getCards().get(i));
+    private void validListOfRequestCreditCards(RequestUser requestUser) {
+        for (int i = 0; i < requestUser.getCards().size(); i++) {
+            validRequestCreditCard.validRequestCreditCard(requestUser.getCards().get(i));
         }
     }
 
-    public List<ResponseUser> returnAllClients() {
+    public List<ResponseUser> returnAllUsers() {
         List<UserEntity> userEntityList = userRepository.findAll();
-        return userEntityList.stream().map(clientEntity -> modelMapper.map(clientEntity, ResponseUser.class)).collect(Collectors.toList());
+        return userEntityList.stream().map(userEntity -> modelMapper.map(userEntity, ResponseUser.class)).collect(Collectors.toList());
     }
 
     public ResponseUser returnClientById(String id) {
@@ -68,10 +68,10 @@ public class UserService {
         return modelMapper.map(savedUserEntity, ResponseUser.class);
     }
 
-    public ResponseUser setStatusClientAccount(String id, RequestSetStatusUserAccount requestSetStatusUserAccount){
+    public ResponseUser setStatusUserAccount(String id, RequestSetStatusUserAccount requestSetStatusUserAccount){
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        boolean clientIsBlocked = requestSetStatusUserAccount.isClientIsBlocked();
-        userEntity.setClientIsBlocked(clientIsBlocked);
+        boolean userIsBlocked = requestSetStatusUserAccount.isUserIsBlocked();
+        userEntity.setBlocked(userIsBlocked);
         userRepository.save(userEntity);
         return modelMapper.map(userEntity, ResponseUser.class);
     }

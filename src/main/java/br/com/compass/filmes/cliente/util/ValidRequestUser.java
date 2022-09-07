@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 @Component
 public class ValidRequestUser {
 
-    public void validRequestClient(RequestUser requestUser) {
-        validClientCategory(requestUser);
+    public void validRequestUser(RequestUser requestUser) {
+        validCategory(requestUser);
     }
 
-    private void validClientCategory(RequestUser requestUser) {
+    private void validCategory(RequestUser requestUser) {
         try {
             List<GenresEnum> categoriesList = requestUser.getCategory().stream().map(
                     GenresEnum::valueOf

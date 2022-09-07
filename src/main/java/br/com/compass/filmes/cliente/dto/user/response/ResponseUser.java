@@ -14,7 +14,7 @@ public class ResponseUser {
     @JsonFormat(pattern = "dd/MM/yyyy")
     @JsonProperty("birth_date")
     private LocalDate birthDate;
-    @JsonProperty("client_is_blocked")
-    private boolean clientIsBlocked;
+    @JsonProperty("is_blocked")
+    private boolean isBlocked;
     private List<ResponseCreditCard> cards;
 }

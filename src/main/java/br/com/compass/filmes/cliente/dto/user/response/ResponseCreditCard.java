@@ -1,9 +1,9 @@
 package br.com.compass.filmes.cliente.dto.user.response;
 
-import br.com.compass.filmes.cliente.enums.ClientCreditCardBrandEnum;
+import br.com.compass.filmes.cliente.enums.CreditCardBrandEnum;
 import lombok.Data;
 
 @Data
 public class ResponseCreditCard {
-    private ClientCreditCardBrandEnum brand;
+    private CreditCardBrandEnum brand;
 }

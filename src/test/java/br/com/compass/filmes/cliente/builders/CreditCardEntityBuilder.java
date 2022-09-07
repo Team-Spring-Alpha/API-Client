@@ -2,7 +2,7 @@ package br.com.compass.filmes.cliente.builders;
 
 import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCard;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
-import br.com.compass.filmes.cliente.enums.ClientCreditCardBrandEnum;
+import br.com.compass.filmes.cliente.enums.CreditCardBrandEnum;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class CreditCardEntityBuilder {
         builder.creditCardEntity.setHolderName("Jetosvaldo");
         builder.creditCardEntity.setNumber("5181652903041943");
         builder.creditCardEntity.setSecurityCode("613");
-        builder.creditCardEntity.setBrand(ClientCreditCardBrandEnum.MASTERCARD);
+        builder.creditCardEntity.setBrand(CreditCardBrandEnum.MASTERCARD);
         builder.creditCardEntity.setMonthExpiration("8");
         builder.creditCardEntity.setYearExpiration(yearNowString);
 
@@ -46,7 +46,7 @@ public class CreditCardEntityBuilder {
         return this;
     }
 
-    public CreditCardEntityBuilder withCreditCardBrand(ClientCreditCardBrandEnum creditCardBrand) {
+    public CreditCardEntityBuilder withCreditCardBrand(CreditCardBrandEnum creditCardBrand) {
         this.creditCardEntity.setBrand(creditCardBrand);
         return this;
     }
@@ -67,7 +67,7 @@ public class CreditCardEntityBuilder {
         this.creditCardEntity.setSecurityCode(requestCreditCard.getSecurityCode());
         this.creditCardEntity.setMonthExpiration(requestCreditCard.getMonthExpiration());
         this.creditCardEntity.setYearExpiration(requestCreditCard.getYearExpiration());
-        this.creditCardEntity.setBrand(ClientCreditCardBrandEnum.valueOf(requestCreditCard.getBrand()));
+        this.creditCardEntity.setBrand(CreditCardBrandEnum.valueOf(requestCreditCard.getBrand()));
 
         return this;
     }

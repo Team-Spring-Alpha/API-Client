@@ -13,7 +13,7 @@ public class RequestSetStatusUserAccountBuilder {
         RequestSetStatusUserAccountBuilder builder = new RequestSetStatusUserAccountBuilder();
         builder.requestSetStatusUserAccount = new RequestSetStatusUserAccount();
 
-        builder.requestSetStatusUserAccount.setClientIsBlocked(true);
+        builder.requestSetStatusUserAccount.setUserIsBlocked(true);
 
         return builder;
     }
@@ -22,7 +22,7 @@ public class RequestSetStatusUserAccountBuilder {
         RequestSetStatusUserAccountBuilder builder = new RequestSetStatusUserAccountBuilder();
         builder.requestSetStatusUserAccount = new RequestSetStatusUserAccount();
 
-        builder.requestSetStatusUserAccount.setClientIsBlocked(false);
+        builder.requestSetStatusUserAccount.setUserIsBlocked(false);
 
         return builder;
     }

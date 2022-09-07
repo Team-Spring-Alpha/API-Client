@@ -24,7 +24,7 @@ class ValidRequestUserTest {
     @DisplayName("should pass the valid when inform a valid client categories")
     void shouldPassTheValidWhenInformAValidClientCategories() {
         RequestUser requestUser = RequestUserBuilder.one().now();
-        this.validRequestUser.validRequestClient(requestUser);
+        this.validRequestUser.validRequestUser(requestUser);
     }
 
     @Test
@@ -35,7 +35,7 @@ class ValidRequestUserTest {
         RequestUser requestUser = RequestUserBuilder.one()
                 .withClientCategory(clientCategories)
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestUser.validRequestClient(requestUser));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestUser.validRequestUser(requestUser));
     }
 
 

@@ -8,6 +8,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class RequestSetStatusUserAccount {
     @NotNull
-    @JsonProperty("client_is_blocked")
-    private boolean clientIsBlocked;
+    @JsonProperty("user_is_blocked")
+    private boolean userIsBlocked;
 }

@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class RequestPaymentCreditCard {
-    @JsonProperty("brand")
     private String brand;
     @JsonProperty("number_token")
     private String number;
