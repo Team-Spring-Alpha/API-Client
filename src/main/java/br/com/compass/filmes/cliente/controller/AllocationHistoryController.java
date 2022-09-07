@@ -1,6 +1,6 @@
 package br.com.compass.filmes.cliente.controller;
 
-import br.com.compass.filmes.cliente.dto.apiAllocationHistory.response.ResponseAllocationDTO;
+import br.com.compass.filmes.cliente.dto.allocation.history.response.ResponseAllocationDTO;
 import br.com.compass.filmes.cliente.service.AllocationHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

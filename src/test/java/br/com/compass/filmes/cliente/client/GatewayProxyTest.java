@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.client;
 
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestAuthDTO;
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentDTO;
+import br.com.compass.filmes.cliente.dto.payment.request.RequestAuthDTO;
+import br.com.compass.filmes.cliente.dto.payment.request.RequestPaymentDTO;
 import br.com.compass.filmes.cliente.enums.PaymentVendorEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

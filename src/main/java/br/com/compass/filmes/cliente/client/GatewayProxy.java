@@ -1,9 +1,9 @@
 package br.com.compass.filmes.cliente.client;
 
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestAuthDTO;
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentDTO;
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseAuthDTO;
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponsePaymentDTO;
+import br.com.compass.filmes.cliente.dto.payment.request.RequestAuthDTO;
+import br.com.compass.filmes.cliente.dto.payment.request.RequestPaymentDTO;
+import br.com.compass.filmes.cliente.dto.payment.response.ResponseAuthDTO;
+import br.com.compass.filmes.cliente.dto.payment.response.ResponsePaymentDTO;
 import br.com.compass.filmes.cliente.enums.PaymentVendorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

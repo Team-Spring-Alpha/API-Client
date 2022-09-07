@@ -1,6 +1,6 @@
 package br.com.compass.filmes.cliente.builders;
 
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseAuthDTO;
+import br.com.compass.filmes.cliente.dto.payment.response.ResponseAuthDTO;
 
 public class ResponseAuthBuilder {
 

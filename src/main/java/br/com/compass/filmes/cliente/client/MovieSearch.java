@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.client;
 
-import br.com.compass.filmes.cliente.dto.apiMovie.ResponseApiMovieManagerDTO;
-import br.com.compass.filmes.cliente.dto.apiMovie.ResponseMovieByIdDTO;
+import br.com.compass.filmes.cliente.dto.movie.ResponseApiMovieManagerDTO;
+import br.com.compass.filmes.cliente.dto.movie.ResponseMovieByIdDTO;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import org.springframework.cloud.openfeign.FeignClient;
