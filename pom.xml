@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.compass.filmes</groupId>
-	<artifactId>cliente</artifactId>
+	<artifactId>user</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>cliente</name>
-	<description>API de cadastro do cliente</description>
+	<name>user</name>
+	<description>API de cadastro do customer, e buscar/alocar filmes</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
