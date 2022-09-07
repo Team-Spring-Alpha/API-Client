@@ -12,7 +12,7 @@ public class CreditCardEntity {
     private ClientCreditCardBrandEnum brand;
     @Field("clientCreditCardNumber")
     private String number;
-    @Field("clientCreditCardSecurityCode")
+    @Field("clientCreditSecurityCode")
     private String securityCode;
     @Field("clientCreditCardYearExpiration")
     private String yearExpiration;
