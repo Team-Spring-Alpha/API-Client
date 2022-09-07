@@ -3,7 +3,7 @@ package br.com.compass.filmes.cliente.service;
 import br.com.compass.filmes.cliente.dto.apiMovie.ResponseApiMovieManager;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
-import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;
+import br.com.compass.filmes.cliente.client.MovieSearchProxy;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

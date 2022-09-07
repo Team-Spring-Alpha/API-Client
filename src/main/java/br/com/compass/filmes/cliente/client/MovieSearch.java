@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.proxy;
+package br.com.compass.filmes.cliente.client;
 
 import br.com.compass.filmes.cliente.dto.apiMovie.ResponseApiMovieManager;
 import br.com.compass.filmes.cliente.dto.apiMovie.ResponseMovieById;

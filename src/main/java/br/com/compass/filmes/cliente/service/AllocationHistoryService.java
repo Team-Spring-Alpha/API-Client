@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.service;
 
 import br.com.compass.filmes.cliente.dto.apiAllocationHistory.response.ResponseAllocation;
-import br.com.compass.filmes.cliente.proxy.AllocationHistoryProxy;
+import br.com.compass.filmes.cliente.client.AllocationHistoryProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
