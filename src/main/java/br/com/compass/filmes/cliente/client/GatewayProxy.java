@@ -1,9 +1,9 @@
 package br.com.compass.filmes.cliente.client;
 
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestAuth;
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPayment;
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseAuth;
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponsePayment;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestAuthDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseAuthDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponsePaymentDTO;
 import br.com.compass.filmes.cliente.enums.PaymentVendorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,12 +15,12 @@ public class GatewayProxy {
     @Autowired
     private Gateway gateway;
 
-    public ResponseAuth getAuthToken(PaymentVendorEnum paymentVendorEnum) {
-        RequestAuth requestAuth = new RequestAuth(paymentVendorEnum.getClientId(), paymentVendorEnum.getApiKey());
-        return gateway.getAuthToken(requestAuth);
+    public ResponseAuthDTO getAuthToken(PaymentVendorEnum paymentVendorEnum) {
+        RequestAuthDTO requestAuthDTO = new RequestAuthDTO(paymentVendorEnum.getClientId(), paymentVendorEnum.getApiKey());
+        return gateway.getAuthToken(requestAuthDTO);
     }
 
-    public ResponsePayment getPayment(String bearerToken, RequestPayment requestPayment) {
-        return gateway.getPayment("Bearer " + bearerToken, requestPayment);
+    public ResponsePaymentDTO getPayment(String bearerToken, RequestPaymentDTO requestPaymentDTO) {
+        return gateway.getPayment("Bearer " + bearerToken, requestPaymentDTO);
     }
 }

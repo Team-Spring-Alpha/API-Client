@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class RequestPaymentCustomer {
+public class RequestPaymentCustomerDTO {
     @JsonProperty("document_type")
     private final String documentType = "CPF";
     @JsonProperty("document_number")

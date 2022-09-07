@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @AllArgsConstructor
 @EqualsAndHashCode
-public class RequestAuth {
+public class RequestAuthDTO {
     @JsonProperty("client_id")
     private String clientId;
     @JsonProperty("api_key")

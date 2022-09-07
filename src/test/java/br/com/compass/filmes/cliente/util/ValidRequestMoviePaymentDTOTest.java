@@ -1,8 +1,8 @@
 package br.com.compass.filmes.cliente.util;
 
 import br.com.compass.filmes.cliente.builders.RequestRentOrBuyBuilder;
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePayment;
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestRentOrBuy;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePaymentDTO;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestRentOrBuyDTO;
 import br.com.compass.filmes.cliente.exceptions.RentAndBuyMoviesEmptyException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,29 +12,29 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-class ValidRequestMoviePaymentTest {
+class ValidRequestMoviePaymentDTOTest {
 
     private ValidRequestMoviePayment validRequestMoviePayment;
-    private RequestMoviePayment requestMoviePayment;
+    private RequestMoviePaymentDTO requestMoviePaymentDTO;
 
     @BeforeEach
     void setUp() {
         this.validRequestMoviePayment = new ValidRequestMoviePayment();
-        this.requestMoviePayment = new RequestMoviePayment();
+        this.requestMoviePaymentDTO = new RequestMoviePaymentDTO();
     }
 
     @Test
     @DisplayName("should throw rent and buy movies is empty when both list is null or empty")
     void shouldThrowRentAndBuyMoviesEmptyExceptionWhenBothListIsNullOrEmpty() {
-        RequestRentOrBuy moviesBuyAndRent = RequestRentOrBuyBuilder.one()
+        RequestRentOrBuyDTO moviesBuyAndRent = RequestRentOrBuyBuilder.one()
                 .withBuyList(null)
                 .withRentList(new ArrayList<>())
                 .now();
 
-        requestMoviePayment.setMovies(moviesBuyAndRent);
+        requestMoviePaymentDTO.setMovies(moviesBuyAndRent);
 
         Assertions.assertThrows(RentAndBuyMoviesEmptyException.class,
-                () -> validRequestMoviePayment.validRequestMoviePayment(requestMoviePayment));
+                () -> validRequestMoviePayment.validRequestMoviePayment(requestMoviePaymentDTO));
     }
 
     @Test
@@ -43,14 +43,14 @@ class ValidRequestMoviePaymentTest {
         List<Long> buyList = new ArrayList<>();
         buyList.add(2L);
 
-        RequestRentOrBuy moviesBuyAndRent = RequestRentOrBuyBuilder
+        RequestRentOrBuyDTO moviesBuyAndRent = RequestRentOrBuyBuilder
                 .one()
                 .withRentList(null)
                 .withBuyList(buyList)
                 .now();
 
-        requestMoviePayment.setMovies(moviesBuyAndRent);
+        requestMoviePaymentDTO.setMovies(moviesBuyAndRent);
 
-        validRequestMoviePayment.validRequestMoviePayment(requestMoviePayment);
+        validRequestMoviePayment.validRequestMoviePayment(requestMoviePaymentDTO);
     }
 }

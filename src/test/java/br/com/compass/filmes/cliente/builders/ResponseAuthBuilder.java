@@ -1,42 +1,42 @@
 package br.com.compass.filmes.cliente.builders;
 
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseAuth;
+import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseAuthDTO;
 
 public class ResponseAuthBuilder {
 
-    private ResponseAuth responseAuth;
+    private ResponseAuthDTO responseAuthDTO;
 
     public ResponseAuthBuilder() {
     }
 
     public static ResponseAuthBuilder one() {
         ResponseAuthBuilder builder = new ResponseAuthBuilder();
-        builder.responseAuth = new ResponseAuth();
+        builder.responseAuthDTO = new ResponseAuthDTO();
 
-        builder.responseAuth.setToken("test token");
-        builder.responseAuth.setExpiresIn("180");
-        builder.responseAuth.setTokenType("bearer");
+        builder.responseAuthDTO.setToken("test token");
+        builder.responseAuthDTO.setExpiresIn("180");
+        builder.responseAuthDTO.setTokenType("bearer");
 
         return builder;
     }
 
     public ResponseAuthBuilder withToken(String token) {
-        this.responseAuth.setToken(token);
+        this.responseAuthDTO.setToken(token);
         return this;
     }
 
     public ResponseAuthBuilder withExpiresIn(String expiresIn) {
-        this.responseAuth.setExpiresIn(expiresIn);
+        this.responseAuthDTO.setExpiresIn(expiresIn);
         return this;
     }
 
     public ResponseAuthBuilder withTokenType(String tokenType) {
-        this.responseAuth.setTokenType(tokenType);
+        this.responseAuthDTO.setTokenType(tokenType);
         return this;
     }
 
-    public ResponseAuth now() {
-        return this.responseAuth;
+    public ResponseAuthDTO now() {
+        return this.responseAuthDTO;
     }
 
 }

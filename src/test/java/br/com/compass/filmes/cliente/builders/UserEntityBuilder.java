@@ -1,6 +1,6 @@
 package br.com.compass.filmes.cliente.builders;
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestUser;
+import br.com.compass.filmes.cliente.dto.user.request.RequestUserDTO;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
@@ -84,21 +84,21 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntityBuilder withRequestUser(RequestUser requestUser) {
+    public UserEntityBuilder withRequestUser(RequestUserDTO requestUserDTO) {
         this.userEntity.setId("idTeste");
-        this.userEntity.setName(requestUser.getName());
-        this.userEntity.setCpf(requestUser.getCpf());
-        this.userEntity.setEmail(requestUser.getEmail());
-        this.userEntity.setPassword(requestUser.getPassword());
+        this.userEntity.setName(requestUserDTO.getName());
+        this.userEntity.setCpf(requestUserDTO.getCpf());
+        this.userEntity.setEmail(requestUserDTO.getEmail());
+        this.userEntity.setPassword(requestUserDTO.getPassword());
         this.userEntity.setBlocked(false);
-        this.userEntity.setBirthDate(requestUser.getBirthDate());
+        this.userEntity.setBirthDate(requestUserDTO.getBirthDate());
 
-        this.userEntity.setCategories(requestUser.getCategory().stream().map(
+        this.userEntity.setCategories(requestUserDTO.getCategory().stream().map(
                 GenresEnum::valueOf
         ).collect(Collectors.toList()));
 
 
-        this.userEntity.setCards(requestUser.getCards().stream().map(
+        this.userEntity.setCards(requestUserDTO.getCards().stream().map(
                 requestCreditCard -> CreditCardEntityBuilder.one().withRequestCreditCard(requestCreditCard).now()
                 ).collect(Collectors.toList()));
 

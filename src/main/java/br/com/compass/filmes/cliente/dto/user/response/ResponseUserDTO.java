@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class ResponseUser {
+public class ResponseUserDTO {
     private String id;
     private String name;
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -16,5 +16,5 @@ public class ResponseUser {
     private LocalDate birthDate;
     @JsonProperty("is_blocked")
     private boolean isBlocked;
-    private List<ResponseCreditCard> cards;
+    private List<ResponseCreditCardDTO> cards;
 }

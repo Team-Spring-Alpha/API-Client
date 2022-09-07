@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponsePayment {
+public class ResponsePaymentDTO {
 
     @JsonProperty("payment_id")
     private String paymentId;
@@ -24,5 +24,5 @@ public class ResponsePayment {
     private String status;
     @JsonProperty("received_at")
     private LocalDateTime receivedAt;
-    private ResponseProcessPayment authorization;
+    private ResponseProcessPaymentDTO authorization;
 }

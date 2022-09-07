@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-public class RequestRentOrBuy {
+public class RequestRentOrBuyDTO {
     @NotNull
     @NotEmpty
     private List<Long> rent;

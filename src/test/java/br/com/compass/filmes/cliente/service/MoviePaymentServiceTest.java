@@ -1,15 +1,15 @@
 package br.com.compass.filmes.cliente.service;
 
 import br.com.compass.filmes.cliente.builders.*;
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePayment;
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestRentOrBuy;
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseAuth;
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseGatewayReproved;
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponsePayment;
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseProcessPayment;
-import br.com.compass.filmes.cliente.dto.apiMovie.ResponseJustWatch;
-import br.com.compass.filmes.cliente.dto.apiMovie.ResponseMovieById;
-import br.com.compass.filmes.cliente.dto.apiMovie.ResponseRentAndBuy;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePaymentDTO;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestRentOrBuyDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseAuthDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseGatewayReprovedDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponsePaymentDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseProcessPaymentDTO;
+import br.com.compass.filmes.cliente.dto.apiMovie.ResponseJustWatchDTO;
+import br.com.compass.filmes.cliente.dto.apiMovie.ResponseMovieByIdDTO;
+import br.com.compass.filmes.cliente.dto.apiMovie.ResponseRentAndBuyDTO;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
 import br.com.compass.filmes.cliente.enums.MovieLinks;
@@ -70,42 +70,42 @@ class MoviePaymentServiceTest {
     @DisplayName("should throw user not found exception when not found a user by id")
     void shoudThrowUserNotFoundWhenNotFoundAUser() {
         UserEntity userEntity = UserEntityBuilder.one().withId("1L").now();
-        RequestMoviePayment requestMoviePayment = new RequestMoviePayment();
-        requestMoviePayment.setUserId("2L");
+        RequestMoviePaymentDTO requestMoviePaymentDTO = new RequestMoviePaymentDTO();
+        requestMoviePaymentDTO.setUserId("2L");
 
-        Assertions.assertThrows(UserNotFoundException.class, () -> moviePaymentService.post(requestMoviePayment));
+        Assertions.assertThrows(UserNotFoundException.class, () -> moviePaymentService.post(requestMoviePaymentDTO));
     }
 
     @Test
     @DisplayName("should throw credit card not found when not found a credt card from that user")
     void shoudThrowCreditCardNotFoundWhenNotFoundACreditCard() {
-        RequestMoviePayment requestMoviePayment = new RequestMoviePayment();
-        requestMoviePayment.setCreditCardNumber("not found");
+        RequestMoviePaymentDTO requestMoviePaymentDTO = new RequestMoviePaymentDTO();
+        requestMoviePaymentDTO.setCreditCardNumber("not found");
         UserEntity userEntity = UserEntityBuilder.one().now();
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.ofNullable(userEntity));
 
-        Assertions.assertThrows(CreditCardNotFoundException.class, () -> moviePaymentService.post(requestMoviePayment));
+        Assertions.assertThrows(CreditCardNotFoundException.class, () -> moviePaymentService.post(requestMoviePaymentDTO));
     }
 
 
     @Test
     @DisplayName("should throw buy movie not found when external api dont return where to buy that movie")
     void shouldThrowBuyMovieNotFoundExceptionWhenExternalApiReturnNullFromBuyProviderList() {
-        RequestRentOrBuy rentOrBuy = RequestRentOrBuyBuilder.one().withRentList(null).now();
+        RequestRentOrBuyDTO rentOrBuy = RequestRentOrBuyBuilder.one().withRentList(null).now();
 
-        RequestMoviePayment moviePayment = RequestMoviePaymentBuilder.one()
+        RequestMoviePaymentDTO moviePayment = RequestMoviePaymentBuilder.one()
                 .withCreditCardNumber("test")
                 .withRentOrBuy(rentOrBuy)
                 .now();
 
         UserEntity userEntity = buildClientEntityWithCreditCardNumber("test");
 
-        ResponseMovieById responseMovieById = buildResponseMovieById();
-        responseMovieById.getJustWatch().setBuy(null);
+        ResponseMovieByIdDTO responseMovieByIdDTO = buildResponseMovieById();
+        responseMovieByIdDTO.getJustWatch().setBuy(null);
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
-        Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieById);
+        Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieByIdDTO);
 
         Assertions.assertThrows(BuyMovieNotFoundException.class, () -> moviePaymentService.post(moviePayment));
     }
@@ -113,19 +113,19 @@ class MoviePaymentServiceTest {
     @Test
     @DisplayName("should throw rent movie not found when external api dont return where to rent that movie")
     void shouldThrowBuyMovieNotFoundExceptionWhenExternalApiReturnNullFromRentProviderList() {
-        RequestRentOrBuy rentOrBuy = RequestRentOrBuyBuilder.one().withBuyList(null).now();
-        RequestMoviePayment moviePayment = RequestMoviePaymentBuilder.one()
+        RequestRentOrBuyDTO rentOrBuy = RequestRentOrBuyBuilder.one().withBuyList(null).now();
+        RequestMoviePaymentDTO moviePayment = RequestMoviePaymentBuilder.one()
                 .withCreditCardNumber("test")
                 .withRentOrBuy(rentOrBuy)
                 .now();
 
         UserEntity userEntity = buildClientEntityWithCreditCardNumber("test");
 
-        ResponseMovieById responseMovieById = buildResponseMovieById();
-        responseMovieById.getJustWatch().setRent(null);
+        ResponseMovieByIdDTO responseMovieByIdDTO = buildResponseMovieById();
+        responseMovieByIdDTO.getJustWatch().setRent(null);
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
-        Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieById);
+        Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieByIdDTO);
 
         Assertions.assertThrows(RentMovieNotFoundException.class, () -> moviePaymentService.post(moviePayment));
     }
@@ -133,44 +133,44 @@ class MoviePaymentServiceTest {
     @Test
     @DisplayName("should process with sucessful a payment request reproved by gateway")
     void shouldProcessWithSucessfulAPaymentReprovedByGateway() {
-        RequestMoviePayment moviePayment = RequestMoviePaymentBuilder.one().withCreditCardNumber("test").now();
+        RequestMoviePaymentDTO moviePayment = RequestMoviePaymentBuilder.one().withCreditCardNumber("test").now();
         UserEntity userEntity = buildClientEntityWithCreditCardNumber("test");
 
-        ResponseMovieById responseMovieById = buildResponseMovieById();
+        ResponseMovieByIdDTO responseMovieByIdDTO = buildResponseMovieById();
 
-        ResponseAuth responseAuth = ResponseAuthBuilder.one().now();
-        ResponsePayment responsePayment = buildResponsePaymentFailed();
+        ResponseAuthDTO responseAuthDTO = ResponseAuthBuilder.one().now();
+        ResponsePaymentDTO responsePaymentDTO = buildResponsePaymentFailed();
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
-        Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieById);
-        Mockito.when(gatewayProxy.getAuthToken(any())).thenReturn(responseAuth);
-        Mockito.when(gatewayProxy.getPayment(any(), any())).thenReturn(responsePayment);
+        Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieByIdDTO);
+        Mockito.when(gatewayProxy.getAuthToken(any())).thenReturn(responseAuthDTO);
+        Mockito.when(gatewayProxy.getPayment(any(), any())).thenReturn(responsePaymentDTO);
 
-        ResponseGatewayReproved responseGatewayReproved = moviePaymentService.post(moviePayment);
+        ResponseGatewayReprovedDTO responseGatewayReprovedDTO = moviePaymentService.post(moviePayment);
 
-        Assertions.assertEquals(responsePayment.getStatus(), responseGatewayReproved.getPaymentStatus());
-        Assertions.assertEquals(responsePayment.getAuthorization().getReasonMessage(), responseGatewayReproved.getCause());
+        Assertions.assertEquals(responsePaymentDTO.getStatus(), responseGatewayReprovedDTO.getPaymentStatus());
+        Assertions.assertEquals(responsePaymentDTO.getAuthorization().getReasonMessage(), responseGatewayReprovedDTO.getCause());
     }
 
     @Test
     @DisplayName("should process with sucessful a payment request approved by gateway")
     void shouldProcessWithSucessfulAPaymentApprovedByGateway() {
-        RequestMoviePayment moviePayment = RequestMoviePaymentBuilder.one().withCreditCardNumber("0081").now();
+        RequestMoviePaymentDTO moviePayment = RequestMoviePaymentBuilder.one().withCreditCardNumber("0081").now();
         UserEntity userEntity = buildClientEntityWithCreditCardNumber("0081");
 
-        ResponseMovieById responseMovieById = buildResponseMovieById();
+        ResponseMovieByIdDTO responseMovieByIdDTO = buildResponseMovieById();
 
-        ResponseAuth responseAuth = ResponseAuthBuilder.one().now();
-        ResponsePayment responsePayment = buildResponsePaymentApproved();
+        ResponseAuthDTO responseAuthDTO = ResponseAuthBuilder.one().now();
+        ResponsePaymentDTO responsePaymentDTO = buildResponsePaymentApproved();
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
-        Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieById);
-        Mockito.when(gatewayProxy.getAuthToken(any())).thenReturn(responseAuth);
-        Mockito.when(gatewayProxy.getPayment(any(), any())).thenReturn(responsePayment);
+        Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieByIdDTO);
+        Mockito.when(gatewayProxy.getAuthToken(any())).thenReturn(responseAuthDTO);
+        Mockito.when(gatewayProxy.getPayment(any(), any())).thenReturn(responsePaymentDTO);
 
-        ResponseGatewayReproved responseGatewayApproved = moviePaymentService.post(moviePayment);
-        Assertions.assertEquals(responsePayment.getStatus(), responseGatewayApproved.getPaymentStatus());
-        Assertions.assertEquals(responsePayment.getAuthorization().getReasonMessage(), responseGatewayApproved.getCause());
+        ResponseGatewayReprovedDTO responseGatewayApproved = moviePaymentService.post(moviePayment);
+        Assertions.assertEquals(responsePaymentDTO.getStatus(), responseGatewayApproved.getPaymentStatus());
+        Assertions.assertEquals(responsePaymentDTO.getAuthorization().getReasonMessage(), responseGatewayApproved.getCause());
 
     }
 
@@ -183,48 +183,48 @@ class MoviePaymentServiceTest {
         return UserEntityBuilder.one().withCreditCard(creditCardEntityList).now();
     }
 
-    private ResponsePayment buildResponsePaymentFailed() {
-        ResponseProcessPayment responseProcessPayment = ResponseProcessPayment.builder()
+    private ResponsePaymentDTO buildResponsePaymentFailed() {
+        ResponseProcessPaymentDTO responseProcessPaymentDTO = ResponseProcessPaymentDTO.builder()
                 .reasonMessage("test fail")
                 .build();
 
-        return ResponsePayment.builder()
+        return ResponsePaymentDTO.builder()
                 .status("REPROVED")
-                .authorization(responseProcessPayment)
+                .authorization(responseProcessPaymentDTO)
                 .build();
     }
 
-    private ResponsePayment buildResponsePaymentApproved() {
-        ResponseProcessPayment responseProcessPayment = ResponseProcessPayment.builder()
+    private ResponsePaymentDTO buildResponsePaymentApproved() {
+        ResponseProcessPaymentDTO responseProcessPaymentDTO = ResponseProcessPaymentDTO.builder()
                 .reasonMessage("approved")
                 .build();
 
-        return ResponsePayment.builder()
+        return ResponsePaymentDTO.builder()
                 .status("APPROVED")
-                .authorization(responseProcessPayment)
+                .authorization(responseProcessPaymentDTO)
                 .build();
     }
 
 
-    private ResponseMovieById buildResponseMovieById() {
-        ResponseRentAndBuy responseRentAndBuy = ResponseRentAndBuy.builder()
+    private ResponseMovieByIdDTO buildResponseMovieById() {
+        ResponseRentAndBuyDTO responseRentAndBuyDTO = ResponseRentAndBuyDTO.builder()
                 .price(50.0)
                 .store(MovieLinks.NETFLIX.getLabel())
                 .build();
-        List<ResponseRentAndBuy> responseRentAndBuyList = new ArrayList<>();
-        responseRentAndBuyList.add(responseRentAndBuy);
+        List<ResponseRentAndBuyDTO> responseRentAndBuyDTOList = new ArrayList<>();
+        responseRentAndBuyDTOList.add(responseRentAndBuyDTO);
 
-        ResponseJustWatch responseJustWatch = ResponseJustWatch.builder()
-                .rent(responseRentAndBuyList)
-                .buy(responseRentAndBuyList)
+        ResponseJustWatchDTO responseJustWatchDTO = ResponseJustWatchDTO.builder()
+                .rent(responseRentAndBuyDTOList)
+                .buy(responseRentAndBuyDTOList)
                 .build();
 
-        ResponseMovieById responseMovieById = ResponseMovieById.builder()
+        ResponseMovieByIdDTO responseMovieByIdDTO = ResponseMovieByIdDTO.builder()
                 .id(1L)
                 .movieName("test")
-                .justWatch(responseJustWatch)
+                .justWatch(responseJustWatchDTO)
                 .build();
 
-        return responseMovieById;
+        return responseMovieByIdDTO;
     }
 }

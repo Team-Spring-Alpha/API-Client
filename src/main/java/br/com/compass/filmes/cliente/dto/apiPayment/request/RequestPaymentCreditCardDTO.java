@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class RequestPaymentCreditCard {
+public class RequestPaymentCreditCardDTO {
     private String brand;
     @JsonProperty("number_token")
     private String number;

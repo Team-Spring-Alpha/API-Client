@@ -9,12 +9,12 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @EqualsAndHashCode
-public class RequestPayment {
+public class RequestPaymentDTO {
     @NotBlank
     @JsonProperty("seller_id")
     private String sellerId;
     @NotNull
-    private RequestPaymentCustomer customer;
+    private RequestPaymentCustomerDTO customer;
     @NotBlank
     @JsonProperty("payment_type")
     private String paymentType = "CREDIT_CARD";
@@ -23,5 +23,5 @@ public class RequestPayment {
     @JsonProperty("transaction_amount")
     private double transactionAmount;
     @NotBlank
-    private RequestPaymentCreditCard card;
+    private RequestPaymentCreditCardDTO card;
 }

@@ -8,10 +8,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class RequestMoviePayment {
+public class RequestMoviePaymentDTO {
 
     @NotNull
-    private RequestRentOrBuy movies;
+    private RequestRentOrBuyDTO movies;
     @CreditCardNumber
     @NotBlank
     @JsonProperty("credit_card_number")

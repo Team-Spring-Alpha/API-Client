@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class RequestCreditCard {
+public class RequestCreditCardDTO {
     @NotBlank
     private String brand;
     @NotBlank

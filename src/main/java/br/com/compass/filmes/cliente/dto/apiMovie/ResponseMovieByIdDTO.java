@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ResponseMovieById {
+public class ResponseMovieByIdDTO {
     private Long id;
     @JsonProperty("movie_name")
     private String movieName;
     @JsonProperty("just_watch")
-    private ResponseJustWatch justWatch;
+    private ResponseJustWatchDTO justWatch;
 }

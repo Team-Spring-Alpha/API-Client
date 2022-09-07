@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseProcessPayment {
+public class ResponseProcessPaymentDTO {
     @JsonProperty("authorization_code")
     private String authorizationCode;
     @JsonProperty("authorized_at")

@@ -1,6 +1,5 @@
 package br.com.compass.filmes.cliente.dto.user.request;
 
-import br.com.compass.filmes.cliente.enums.GenresEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -12,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class RequestUser {
+public class RequestUserDTO {
 
     @NotBlank
     @Email
@@ -30,7 +29,7 @@ public class RequestUser {
     @NotNull
     private String cpf;
     @Size(min = 1)
-    private List<@Valid RequestCreditCard> cards;
+    private List<@Valid RequestCreditCardDTO> cards;
     @NotNull
     private List<String> category;
 }

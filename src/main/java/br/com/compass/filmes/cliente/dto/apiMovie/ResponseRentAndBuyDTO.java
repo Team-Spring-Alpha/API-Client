@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ResponseRentAndBuy {
+public class ResponseRentAndBuyDTO {
     private String store;
     private Double price;
 }

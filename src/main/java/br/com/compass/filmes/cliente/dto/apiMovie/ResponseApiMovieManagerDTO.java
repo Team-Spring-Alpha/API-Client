@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ResponseApiMovieManager {
+public class ResponseApiMovieManagerDTO {
     @JsonProperty("movie_id")
     private Long movieId;
     private String title;
@@ -18,5 +18,5 @@ public class ResponseApiMovieManager {
     private String overview;
     private String poster;
     @JsonProperty("just_watch")
-    private ResponseJustWatch justWatch;
+    private ResponseJustWatchDTO justWatch;
 }

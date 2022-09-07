@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.client;
 
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestAuth;
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPayment;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestAuthDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentDTO;
 import br.com.compass.filmes.cliente.enums.PaymentVendorEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,19 +21,19 @@ class GatewayProxyTest {
     @Test
     @DisplayName("should get auth token sucessful")
     void shouldGetAuthTokenSucessful() {
-        RequestAuth requestAuth = new RequestAuth(PaymentVendorEnum.PEDRO.getClientId(), PaymentVendorEnum.PEDRO.getApiKey());
+        RequestAuthDTO requestAuthDTO = new RequestAuthDTO(PaymentVendorEnum.PEDRO.getClientId(), PaymentVendorEnum.PEDRO.getApiKey());
 
         gatewayProxy.getAuthToken(PaymentVendorEnum.PEDRO);
 
-        Mockito.verify(gateway).getAuthToken(requestAuth);
+        Mockito.verify(gateway).getAuthToken(requestAuthDTO);
     }
 
     @Test
     @DisplayName("should get payment from gateway")
     void shouldGetPaymentFromGateWay() {
-        RequestPayment requestPayment = new RequestPayment();
-        gatewayProxy.getPayment("test", requestPayment);
+        RequestPaymentDTO requestPaymentDTO = new RequestPaymentDTO();
+        gatewayProxy.getPayment("test", requestPaymentDTO);
 
-        Mockito.verify(gateway).getPayment("Bearer test", requestPayment);
+        Mockito.verify(gateway).getPayment("Bearer test", requestPaymentDTO);
     }
 }

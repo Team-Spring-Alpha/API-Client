@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class RequestSetStatusUserAccount {
+public class RequestSetStatusUserAccountDTO {
     @NotNull
     @JsonProperty("user_is_blocked")
     private boolean userIsBlocked;

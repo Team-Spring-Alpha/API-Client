@@ -10,12 +10,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @EqualsAndHashCode
-public class RequestAllocation {
+public class RequestAllocationDTO {
     @JsonProperty("user_id")
     private String userId;
     @JsonProperty("card_number")
     private String cardNumber;
-    private List<RequestAllocationMovie> movies;
+    private List<RequestAllocationMovieDTO> movies;
     @JsonProperty("payment_status")
     private String paymentStatus;
 }

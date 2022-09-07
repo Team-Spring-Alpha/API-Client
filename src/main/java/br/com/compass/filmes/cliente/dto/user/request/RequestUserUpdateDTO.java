@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
-public class RequestUserUpdate {
+public class RequestUserUpdateDTO {
 
     @Email
     private String email;

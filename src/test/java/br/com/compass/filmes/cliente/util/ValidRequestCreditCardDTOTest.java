@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.util;
 
 import br.com.compass.filmes.cliente.builders.RequestCreditCardBuilder;
-import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCard;
+import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCardDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
-class ValidRequestCreditCardTest {
+class ValidRequestCreditCardDTOTest {
 
     private ValidRequestCreditCard validRequestCreditCard;
 
@@ -22,49 +22,49 @@ class ValidRequestCreditCardTest {
     @Test
     @DisplayName("should pass when inform a correct request credit card")
     void shouldPassWhenInformACorrectRequestCreditCard() {
-        RequestCreditCard requestCreditCard = RequestCreditCardBuilder.one().now();
-        this.validRequestCreditCard.validRequestCreditCard(requestCreditCard);
+        RequestCreditCardDTO requestCreditCardDTO = RequestCreditCardBuilder.one().now();
+        this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO);
     }
 
     @Test
     @DisplayName("should not pass when inform a wrong credit card brand")
     void shouldNotPassWhenInformAWrongCreditCardBrand() {
-        RequestCreditCard requestCreditCard = RequestCreditCardBuilder
+        RequestCreditCardDTO requestCreditCardDTO = RequestCreditCardBuilder
                 .one()
                 .withCreditCardBrand("test")
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCard));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO));
     }
 
     @Test
     @DisplayName("should not pass when inform a wrong credit card security code")
     void shouldNotPassWhenInformAWrongCreditCardSecurityCode() {
-        RequestCreditCard requestCreditCard = RequestCreditCardBuilder
+        RequestCreditCardDTO requestCreditCardDTO = RequestCreditCardBuilder
                 .one()
                 .withCreditCardSecurityCode("0x0")
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCard));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO));
     }
 
     @Test
     @DisplayName("should not pass when inform a wrong credit card month expiration")
     void shouldNotPassWhenInformAWrongCreditCardMonthExpiration() {
-        RequestCreditCard requestCreditCard = RequestCreditCardBuilder
+        RequestCreditCardDTO requestCreditCardDTO = RequestCreditCardBuilder
                 .one()
                 .withCreditCardMonthExpiration("01")
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCard));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO));
     }
 
     @Test
     @DisplayName("should not pass when inform a wrong credit card year expiration")
     void shouldNotPassWhenInformAWrongCreditCardYearExpiration() {
         String dateString = LocalDate.now().plusYears(6).toString();
-        RequestCreditCard requestCreditCard = RequestCreditCardBuilder
+        RequestCreditCardDTO requestCreditCardDTO = RequestCreditCardBuilder
                 .one()
                 .withCreditCardYearExpiration(dateString)
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCard));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO));
     }
 
 }

@@ -4,6 +4,6 @@ import br.com.compass.filmes.cliente.enums.CreditCardBrandEnum;
 import lombok.Data;
 
 @Data
-public class ResponseCreditCard {
+public class ResponseCreditCardDTO {
     private CreditCardBrandEnum brand;
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class RequestAllocationMovie {
+public class RequestAllocationMovieDTO {
     private Long id;
     private String name;
 }

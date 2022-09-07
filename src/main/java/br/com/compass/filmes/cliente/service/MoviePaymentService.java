@@ -1,13 +1,13 @@
 package br.com.compass.filmes.cliente.service;
 
-import br.com.compass.filmes.cliente.dto.apiAllocationHistory.request.RequestAllocation;
-import br.com.compass.filmes.cliente.dto.apiAllocationHistory.request.RequestAllocationMovie;
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePayment;
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPayment;
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCreditCard;
-import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCustomer;
+import br.com.compass.filmes.cliente.dto.apiAllocationHistory.request.RequestAllocationDTO;
+import br.com.compass.filmes.cliente.dto.apiAllocationHistory.request.RequestAllocationMovieDTO;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePaymentDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCreditCardDTO;
+import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCustomerDTO;
 import br.com.compass.filmes.cliente.dto.apiPayment.response.*;
-import br.com.compass.filmes.cliente.dto.apiMovie.ResponseMovieById;
+import br.com.compass.filmes.cliente.dto.apiMovie.ResponseMovieByIdDTO;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
 import br.com.compass.filmes.cliente.enums.PaymentVendorEnum;
@@ -45,20 +45,20 @@ public class MoviePaymentService {
     private final Md5 md5;
     private final ValidRequestMoviePayment validRequestMoviePayment;
 
-    public ResponseGatewayReproved post(RequestMoviePayment requestMoviePayment) {
-        validRequestMoviePayment.validRequestMoviePayment(requestMoviePayment);
-        UserEntity userEntity = userRepository.findById(requestMoviePayment.getUserId()).orElseThrow(() -> new UserNotFoundException("userId: "+ requestMoviePayment.getUserId()));
-        CreditCardEntity creditCard = getCreditCard(requestMoviePayment, userEntity);
+    public ResponseGatewayReprovedDTO post(RequestMoviePaymentDTO requestMoviePaymentDTO) {
+        validRequestMoviePayment.validRequestMoviePayment(requestMoviePaymentDTO);
+        UserEntity userEntity = userRepository.findById(requestMoviePaymentDTO.getUserId()).orElseThrow(() -> new UserNotFoundException("userId: "+ requestMoviePaymentDTO.getUserId()));
+        CreditCardEntity creditCard = getCreditCard(requestMoviePaymentDTO, userEntity);
 
-        List<ResponseMoviePaymentProcess> moviePaymentProcessList = new ArrayList<>();
+        List<ResponseMoviePaymentProcessDTO> moviePaymentProcessList = new ArrayList<>();
         Double amount = 0.0;
 
-        if (requestMoviePayment.getMovies().getBuy() != null) {
-            amount = processTheBuyMovieList(requestMoviePayment, moviePaymentProcessList, amount);
+        if (requestMoviePaymentDTO.getMovies().getBuy() != null) {
+            amount = processTheBuyMovieList(requestMoviePaymentDTO, moviePaymentProcessList, amount);
         }
 
-        if (requestMoviePayment.getMovies().getRent() != null) {
-            amount = processTheRentMovieList(requestMoviePayment, moviePaymentProcessList, amount);
+        if (requestMoviePaymentDTO.getMovies().getRent() != null) {
+            amount = processTheRentMovieList(requestMoviePaymentDTO, moviePaymentProcessList, amount);
         }
 
         PaymentVendorEnum randomPaymentVendorEnum = PaymentVendorEnum.getRandomClientEnum();
@@ -71,28 +71,28 @@ public class MoviePaymentService {
         }
 
 
-        RequestPaymentCustomer paymentCustomer = buildCustomer(userEntity);
+        RequestPaymentCustomerDTO paymentCustomer = buildCustomer(userEntity);
 
-        RequestPayment requestPayment = buildRequesPayment(creditCard, amount, randomPaymentVendorEnum, paymentCustomer);
+        RequestPaymentDTO requestPaymentDTO = buildRequesPayment(creditCard, amount, randomPaymentVendorEnum, paymentCustomer);
 
-        ResponsePayment payment = gatewayProxy.getPayment(this.authToken, requestPayment);
+        ResponsePaymentDTO payment = gatewayProxy.getPayment(this.authToken, requestPaymentDTO);
 
-        List<RequestAllocationMovie> requestAllocationMovieList = getRequestAllocationMovies(moviePaymentProcessList);
-        RequestAllocation requestAllocation = buildRequestAllocation(requestMoviePayment, userEntity, payment, requestAllocationMovieList);
-        messageHistory.sendMessage(requestAllocation);
+        List<RequestAllocationMovieDTO> requestAllocationMovieDTOList = getRequestAllocationMovies(moviePaymentProcessList);
+        RequestAllocationDTO requestAllocationDTO = buildRequestAllocation(requestMoviePaymentDTO, userEntity, payment, requestAllocationMovieDTOList);
+        messageHistory.sendMessage(requestAllocationDTO);
 
         if (payment.getStatus().equals("REPROVED")) {
             String cause = payment.getAuthorization().getReasonMessage();
-            return new ResponseGatewayReproved(cause);
+            return new ResponseGatewayReprovedDTO(cause);
         }
 
-        return new ResponseGatewayOk(moviePaymentProcessList);
+        return new ResponseGatewayOkDTO(moviePaymentProcessList);
     }
 
-    private Double processTheRentMovieList(RequestMoviePayment requestMoviePayment, List<ResponseMoviePaymentProcess> moviePaymentProcessList, Double amount) {
-        for (int i = 0; i < requestMoviePayment.getMovies().getRent().size(); i++) {
-            Long movieId = requestMoviePayment.getMovies().getRent().get(i);
-            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(requestMoviePayment.getMovies().getRent().get(i));
+    private Double processTheRentMovieList(RequestMoviePaymentDTO requestMoviePaymentDTO, List<ResponseMoviePaymentProcessDTO> moviePaymentProcessList, Double amount) {
+        for (int i = 0; i < requestMoviePaymentDTO.getMovies().getRent().size(); i++) {
+            Long movieId = requestMoviePaymentDTO.getMovies().getRent().get(i);
+            ResponseMovieByIdDTO proxyMovieById = movieSearchProxy.getMovieById(requestMoviePaymentDTO.getMovies().getRent().get(i));
             String movieTitle = proxyMovieById.getMovieName();
             try {
                 String movieStore = proxyMovieById.getJustWatch().getRent().get(0).getStore();
@@ -107,10 +107,10 @@ public class MoviePaymentService {
         return amount;
     }
 
-    private Double processTheBuyMovieList(RequestMoviePayment requestMoviePayment, List<ResponseMoviePaymentProcess> moviePaymentProcessList, Double amount) {
-        for (int i = 0; i < requestMoviePayment.getMovies().getBuy().size(); i++) {
-            Long movieId = requestMoviePayment.getMovies().getBuy().get(i);
-            ResponseMovieById proxyMovieById = movieSearchProxy.getMovieById(movieId);
+    private Double processTheBuyMovieList(RequestMoviePaymentDTO requestMoviePaymentDTO, List<ResponseMoviePaymentProcessDTO> moviePaymentProcessList, Double amount) {
+        for (int i = 0; i < requestMoviePaymentDTO.getMovies().getBuy().size(); i++) {
+            Long movieId = requestMoviePaymentDTO.getMovies().getBuy().get(i);
+            ResponseMovieByIdDTO proxyMovieById = movieSearchProxy.getMovieById(movieId);
             String movieTitle = proxyMovieById.getMovieName();
             try {
                 String movieStore = proxyMovieById.getJustWatch().getBuy().get(0).getStore();
@@ -128,57 +128,57 @@ public class MoviePaymentService {
         return MovieLinks.valueOfLabel(label);
     }
 
-    private void buildMoviesProcessList(Long movieId, String movieTitle, String movieStore, List<ResponseMoviePaymentProcess> moviePaymentProcessList) {
-        ResponseMoviePaymentProcess moviePaymentProcess = new ResponseMoviePaymentProcess();
+    private void buildMoviesProcessList(Long movieId, String movieTitle, String movieStore, List<ResponseMoviePaymentProcessDTO> moviePaymentProcessList) {
+        ResponseMoviePaymentProcessDTO moviePaymentProcess = new ResponseMoviePaymentProcessDTO();
         moviePaymentProcess.setMovieId(movieId);
         moviePaymentProcess.setTitle(movieTitle);
         MovieLinks movieLinks = getMovieLinkFromlabel(movieStore);
         moviePaymentProcess.setLink(movieLinks.getLink());
         moviePaymentProcessList.add(moviePaymentProcess);
     }
-    private List<RequestAllocationMovie> getRequestAllocationMovies(List<ResponseMoviePaymentProcess> response) {
-        List<RequestAllocationMovie> requestAllocationMovieList = new ArrayList<>();
-        for (ResponseMoviePaymentProcess responseMoviePaymentProcess : response) {
-            RequestAllocationMovie allocationMovie = new RequestAllocationMovie(responseMoviePaymentProcess.getMovieId(), responseMoviePaymentProcess.getTitle());
-            requestAllocationMovieList.add(allocationMovie);
+    private List<RequestAllocationMovieDTO> getRequestAllocationMovies(List<ResponseMoviePaymentProcessDTO> response) {
+        List<RequestAllocationMovieDTO> requestAllocationMovieDTOList = new ArrayList<>();
+        for (ResponseMoviePaymentProcessDTO responseMoviePaymentProcessDTO : response) {
+            RequestAllocationMovieDTO allocationMovie = new RequestAllocationMovieDTO(responseMoviePaymentProcessDTO.getMovieId(), responseMoviePaymentProcessDTO.getTitle());
+            requestAllocationMovieDTOList.add(allocationMovie);
         }
-        return requestAllocationMovieList;
+        return requestAllocationMovieDTOList;
     }
 
-    private RequestAllocation buildRequestAllocation(RequestMoviePayment requestMoviePayment, UserEntity userEntity, ResponsePayment payment, List<RequestAllocationMovie> requestAllocationMovieList) {
+    private RequestAllocationDTO buildRequestAllocation(RequestMoviePaymentDTO requestMoviePaymentDTO, UserEntity userEntity, ResponsePaymentDTO payment, List<RequestAllocationMovieDTO> requestAllocationMovieDTOList) {
         String userId = userEntity.getId();
-        String cardNumber = requestMoviePayment.getCreditCardNumber();
+        String cardNumber = requestMoviePaymentDTO.getCreditCardNumber();
         String status = payment.getStatus();
-        return new RequestAllocation(userId, cardNumber, requestAllocationMovieList, status);
+        return new RequestAllocationDTO(userId, cardNumber, requestAllocationMovieDTOList, status);
     }
 
     private void getToken(PaymentVendorEnum randomPaymentVendorEnum) {
-        ResponseAuth authToken = gatewayProxy.getAuthToken(randomPaymentVendorEnum);
+        ResponseAuthDTO authToken = gatewayProxy.getAuthToken(randomPaymentVendorEnum);
         this.tokenExpirationTime = LocalTime.now().plusSeconds(Long.parseLong(authToken.getExpiresIn()));
         this.authToken = authToken.getToken();
     }
 
-    private RequestPayment buildRequesPayment(CreditCardEntity creditCard, Double amount, PaymentVendorEnum randomPaymentVendorEnum, RequestPaymentCustomer paymentCustomer) {
-        RequestPayment requestPayment = new RequestPayment();
-        requestPayment.setSellerId(randomPaymentVendorEnum.getSellerId());
-        requestPayment.setCustomer(paymentCustomer);
-        requestPayment.setTransactionAmount(amount);
-        RequestPaymentCreditCard requestCreditCard = modelMapper.map(creditCard, RequestPaymentCreditCard.class);
+    private RequestPaymentDTO buildRequesPayment(CreditCardEntity creditCard, Double amount, PaymentVendorEnum randomPaymentVendorEnum, RequestPaymentCustomerDTO paymentCustomer) {
+        RequestPaymentDTO requestPaymentDTO = new RequestPaymentDTO();
+        requestPaymentDTO.setSellerId(randomPaymentVendorEnum.getSellerId());
+        requestPaymentDTO.setCustomer(paymentCustomer);
+        requestPaymentDTO.setTransactionAmount(amount);
+        RequestPaymentCreditCardDTO requestCreditCard = modelMapper.map(creditCard, RequestPaymentCreditCardDTO.class);
         requestCreditCard.setNumber(md5.ToMd5(creditCard.getNumber()));
-        requestPayment.setCard(requestCreditCard);
-        return requestPayment;
+        requestPaymentDTO.setCard(requestCreditCard);
+        return requestPaymentDTO;
     }
 
-    private CreditCardEntity getCreditCard(RequestMoviePayment requestMoviePayment, UserEntity userEntity) {
+    private CreditCardEntity getCreditCard(RequestMoviePaymentDTO requestMoviePaymentDTO, UserEntity userEntity) {
         for (int i = 0; i < userEntity.getCards().size(); i++) {
-            if (Objects.equals(userEntity.getCards().get(i).getNumber(), requestMoviePayment.getCreditCardNumber())) {
+            if (Objects.equals(userEntity.getCards().get(i).getNumber(), requestMoviePaymentDTO.getCreditCardNumber())) {
                 return userEntity.getCards().get(i);
             }
         }
-        throw new CreditCardNotFoundException("credit card id: " + requestMoviePayment.getCreditCardNumber());
+        throw new CreditCardNotFoundException("credit card id: " + requestMoviePaymentDTO.getCreditCardNumber());
     }
 
-    private RequestPaymentCustomer buildCustomer(UserEntity userEntity) {
-        return new RequestPaymentCustomer(userEntity.getCpf());
+    private RequestPaymentCustomerDTO buildCustomer(UserEntity userEntity) {
+        return new RequestPaymentCustomerDTO(userEntity.getCpf());
     }
 }
