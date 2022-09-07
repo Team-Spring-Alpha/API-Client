@@ -10,7 +10,7 @@ import br.com.compass.filmes.cliente.dto.apiPayment.response.*;
 import br.com.compass.filmes.cliente.dto.apiMovie.ResponseMovieById;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
-import br.com.compass.filmes.cliente.enums.UserEnum;
+import br.com.compass.filmes.cliente.enums.PaymentVendorEnum;
 import br.com.compass.filmes.cliente.enums.MovieLinks;
 import br.com.compass.filmes.cliente.exceptions.BuyMovieNotFoundException;
 import br.com.compass.filmes.cliente.exceptions.UserNotFoundException;
@@ -61,19 +61,19 @@ public class MoviePaymentService {
             amount = processTheRentMovieList(requestMoviePayment, moviePaymentProcessList, amount);
         }
 
-        UserEnum randomUserEnum = UserEnum.getRandomClientEnum();
+        PaymentVendorEnum randomPaymentVendorEnum = PaymentVendorEnum.getRandomClientEnum();
         if (this.tokenExpirationTime == null) {
-            getToken(randomUserEnum);
+            getToken(randomPaymentVendorEnum);
         }
 
         if (LocalTime.now().isAfter(tokenExpirationTime)) {
-            getToken(randomUserEnum);
+            getToken(randomPaymentVendorEnum);
         }
 
 
         RequestPaymentCustomer paymentCustomer = buildCustomer(userEntity);
 
-        RequestPayment requestPayment = buildRequesPayment(creditCard, amount, randomUserEnum, paymentCustomer);
+        RequestPayment requestPayment = buildRequesPayment(creditCard, amount, randomPaymentVendorEnum, paymentCustomer);
 
         ResponsePayment payment = gatewayProxy.getPayment(this.authToken, requestPayment);
 
@@ -152,15 +152,15 @@ public class MoviePaymentService {
         return new RequestAllocation(userId, cardNumber, requestAllocationMovieList, status);
     }
 
-    private void getToken(UserEnum randomUserEnum) {
-        ResponseAuth authToken = gatewayProxy.getAuthToken(randomUserEnum);
+    private void getToken(PaymentVendorEnum randomPaymentVendorEnum) {
+        ResponseAuth authToken = gatewayProxy.getAuthToken(randomPaymentVendorEnum);
         this.tokenExpirationTime = LocalTime.now().plusSeconds(Long.parseLong(authToken.getExpiresIn()));
         this.authToken = authToken.getToken();
     }
 
-    private RequestPayment buildRequesPayment(CreditCardEntity creditCard, Double amount, UserEnum randomUserEnum, RequestPaymentCustomer paymentCustomer) {
+    private RequestPayment buildRequesPayment(CreditCardEntity creditCard, Double amount, PaymentVendorEnum randomPaymentVendorEnum, RequestPaymentCustomer paymentCustomer) {
         RequestPayment requestPayment = new RequestPayment();
-        requestPayment.setSellerId(randomUserEnum.getSellerId());
+        requestPayment.setSellerId(randomPaymentVendorEnum.getSellerId());
         requestPayment.setCustomer(paymentCustomer);
         requestPayment.setTransactionAmount(amount);
         RequestPaymentCreditCard requestCreditCard = modelMapper.map(creditCard, RequestPaymentCreditCard.class);
