@@ -1,6 +1,7 @@
 package br.com.compass.filmes.cliente.dto.user.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,7 +12,9 @@ public class ResponseUser {
     private String id;
     private String name;
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonProperty("birth_date")
     private LocalDate birthDate;
+    @JsonProperty("client_is_blocked")
     private boolean clientIsBlocked;
     private List<ResponseCreditCard> cards;
 }

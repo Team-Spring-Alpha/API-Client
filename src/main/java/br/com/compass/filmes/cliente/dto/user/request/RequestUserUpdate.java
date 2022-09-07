@@ -1,9 +1,11 @@
 package br.com.compass.filmes.cliente.dto.user.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
@@ -15,5 +17,6 @@ public class RequestUserUpdate {
     private String name;
     private String password;
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonProperty("birth_date")
     private LocalDate birthDate;
 }

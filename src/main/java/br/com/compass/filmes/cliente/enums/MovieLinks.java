@@ -60,8 +60,8 @@ public enum MovieLinks {
     REVRY("https://www.justwatch.com/br/provedor/revry", "Revry"),
     MOVIESAINTS("https://www.justwatch.com/br/provedor/moviesaints", "MovieSaints");
 
-    private String link;
-    private String label;
+    private final String link;
+    private final String label;
     MovieLinks(String link, String label) {
         this.link = link;
         this.label = label;

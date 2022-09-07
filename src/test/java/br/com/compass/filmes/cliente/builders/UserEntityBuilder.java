@@ -1,9 +1,9 @@
 package br.com.compass.filmes.cliente.builders;
 
 import br.com.compass.filmes.cliente.dto.user.request.RequestUser;
-import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
-import br.com.compass.filmes.cliente.enums.UserCategoryEnum;
+import br.com.compass.filmes.cliente.entities.UserEntity;
+import br.com.compass.filmes.cliente.enums.GenresEnum;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,8 +29,8 @@ public class UserEntityBuilder {
         builder.userEntity.setClientIsBlocked(false);
         builder.userEntity.setBirthDate(LocalDate.now());
 
-        List<UserCategoryEnum> categoryEnumList = new ArrayList<>();
-        categoryEnumList.add(UserCategoryEnum.ACAO);
+        List<GenresEnum> categoryEnumList = new ArrayList<>();
+        categoryEnumList.add(GenresEnum.ACAO);
         builder.userEntity.setCategories(categoryEnumList);
 
         List<CreditCardEntity> creditCardEntityList = CreditCardEntityBuilder.one().list();
@@ -74,7 +74,7 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntityBuilder withClientCategory(List<UserCategoryEnum> categoryEnumList) {
+    public UserEntityBuilder withClientCategory(List<GenresEnum> categoryEnumList) {
         this.userEntity.setCategories(categoryEnumList);
         return this;
     }
@@ -94,7 +94,7 @@ public class UserEntityBuilder {
         this.userEntity.setBirthDate(requestUser.getBirthDate());
 
         this.userEntity.setCategories(requestUser.getCategory().stream().map(
-                UserCategoryEnum::valueOf
+                GenresEnum::valueOf
         ).collect(Collectors.toList()));
 
 

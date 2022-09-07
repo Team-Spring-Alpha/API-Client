@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.dto.user.response.apiAllocationHistory;
+package br.com.compass.filmes.cliente.dto.apiAllocationHistory.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
