@@ -18,7 +18,7 @@ import br.com.compass.filmes.cliente.exceptions.CreditCardNotFoundException;
 import br.com.compass.filmes.cliente.exceptions.RentMovieNotFoundException;
 import br.com.compass.filmes.cliente.client.GatewayProxy;
 import br.com.compass.filmes.cliente.client.MovieSearchProxy;
-import br.com.compass.filmes.cliente.rabbit.mq.MessageHistory;
+import br.com.compass.filmes.cliente.producer.MessageHistoryProducer;
 import br.com.compass.filmes.cliente.repository.UserRepository;
 import br.com.compass.filmes.cliente.util.EncriptPasswordUtil;
 import br.com.compass.filmes.cliente.util.ValidateRequestMoviePaymentUtil;
@@ -41,7 +41,7 @@ public class MoviePaymentService {
     private final UserRepository userRepository;
     private final MovieSearchProxy movieSearchProxy;
     private final GatewayProxy gatewayProxy;
-    private final MessageHistory messageHistory;
+    private final MessageHistoryProducer messageHistoryProducer;
     private final EncriptPasswordUtil encriptPasswordUtil;
     private final ValidateRequestMoviePaymentUtil validateRequestMoviePaymentUtil;
 
@@ -79,7 +79,7 @@ public class MoviePaymentService {
 
         List<RequestAllocationMovieDTO> requestAllocationMovieDTOList = getRequestAllocationMovies(moviePaymentProcessList);
         RequestAllocationDTO requestAllocationDTO = buildRequestAllocation(requestMoviePaymentDTO, userEntity, payment, requestAllocationMovieDTOList);
-        messageHistory.sendMessage(requestAllocationDTO);
+        messageHistoryProducer.sendMessage(requestAllocationDTO);
 
         if (payment.getStatus().equals("REPROVED")) {
             String cause = payment.getAuthorization().getReasonMessage();

@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.rabbit.mq;
+package br.com.compass.filmes.cliente.producer;
 
 import br.com.compass.filmes.cliente.dto.allocation.history.request.RequestAllocationDTO;
 import br.com.compass.filmes.cliente.dto.allocation.history.request.RequestAllocationMovieDTO;
@@ -12,11 +12,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest(classes = MessageHistory.class)
-class MessageHistoryTest {
+@SpringBootTest(classes = MessageHistoryProducer.class)
+class MessageHistoryProducerTest {
 
     @Autowired
-    private MessageHistory messageHistory;
+    private MessageHistoryProducer messageHistoryProducer;
 
     @MockBean
     private RabbitTemplate rabbitTemplate;
@@ -30,7 +30,7 @@ class MessageHistoryTest {
         allocationMovieList.add(allocationMovie);
         RequestAllocationDTO requestAllocationDTO = new RequestAllocationDTO("idTest", "853", allocationMovieList, "approved");
 
-        messageHistory.sendMessage(requestAllocationDTO);
+        messageHistoryProducer.sendMessage(requestAllocationDTO);
 
         Mockito.verify(rabbitTemplate).convertAndSend(routingKey, requestAllocationDTO);
 

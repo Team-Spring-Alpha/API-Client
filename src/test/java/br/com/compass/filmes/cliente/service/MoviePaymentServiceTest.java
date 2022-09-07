@@ -19,7 +19,7 @@ import br.com.compass.filmes.cliente.exceptions.CreditCardNotFoundException;
 import br.com.compass.filmes.cliente.exceptions.RentMovieNotFoundException;
 import br.com.compass.filmes.cliente.client.GatewayProxy;
 import br.com.compass.filmes.cliente.client.MovieSearchProxy;
-import br.com.compass.filmes.cliente.rabbit.mq.MessageHistory;
+import br.com.compass.filmes.cliente.producer.MessageHistoryProducer;
 import br.com.compass.filmes.cliente.repository.UserRepository;
 import br.com.compass.filmes.cliente.util.EncriptPasswordUtil;
 import br.com.compass.filmes.cliente.util.ValidateRequestMoviePaymentUtil;
@@ -58,7 +58,7 @@ class MoviePaymentServiceTest {
     private  GatewayProxy gatewayProxy;
 
     @MockBean
-    private  MessageHistory messageHistory;
+    private MessageHistoryProducer messageHistoryProducer;
 
     @MockBean
     private EncriptPasswordUtil encriptPasswordUtil;
