@@ -164,7 +164,7 @@ public class MoviePaymentService {
         requestPayment.setCustomer(paymentCustomer);
         requestPayment.setTransactionAmount(amount);
         RequestPaymentCreditCard requestCreditCard = modelMapper.map(creditCard, RequestPaymentCreditCard.class);
-        requestCreditCard.setClientCreditCardNumber(md5.ToMd5(creditCard.getNumber()));
+        requestCreditCard.setNumber(md5.ToMd5(creditCard.getNumber()));
         requestPayment.setCard(requestCreditCard);
         return requestPayment;
     }
