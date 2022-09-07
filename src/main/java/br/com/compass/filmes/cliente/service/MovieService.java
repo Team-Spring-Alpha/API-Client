@@ -1,6 +1,6 @@
 package br.com.compass.filmes.cliente.service;
 
-import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseApiMovieManager;
+import br.com.compass.filmes.cliente.dto.apiMovie.ResponseApiMovieManager;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;

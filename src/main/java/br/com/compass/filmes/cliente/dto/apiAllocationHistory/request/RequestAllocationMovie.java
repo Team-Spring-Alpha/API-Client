@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.dto.apiAllocationHistory;
+package br.com.compass.filmes.cliente.dto.apiAllocationHistory.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
