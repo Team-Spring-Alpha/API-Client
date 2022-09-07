@@ -10,6 +10,6 @@ import java.util.List;
 @FeignClient(value = "allocationHistory", url = "${custom.allocation-history-url}")
 public interface AllocationHistory {
 
-    @GetMapping(value = "/history/{userId}")
+    @GetMapping(value = "/{userId}")
     List<ResponseAllocation> getHistoryByUser(@PathVariable String userId);
 }
