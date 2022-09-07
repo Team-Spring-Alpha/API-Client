@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.util.List;
 
-@FeignClient(value = "movieManager", url = "http://localhost:8081/search/")
+@FeignClient(value = "movieManager", url = "${custom.movie-search-url}")
 public interface MovieSearch {
-    @GetMapping(value = "{movieId}/recommendations")
+    @GetMapping(value = "/{movieId}/recommendations")
     List<ResponseApiMovieManager> getMovieByRecommendations(@PathVariable("movieId") Long movieId);
 
-    @GetMapping(value = "movie-filters")
+    @GetMapping(value = "/movie-filters")
     List<ResponseApiMovieManager> getMovieByFilters(@RequestParam(name = "movie_genrer", required = false) GenresEnum movieGenre,
                                                     @RequestParam(name = "release_date_after", required = false)
                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate releaseDateAfter,
@@ -28,6 +28,6 @@ public interface MovieSearch {
                                                     @RequestParam(name = "movie_peoples", required = false) List<String> moviePeoples,
                                                     @RequestParam(name = "movie_name", required = false) String movieName);
 
-    @GetMapping(value = "movie/{movieId}")
+    @GetMapping(value = "/movie/{movieId}")
     ResponseMovieById getMovieById(@PathVariable("movieId") Long movieId);
 }

@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      uri: ${URI}
+      database: FilmesApollo70
+  rabbitmq:
+    host: ${RABBITHOST}
+    port: 5672
+    username: ${RABBITUSERNAME}
+    password: ${RABBITPASSWORD}
+    virtual-host: ${RABBITVHOST}
+
+custom:
+  movie-search-url: https://moviemanagerapi.herokuapp.com/search
+  allocation-history-url: falta

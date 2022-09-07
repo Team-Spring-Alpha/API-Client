@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(value = "allocationHistory", url = "http://localhost:8082/api/allocation-history")
+@FeignClient(value = "allocationHistory", url = "${custom.allocation-history-url}")
 public interface AllocationHistory {
 
     @GetMapping(value = "/history/{userId}")

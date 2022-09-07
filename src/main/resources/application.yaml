@@ -1,17 +1,3 @@
-.env:
-  directory: .
-  filename: .env
-  prefix: ""
-
 spring:
-  config:
-    import: optional:file:.env[.properties]
-  data:
-    mongodb:
-      uri: ${URI}
-      database: FilmesApollo70
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: ${RABBITUSERNAME}
-    password: ${RABBITPASSWORD}
+  profiles:
+    active: ${APP_PROFILE:dev}
