@@ -21,8 +21,8 @@ import br.com.compass.filmes.cliente.client.GatewayProxy;
 import br.com.compass.filmes.cliente.client.MovieSearchProxy;
 import br.com.compass.filmes.cliente.rabbit.mq.MessageHistory;
 import br.com.compass.filmes.cliente.repository.UserRepository;
-import br.com.compass.filmes.cliente.util.Md5;
-import br.com.compass.filmes.cliente.util.ValidRequestMoviePayment;
+import br.com.compass.filmes.cliente.util.EncriptPasswordUtil;
+import br.com.compass.filmes.cliente.util.ValidateRequestMoviePaymentUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,10 +61,10 @@ class MoviePaymentServiceTest {
     private  MessageHistory messageHistory;
 
     @MockBean
-    private  Md5 md5;
+    private EncriptPasswordUtil encriptPasswordUtil;
 
     @MockBean
-    private ValidRequestMoviePayment validRequestMoviePayment;
+    private ValidateRequestMoviePaymentUtil validateRequestMoviePaymentUtil;
 
     @Test
     @DisplayName("should throw user not found exception when not found a user by id")

@@ -10,20 +10,20 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
-class ValidRequestCreditCardDTOTest {
+class ValidateRequestCreditCardUtilTest {
 
-    private ValidRequestCreditCard validRequestCreditCard;
+    private ValidateRequestCreditCardUtil validateRequestCreditCardUtil;
 
     @BeforeEach
     void setUp() {
-        this.validRequestCreditCard = new ValidRequestCreditCard();
+        this.validateRequestCreditCardUtil = new ValidateRequestCreditCardUtil();
     }
 
     @Test
     @DisplayName("should pass when inform a correct request credit card")
     void shouldPassWhenInformACorrectRequestCreditCard() {
         RequestCreditCardDTO requestCreditCardDTO = RequestCreditCardBuilder.one().now();
-        this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO);
+        this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO);
     }
 
     @Test
@@ -33,7 +33,7 @@ class ValidRequestCreditCardDTOTest {
                 .one()
                 .withCreditCardBrand("test")
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
     }
 
     @Test
@@ -43,7 +43,7 @@ class ValidRequestCreditCardDTOTest {
                 .one()
                 .withCreditCardSecurityCode("0x0")
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
     }
 
     @Test
@@ -53,7 +53,7 @@ class ValidRequestCreditCardDTOTest {
                 .one()
                 .withCreditCardMonthExpiration("01")
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
     }
 
     @Test
@@ -64,7 +64,7 @@ class ValidRequestCreditCardDTOTest {
                 .one()
                 .withCreditCardYearExpiration(dateString)
                 .now();
-        Assertions.assertThrows(ResponseStatusException.class, () -> this.validRequestCreditCard.validRequestCreditCard(requestCreditCardDTO));
+        Assertions.assertThrows(ResponseStatusException.class, () -> this.validateRequestCreditCardUtil.validRequestCreditCard(requestCreditCardDTO));
     }
 
 }

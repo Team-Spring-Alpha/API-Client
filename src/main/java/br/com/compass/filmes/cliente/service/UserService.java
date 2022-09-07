@@ -6,9 +6,9 @@ import br.com.compass.filmes.cliente.dto.user.request.RequestSetStatusUserAccoun
 import br.com.compass.filmes.cliente.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.repository.UserRepository;
-import br.com.compass.filmes.cliente.util.Md5;
-import br.com.compass.filmes.cliente.util.ValidRequestUser;
-import br.com.compass.filmes.cliente.util.ValidRequestCreditCard;
+import br.com.compass.filmes.cliente.util.EncriptPasswordUtil;
+import br.com.compass.filmes.cliente.util.ValidateRequestUserUtil;
+import br.com.compass.filmes.cliente.util.ValidateRequestCreditCardUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -26,18 +26,18 @@ public class UserService {
 
     private final ModelMapper modelMapper;
 
-    private final Md5 md5;
+    private final EncriptPasswordUtil encriptPasswordUtil;
 
-    private final ValidRequestUser validRequestUser;
+    private final ValidateRequestUserUtil validateRequestUserUtil;
 
-    private final ValidRequestCreditCard validRequestCreditCard;
+    private final ValidateRequestCreditCardUtil validateRequestCreditCardUtil;
 
     public ResponseUserDTO post(RequestUserDTO requestUserDTO){
-        validRequestUser.validRequestUser(requestUserDTO);
+        validateRequestUserUtil.validRequestUser(requestUserDTO);
         validListOfRequestCreditCards(requestUserDTO);
 
         UserEntity user = modelMapper.map(requestUserDTO, UserEntity.class);
-        user.setPassword(md5.ToMd5(user.getPassword()));
+        user.setPassword(encriptPasswordUtil.Encript(user.getPassword()));
 
         UserEntity saveUser = userRepository.save(user);
         return modelMapper.map(saveUser, ResponseUserDTO.class);
@@ -45,7 +45,7 @@ public class UserService {
 
     private void validListOfRequestCreditCards(RequestUserDTO requestUserDTO) {
         for (int i = 0; i < requestUserDTO.getCards().size(); i++) {
-            validRequestCreditCard.validRequestCreditCard(requestUserDTO.getCards().get(i));
+            validateRequestCreditCardUtil.validRequestCreditCard(requestUserDTO.getCards().get(i));
         }
     }
 

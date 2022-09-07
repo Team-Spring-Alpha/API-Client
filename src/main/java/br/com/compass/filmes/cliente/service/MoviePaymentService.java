@@ -20,8 +20,8 @@ import br.com.compass.filmes.cliente.client.GatewayProxy;
 import br.com.compass.filmes.cliente.client.MovieSearchProxy;
 import br.com.compass.filmes.cliente.rabbit.mq.MessageHistory;
 import br.com.compass.filmes.cliente.repository.UserRepository;
-import br.com.compass.filmes.cliente.util.Md5;
-import br.com.compass.filmes.cliente.util.ValidRequestMoviePayment;
+import br.com.compass.filmes.cliente.util.EncriptPasswordUtil;
+import br.com.compass.filmes.cliente.util.ValidateRequestMoviePaymentUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -42,11 +42,11 @@ public class MoviePaymentService {
     private final MovieSearchProxy movieSearchProxy;
     private final GatewayProxy gatewayProxy;
     private final MessageHistory messageHistory;
-    private final Md5 md5;
-    private final ValidRequestMoviePayment validRequestMoviePayment;
+    private final EncriptPasswordUtil encriptPasswordUtil;
+    private final ValidateRequestMoviePaymentUtil validateRequestMoviePaymentUtil;
 
     public ResponseGatewayReprovedDTO post(RequestMoviePaymentDTO requestMoviePaymentDTO) {
-        validRequestMoviePayment.validRequestMoviePayment(requestMoviePaymentDTO);
+        validateRequestMoviePaymentUtil.validRequestMoviePayment(requestMoviePaymentDTO);
         UserEntity userEntity = userRepository.findById(requestMoviePaymentDTO.getUserId()).orElseThrow(() -> new UserNotFoundException("userId: "+ requestMoviePaymentDTO.getUserId()));
         CreditCardEntity creditCard = getCreditCard(requestMoviePaymentDTO, userEntity);
 
@@ -164,7 +164,7 @@ public class MoviePaymentService {
         requestPaymentDTO.setCustomer(paymentCustomer);
         requestPaymentDTO.setTransactionAmount(amount);
         RequestPaymentCreditCardDTO requestCreditCard = modelMapper.map(creditCard, RequestPaymentCreditCardDTO.class);
-        requestCreditCard.setNumber(md5.ToMd5(creditCard.getNumber()));
+        requestCreditCard.setNumber(encriptPasswordUtil.Encript(creditCard.getNumber()));
         requestPaymentDTO.setCard(requestCreditCard);
         return requestPaymentDTO;
     }
