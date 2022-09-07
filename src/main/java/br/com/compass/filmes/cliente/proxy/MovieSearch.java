@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.util.List;
 
-@FeignClient(value = "movieManager", url = "${custom.movie-search-url}")
+@FeignClient(value = "movieManager", url = "${custom.movie-manager-url}")
 public interface MovieSearch {
     @GetMapping(value = "/{movieId}/recommendations")
     List<ResponseApiMovieManager> getMovieByRecommendations(@PathVariable("movieId") Long movieId);
