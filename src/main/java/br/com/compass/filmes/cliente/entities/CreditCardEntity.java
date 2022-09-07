@@ -2,22 +2,20 @@ package br.com.compass.filmes.cliente.entities;
 
 import br.com.compass.filmes.cliente.enums.ClientCreditCardBrandEnum;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
-@Document(collection = "CreditCard")
 public class CreditCardEntity {
-    @Field("clientCreditCardBrand")
+    @Field("userCreditCardBrand")
     private ClientCreditCardBrandEnum brand;
-    @Field("clientCreditCardNumber")
+    @Field("userCreditCardNumber")
     private String number;
-    @Field("clientCreditSecurityCode")
+    @Field("userCreditCardSecurityCode")
     private String securityCode;
-    @Field("clientCreditCardYearExpiration")
+    @Field("userCreditCardYearExpiration")
     private String yearExpiration;
-    @Field("clientCreditCardMonthExpiration")
+    @Field("userCreditCardMonthExpiration")
     private String monthExpiration;
-    @Field("clientCreditCardHolderName")
+    @Field("userCreditCardHolderName")
     private String holderName;
 }
