@@ -1,0 +1,11 @@
+package br.com.compass.filmes.user.enums;
+
+public enum GenresEnum {
+    ACAO, AVENTURA, ANIMACAO,
+    COMEDIA, CRIME, DOCUMENTARIO,
+    DRAMA, FAMILIA, FANTASIA,
+    HISTORIA, TERROR, MUSICA,
+    MISTERIO, ROMANCE, FICCAO_CIENTIFICA,
+    CINEMA_TV, THIILLER, GUERRA,
+    FAROESTE;
+}
