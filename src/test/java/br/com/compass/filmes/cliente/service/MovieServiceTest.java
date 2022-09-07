@@ -1,18 +1,13 @@
 package br.com.compass.filmes.cliente.service;
 
-import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;
-import feign.FeignException;
-import feign.Request;
-import org.junit.jupiter.api.Assertions;
+import br.com.compass.filmes.cliente.client.MovieSearchProxy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.web.server.ResponseStatusException;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest(classes = MovieService.class)

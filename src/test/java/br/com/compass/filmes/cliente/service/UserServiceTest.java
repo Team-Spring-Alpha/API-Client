@@ -1,11 +1,11 @@
 package br.com.compass.filmes.cliente.service;
 
 import br.com.compass.filmes.cliente.builders.*;
-import br.com.compass.filmes.cliente.dto.user.request.RequestUser;
-import br.com.compass.filmes.cliente.dto.user.request.RequestUserUpdate;
-import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCard;
-import br.com.compass.filmes.cliente.dto.user.request.RequestSetStatusUserAccount;
-import br.com.compass.filmes.cliente.dto.user.response.ResponseUser;
+import br.com.compass.filmes.cliente.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.cliente.dto.user.request.RequestUserUpdateDTO;
+import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCardDTO;
+import br.com.compass.filmes.cliente.dto.user.request.RequestSetStatusUserAccountDTO;
+import br.com.compass.filmes.cliente.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.repository.UserRepository;
 import br.com.compass.filmes.cliente.util.Md5;
@@ -52,229 +52,229 @@ class UserServiceTest {
     private ValidRequestUser validRequestUser;
 
     @Test
-    @DisplayName("should successful create a client")
-    void shouldSuccesfulCreateAClient() {
-        RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
+    @DisplayName("should successful create a user")
+    void shouldSuccesfulCreateAUser() {
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUserDTO).now();
 
         Mockito.when(userRepository.save(any())).thenReturn(userEntity);
 
-        ResponseUser responseUser = userService.post(requestUser);
+        ResponseUserDTO responseUserDTO = userService.post(requestUserDTO);
 
-        Assertions.assertEquals(userEntity.getName(), responseUser.getName());
-        Assertions.assertEquals(userEntity.getBirthDate(), responseUser.getBirthDate());
-        Assertions.assertEquals(userEntity.getCards().get(0).getBrand(), responseUser.getCards().get(0).getBrand());
-        Assertions.assertEquals(userEntity.getCards().get(1).getBrand(), responseUser.getCards().get(1).getBrand());
+        Assertions.assertEquals(userEntity.getName(), responseUserDTO.getName());
+        Assertions.assertEquals(userEntity.getBirthDate(), responseUserDTO.getBirthDate());
+        Assertions.assertEquals(userEntity.getCards().get(0).getBrand(), responseUserDTO.getCards().get(0).getBrand());
+        Assertions.assertEquals(userEntity.getCards().get(1).getBrand(), responseUserDTO.getCards().get(1).getBrand());
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong category")
-    void shouldThrowExceptionWhenCreateAClientWithWrongCategory() {
+    @DisplayName("should throw exception when create a user with a wrong category")
+    void shouldThrowExceptionWhenCreateAUserWithWrongCategory() {
         List<String> categoriesList = new ArrayList<>();
         categoriesList.add("test");
 
-        RequestUser requestUser = RequestUserBuilder.one()
-                .withClientCategory(categoriesList)
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one()
+                .withCategory(categoriesList)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card brand")
-    void shouldThrowExceptionWhenCreateAClientWithWrongCreditCardBrand() {
-        List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardBrand("test")
+    @DisplayName("should throw exception when create a user with a wrong credit card brand")
+    void shouldThrowExceptionWhenCreateAUserWithWrongCreditCardBrand() {
+        List<RequestCreditCardDTO> requestCreditCardDTO = RequestCreditCardBuilder.one()
+                .withCreditCardBrand("test")
                 .list();
 
-        RequestUser requestUser = RequestUserBuilder.one()
-                .withCreditCards(requestCreditCard)
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one()
+                .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card security code")
-    void shouldThrowExceptionWhenCreateAClientWithWrongCreditCardSecurityCode() {
-        List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardSecurityCode("01x")
+    @DisplayName("should throw exception when create a user with a wrong credit card security code")
+    void shouldThrowExceptionWhenCreateAUserWithWrongCreditCardSecurityCode() {
+        List<RequestCreditCardDTO> requestCreditCardDTO = RequestCreditCardBuilder.one()
+                .withCreditCardSecurityCode("01x")
                 .list();
 
-        RequestUser requestUser = RequestUserBuilder.one()
-                .withCreditCards(requestCreditCard)
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one()
+                .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card security code (missing 1 digit)")
-    void shouldThrowExceptionWhenCreateAClientWithCreditCardSecurityCodeMissingOneDigit() {
-        List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardSecurityCode("01")
+    @DisplayName("should throw exception when create a user with a wrong credit card security code (missing 1 digit)")
+    void shouldThrowExceptionWhenCreateAUserWithCreditCardSecurityCodeMissingOneDigit() {
+        List<RequestCreditCardDTO> requestCreditCardDTO = RequestCreditCardBuilder.one()
+                .withCreditCardSecurityCode("01")
                 .list();
 
-        RequestUser requestUser = RequestUserBuilder.one()
-                .withCreditCards(requestCreditCard)
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one()
+                .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card month")
-    void shouldThrowExceptionWhenCreateAClientWithWrongCreditCardMonth() {
-        List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardMonthExpiration("01")
+    @DisplayName("should throw exception when create a user with a wrong credit card month")
+    void shouldThrowExceptionWhenCreateAUserWithWrongCreditCardMonth() {
+        List<RequestCreditCardDTO> requestCreditCardDTO = RequestCreditCardBuilder.one()
+                .withCreditCardMonthExpiration("01")
                 .list();
 
-        RequestUser requestUser = RequestUserBuilder.one()
-                .withCreditCards(requestCreditCard)
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one()
+                .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
-        requestUser.getCards().get(0).setMonthExpiration("teste");
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
-        requestUser.getCards().get(0).setMonthExpiration("13");
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
-        requestUser.getCards().get(0).setMonthExpiration("-3");
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        requestUserDTO.getCards().get(0).setMonthExpiration("teste");
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        requestUserDTO.getCards().get(0).setMonthExpiration("13");
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        requestUserDTO.getCards().get(0).setMonthExpiration("-3");
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card year (+6 year)")
-    void shouldThrowExceptionWhenCreateClientWithWrongCreditCardYearAfterSixYears() {
+    @DisplayName("should throw exception when create a user with a wrong credit card year (+6 year)")
+    void shouldThrowExceptionWhenCreateUserWithWrongCreditCardYearAfterSixYears() {
         String yearString = LocalDate.now().plusYears(6).toString();
-        List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardYearExpiration(yearString)
+        List<RequestCreditCardDTO> requestCreditCardDTO = RequestCreditCardBuilder.one()
+                .withCreditCardYearExpiration(yearString)
                 .list();
 
-        RequestUser requestUser = RequestUserBuilder.one()
-                .withCreditCards(requestCreditCard)
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one()
+                .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card year (-1 year)")
-    void shouldThrowExceptionWhenCreateClientWithCreditCardYearBeforeNow() {
+    @DisplayName("should throw exception when create a user with a wrong credit card year (-1 year)")
+    void shouldThrowExceptionWhenCreateUserWithCreditCardYearBeforeNow() {
         String yearString = LocalDate.now().minusYears(1).toString();
-        List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardYearExpiration(yearString)
+        List<RequestCreditCardDTO> requestCreditCardDTO = RequestCreditCardBuilder.one()
+                .withCreditCardYearExpiration(yearString)
                 .list();
 
-        RequestUser requestUser = RequestUserBuilder.one()
-                .withCreditCards(requestCreditCard)
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one()
+                .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
-    @DisplayName("should throw exception when create a client with a wrong credit card year")
-    void shouldThrowExceptionWhenCreateClientWithCreditCardYear() {
+    @DisplayName("should throw exception when create a user with a wrong credit card year")
+    void shouldThrowExceptionWhenCreateUserWithCreditCardYear() {
         String yearString = "teste";
-        List<RequestCreditCard> requestCreditCard = RequestCreditCardBuilder.one()
-                .withClientCreditCardYearExpiration(yearString)
+        List<RequestCreditCardDTO> requestCreditCardDTO = RequestCreditCardBuilder.one()
+                .withCreditCardYearExpiration(yearString)
                 .list();
 
-        RequestUser requestUser = RequestUserBuilder.one()
-                .withCreditCards(requestCreditCard)
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one()
+                .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUser));
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
-    @DisplayName("should set the client's status account as blocked")
-    void shouldSetTheClientStatusAccountAsBlocked(){
-        RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
-        RequestSetStatusUserAccount requestSetStatusUserAccount =
+    @DisplayName("should set the user's status account as blocked")
+    void shouldSetTheUserStatusAccountAsBlocked(){
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUserDTO).now();
+        RequestSetStatusUserAccountDTO requestSetStatusUserAccountDTO =
                 RequestSetStatusUserAccountBuilder.blocked().now();
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
 
-        ResponseUser responseUser = userService.setStatusClientAccount("1",
-                requestSetStatusUserAccount);
+        ResponseUserDTO responseUserDTO = userService.setStatusUserAccount("1",
+                requestSetStatusUserAccountDTO);
 
         Mockito.verify(userRepository).save(userEntity);
-        Assertions.assertTrue(responseUser.isClientIsBlocked());
+        Assertions.assertTrue(responseUserDTO.isBlocked());
     }
     @Test
-    @DisplayName("should set the client's status account as unlocked")
-    void shouldSetTheClientStatusAccountAsUnlocked(){
-        RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
-        RequestSetStatusUserAccount requestSetStatusUserAccount =
+    @DisplayName("should set the user's status account as unlocked")
+    void shouldSetTheUserStatusAccountAsUnlocked(){
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUserDTO).now();
+        RequestSetStatusUserAccountDTO requestSetStatusUserAccountDTO =
                 RequestSetStatusUserAccountBuilder.unlocked().now();
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
 
-        ResponseUser responseUser = userService.setStatusClientAccount("1",
-                requestSetStatusUserAccount);
+        ResponseUserDTO responseUserDTO = userService.setStatusUserAccount("1",
+                requestSetStatusUserAccountDTO);
 
         Mockito.verify(userRepository).save(userEntity);
-        Assertions.assertFalse(responseUser.isClientIsBlocked());
+        Assertions.assertFalse(responseUserDTO.isBlocked());
     }
     @Test
-    @DisplayName("should throw an exception when the setStatusClientAccount method receives a nonexistent id")
-    void shouldThrowAnExceptionWhenTheSetStatusClientAccountMethodReceivesANonexistentId(){
-        RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
-        RequestSetStatusUserAccount requestSetStatusUserAccount =
+    @DisplayName("should throw an exception when the setStatusUserAccount method receives a nonexistent id")
+    void shouldThrowAnExceptionWhenTheSetStatusUserAccountMethodReceivesANonexistentId(){
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUserDTO).now();
+        RequestSetStatusUserAccountDTO requestSetStatusUserAccountDTO =
                 RequestSetStatusUserAccountBuilder.blocked().now();
 
         Assertions.assertThrows(ResponseStatusException.class, () -> userService
-                .setStatusClientAccount("2", requestSetStatusUserAccount));
+                .setStatusUserAccount("2", requestSetStatusUserAccountDTO));
     }
 
     @Test
-    @DisplayName("should successful update a client")
-    void shouldSuccessfulUpdateAClient(){
-        RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
-        RequestUserUpdate clientUpdate = RequestClientUpdateBuilder.one().now();
+    @DisplayName("should successful update a user")
+    void shouldSuccessfulUpdateAUser(){
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUserDTO).now();
+        RequestUserUpdateDTO userUpdate = RequestUserUpdateBuilder.one().now();
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(userRepository.save(any())).thenReturn(userEntity);
 
-        ResponseUser responseUser = userService.patch("idTeste", clientUpdate);
+        ResponseUserDTO responseUserDTO = userService.patch("idTeste", userUpdate);
 
-        Assertions.assertEquals(userEntity.getEmail(), clientUpdate.getEmail());
-        Assertions.assertEquals(userEntity.getPassword(), clientUpdate.getPassword());
-        Assertions.assertEquals(userEntity.getName(), responseUser.getName());
-        Assertions.assertEquals(userEntity.getBirthDate(), responseUser.getBirthDate());
+        Assertions.assertEquals(userEntity.getEmail(), userUpdate.getEmail());
+        Assertions.assertEquals(userEntity.getPassword(), userUpdate.getPassword());
+        Assertions.assertEquals(userEntity.getName(), responseUserDTO.getName());
+        Assertions.assertEquals(userEntity.getBirthDate(), responseUserDTO.getBirthDate());
     }
 
     @Test
     @DisplayName("should throw an exception when the patch method receives a nonexistent id")
     void shouldThrowAnExceptionWhenThePatchMethodReceivesANonexistentId(){
-        RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
-        RequestUserUpdate clientUpdate = RequestClientUpdateBuilder.one().now();
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUserDTO).now();
+        RequestUserUpdateDTO clientUpdate = RequestUserUpdateBuilder.one().now();
 
         Assertions.assertThrows(ResponseStatusException.class, () -> userService
                 .patch("2", clientUpdate));
     }
 
     @Test
-    @DisplayName("Should bring all client")
-    public void shouldFindAllClient(){
+    @DisplayName("Should bring all users")
+    public void shouldFindAllUsers(){
         Mockito.when(userRepository.findAll()).thenReturn(Arrays.asList(UserEntityBuilder.one().now()));
-        List<ResponseUser> listClient = userService.returnAllClients();
-        Assertions.assertNotNull(listClient);
-        Assertions.assertEquals(1, listClient.size());
-        Assertions.assertEquals("Jetosvaldo", listClient.get(0).getName());
+        List<ResponseUserDTO> userList = userService.returnAllUsers();
+        Assertions.assertNotNull(userList);
+        Assertions.assertEquals(1, userList.size());
+        Assertions.assertEquals("Jetosvaldo", userList.get(0).getName());
     }
 
     @Test
-    @DisplayName("Should bring a client by id")
-    public void shouldFindClientById(){
-        RequestUser requestUser = RequestUserBuilder.one().now();
-        UserEntity userEntity = UserEntityBuilder.one().withRequestClient(requestUser).now();
+    @DisplayName("Should bring a user by id")
+    public void shouldFindUserById(){
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one().now();
+        UserEntity userEntity = UserEntityBuilder.one().withRequestUser(requestUserDTO).now();
         Mockito.when(userRepository.findById(userEntity.getId())).thenReturn(Optional.of(userEntity));
         userService.returnClientById(userEntity.getId());
         Mockito.verify(userRepository, Mockito.times(1)).findById(userEntity.getId());
@@ -282,8 +282,8 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Shouldn't find a client by id and should throw an exception")
-    public void shouldNotFindClientById(){
+    @DisplayName("Shouldn't find a user by id and should throw an exception")
+    public void shouldNotFindUserById(){
         Assertions.assertThrows(ResponseStatusException.class, () -> userService
                 .returnClientById("2"));
     }

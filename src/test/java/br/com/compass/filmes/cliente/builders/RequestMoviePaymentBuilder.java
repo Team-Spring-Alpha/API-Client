@@ -1,44 +1,44 @@
 package br.com.compass.filmes.cliente.builders;
 
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePayment;
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestRentOrBuy;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePaymentDTO;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestRentOrBuyDTO;
 
 public class RequestMoviePaymentBuilder {
 
-    private RequestMoviePayment requestMoviePayment;
+    private RequestMoviePaymentDTO requestMoviePaymentDTO;
 
     public RequestMoviePaymentBuilder() {
     }
 
     public static RequestMoviePaymentBuilder one() {
         RequestMoviePaymentBuilder builder = new RequestMoviePaymentBuilder();
-        builder.requestMoviePayment = new RequestMoviePayment();
+        builder.requestMoviePaymentDTO = new RequestMoviePaymentDTO();
 
-        RequestRentOrBuy requestRentOrBuy = RequestRentOrBuyBuilder.one().now();
+        RequestRentOrBuyDTO requestRentOrBuyDTO = RequestRentOrBuyBuilder.one().now();
 
-        builder.requestMoviePayment.setUserId("test");
-        builder.requestMoviePayment.setCreditCardNumber("card test");
-        builder.requestMoviePayment.setMovies(requestRentOrBuy);
+        builder.requestMoviePaymentDTO.setUserId("test");
+        builder.requestMoviePaymentDTO.setCreditCardNumber("card test");
+        builder.requestMoviePaymentDTO.setMovies(requestRentOrBuyDTO);
 
         return builder;
     }
 
     public RequestMoviePaymentBuilder withUserId(String userId) {
-        this.requestMoviePayment.setUserId(userId);
+        this.requestMoviePaymentDTO.setUserId(userId);
         return this;
     }
 
     public RequestMoviePaymentBuilder withCreditCardNumber(String cardNumber) {
-        this.requestMoviePayment.setCreditCardNumber(cardNumber);
+        this.requestMoviePaymentDTO.setCreditCardNumber(cardNumber);
         return this;
     }
 
-    public RequestMoviePaymentBuilder withRentOrBuy(RequestRentOrBuy rentOrBuy) {
-        this.requestMoviePayment.setMovies(rentOrBuy);
+    public RequestMoviePaymentBuilder withRentOrBuy(RequestRentOrBuyDTO rentOrBuy) {
+        this.requestMoviePaymentDTO.setMovies(rentOrBuy);
         return this;
     }
 
-    public RequestMoviePayment now() {
-        return this.requestMoviePayment;
+    public RequestMoviePaymentDTO now() {
+        return this.requestMoviePaymentDTO;
     }
 }

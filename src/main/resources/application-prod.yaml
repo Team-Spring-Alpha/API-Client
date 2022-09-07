@@ -11,5 +11,5 @@ spring:
     virtual-host: ${RABBITVHOST}
 
 custom:
-  movie-search-url: https://moviemanagerapi.herokuapp.com/search
+  movie-search-url: https://moviemanagerapi.herokuapp.com/api/movie-manager
   allocation-history-url: https://movieallocationhistory.herokuapp.com/api/allocation-history

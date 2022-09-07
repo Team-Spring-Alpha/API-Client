@@ -1,6 +1,6 @@
 package br.com.compass.filmes.cliente.builders;
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestUser;
+import br.com.compass.filmes.cliente.dto.user.request.RequestUserDTO;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
@@ -26,7 +26,7 @@ public class UserEntityBuilder {
         builder.userEntity.setCpf("686.751.800-12");
         builder.userEntity.setEmail("yosope1626@wnpop.com");
         builder.userEntity.setPassword("123");
-        builder.userEntity.setClientIsBlocked(false);
+        builder.userEntity.setBlocked(false);
         builder.userEntity.setBirthDate(LocalDate.now());
 
         List<GenresEnum> categoryEnumList = new ArrayList<>();
@@ -44,37 +44,37 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntityBuilder withClientName(String clientName) {
-        this.userEntity.setName(clientName);
+    public UserEntityBuilder withName(String name) {
+        this.userEntity.setName(name);
         return this;
     }
 
-    public UserEntityBuilder withClientCpf(String clientCpf) {
-        this.userEntity.setCpf(clientCpf);
+    public UserEntityBuilder withCpf(String cpf) {
+        this.userEntity.setCpf(cpf);
         return this;
     }
 
-    public UserEntityBuilder withClientEmail(String clientEmail) {
-        this.userEntity.setEmail(clientEmail);
+    public UserEntityBuilder withEmail(String email) {
+        this.userEntity.setEmail(email);
         return this;
     }
 
-    public UserEntityBuilder withClientPassword(String clientPassword) {
-        this.userEntity.setPassword(clientPassword);
+    public UserEntityBuilder withPassword(String password) {
+        this.userEntity.setPassword(password);
         return this;
     }
 
-    public UserEntityBuilder withClientIsBlocked(boolean clientIsBlocked) {
-        this.userEntity.setClientIsBlocked(clientIsBlocked);
+    public UserEntityBuilder withIsBlocked(boolean isBlocked) {
+        this.userEntity.setBlocked(isBlocked);
         return this;
     }
 
-    public UserEntityBuilder withClientBirthDate(LocalDate clientBirthDate) {
-        this.userEntity.setBirthDate(clientBirthDate);
+    public UserEntityBuilder withBirthDate(LocalDate birthDate) {
+        this.userEntity.setBirthDate(birthDate);
         return this;
     }
 
-    public UserEntityBuilder withClientCategory(List<GenresEnum> categoryEnumList) {
+    public UserEntityBuilder withCategory(List<GenresEnum> categoryEnumList) {
         this.userEntity.setCategories(categoryEnumList);
         return this;
     }
@@ -84,21 +84,21 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntityBuilder withRequestClient(RequestUser requestUser) {
+    public UserEntityBuilder withRequestUser(RequestUserDTO requestUserDTO) {
         this.userEntity.setId("idTeste");
-        this.userEntity.setName(requestUser.getName());
-        this.userEntity.setCpf(requestUser.getCpf());
-        this.userEntity.setEmail(requestUser.getEmail());
-        this.userEntity.setPassword(requestUser.getPassword());
-        this.userEntity.setClientIsBlocked(false);
-        this.userEntity.setBirthDate(requestUser.getBirthDate());
+        this.userEntity.setName(requestUserDTO.getName());
+        this.userEntity.setCpf(requestUserDTO.getCpf());
+        this.userEntity.setEmail(requestUserDTO.getEmail());
+        this.userEntity.setPassword(requestUserDTO.getPassword());
+        this.userEntity.setBlocked(false);
+        this.userEntity.setBirthDate(requestUserDTO.getBirthDate());
 
-        this.userEntity.setCategories(requestUser.getCategory().stream().map(
+        this.userEntity.setCategories(requestUserDTO.getCategory().stream().map(
                 GenresEnum::valueOf
         ).collect(Collectors.toList()));
 
 
-        this.userEntity.setCards(requestUser.getCards().stream().map(
+        this.userEntity.setCards(requestUserDTO.getCards().stream().map(
                 requestCreditCard -> CreditCardEntityBuilder.one().withRequestCreditCard(requestCreditCard).now()
                 ).collect(Collectors.toList()));
 

@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.controller;
 
-import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseGatewayReproved;
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePayment;
+import br.com.compass.filmes.cliente.dto.apiPayment.response.ResponseGatewayReprovedDTO;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePaymentDTO;
 import br.com.compass.filmes.cliente.service.MoviePaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,8 +20,8 @@ public class MoviePaymentController {
     private final MoviePaymentService moviePaymentService;
 
     @PostMapping
-    public ResponseEntity<ResponseGatewayReproved> post(@Valid @RequestBody RequestMoviePayment requestMoviePayment){
-        ResponseGatewayReproved responseGateway = moviePaymentService.post(requestMoviePayment);
+    public ResponseEntity<ResponseGatewayReprovedDTO> post(@Valid @RequestBody RequestMoviePaymentDTO requestMoviePaymentDTO){
+        ResponseGatewayReprovedDTO responseGateway = moviePaymentService.post(requestMoviePaymentDTO);
         if(responseGateway.getPaymentStatus().equals("REPROVED")){
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(responseGateway);
         }

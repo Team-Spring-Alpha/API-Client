@@ -23,7 +23,7 @@ public class UserEntity {
     @Field("userPassword")
     private String password;
     @Field("userIsBlocked")
-    private boolean clientIsBlocked = false;
+    private boolean isBlocked = false;
     @Field("userBirthDate")
     private LocalDate birthDate;
     @Field("creditCards")
