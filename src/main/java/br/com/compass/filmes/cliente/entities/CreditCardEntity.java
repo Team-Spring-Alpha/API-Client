@@ -1,13 +1,13 @@
 package br.com.compass.filmes.cliente.entities;
 
-import br.com.compass.filmes.cliente.enums.ClientCreditCardBrandEnum;
+import br.com.compass.filmes.cliente.enums.CreditCardBrandEnum;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 public class CreditCardEntity {
     @Field("userCreditCardBrand")
-    private ClientCreditCardBrandEnum brand;
+    private CreditCardBrandEnum brand;
     @Field("userCreditCardNumber")
     private String number;
     @Field("userCreditCardSecurityCode")

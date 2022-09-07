@@ -1,20 +1,20 @@
 package br.com.compass.filmes.cliente.builders;
 
-import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestRentOrBuy;
+import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestRentOrBuyDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RequestRentOrBuyBuilder {
 
-    private RequestRentOrBuy requestRentOrBuy;
+    private RequestRentOrBuyDTO requestRentOrBuyDTO;
 
     public RequestRentOrBuyBuilder() {
     }
 
     public static RequestRentOrBuyBuilder one() {
         RequestRentOrBuyBuilder builder = new RequestRentOrBuyBuilder();
-        builder.requestRentOrBuy = new RequestRentOrBuy();
+        builder.requestRentOrBuyDTO = new RequestRentOrBuyDTO();
 
         List<Long> buyList = new ArrayList<>();
         buyList.add(1L);
@@ -24,23 +24,23 @@ public class RequestRentOrBuyBuilder {
         rentList.add(5L);
         rentList.add(6L);
 
-        builder.requestRentOrBuy.setBuy(buyList);
-        builder.requestRentOrBuy.setRent(rentList);
+        builder.requestRentOrBuyDTO.setBuy(buyList);
+        builder.requestRentOrBuyDTO.setRent(rentList);
 
         return builder;
     }
 
     public RequestRentOrBuyBuilder withBuyList(List<Long> buyList) {
-        this.requestRentOrBuy.setBuy(buyList);
+        this.requestRentOrBuyDTO.setBuy(buyList);
         return this;
     }
 
     public RequestRentOrBuyBuilder withRentList(List<Long> rentList) {
-        this.requestRentOrBuy.setRent(rentList);
+        this.requestRentOrBuyDTO.setRent(rentList);
         return this;
     }
 
-    public RequestRentOrBuy now() {
-        return this.requestRentOrBuy;
+    public RequestRentOrBuyDTO now() {
+        return this.requestRentOrBuyDTO;
     }
 }

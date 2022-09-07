@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.util;
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCard;
-import br.com.compass.filmes.cliente.enums.ClientCreditCardBrandEnum;
+import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCardDTO;
+import br.com.compass.filmes.cliente.enums.CreditCardBrandEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -11,46 +11,46 @@ import java.time.LocalDate;
 @Component
 public class ValidRequestCreditCard {
 
-    public void validRequestCreditCard(RequestCreditCard requestCreditCard) {
+    public void validRequestCreditCard(RequestCreditCardDTO requestCreditCardDTO) {
 
-        validRequestCreditCardSecurityCode(requestCreditCard);
-        validRequestCreditCardBrand(requestCreditCard);
-        validRequestCreditCardMonthExpiration(requestCreditCard);
-        validRequestCreditCardYearExpiration(requestCreditCard);
+        validRequestCreditCardSecurityCode(requestCreditCardDTO);
+        validRequestCreditCardBrand(requestCreditCardDTO);
+        validRequestCreditCardMonthExpiration(requestCreditCardDTO);
+        validRequestCreditCardYearExpiration(requestCreditCardDTO);
 
     }
 
-    private void validRequestCreditCardBrand(RequestCreditCard requestCreditCard) {
+    private void validRequestCreditCardBrand(RequestCreditCardDTO requestCreditCardDTO) {
         try {
-            ClientCreditCardBrandEnum.valueOf(requestCreditCard.getBrand());
+            CreditCardBrandEnum.valueOf(requestCreditCardDTO.getBrand());
         } catch (IllegalArgumentException illegalArgumentException) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
-    private void validRequestCreditCardSecurityCode(RequestCreditCard requestCreditCard) {
+    private void validRequestCreditCardSecurityCode(RequestCreditCardDTO requestCreditCardDTO) {
         String regexStringSecurityCode = "[0-9]{3}";
 
-        if (!requestCreditCard.getSecurityCode().matches(regexStringSecurityCode)) {
+        if (!requestCreditCardDTO.getSecurityCode().matches(regexStringSecurityCode)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
-    private void validRequestCreditCardMonthExpiration(RequestCreditCard requestCreditCard) {
+    private void validRequestCreditCardMonthExpiration(RequestCreditCardDTO requestCreditCardDTO) {
         String regexStringMonthExpiration = "^[1-9]{1}|^1[0-2]{1}";
 
-        if (!requestCreditCard.getMonthExpiration().matches(regexStringMonthExpiration)) {
+        if (!requestCreditCardDTO.getMonthExpiration().matches(regexStringMonthExpiration)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
-    private void validRequestCreditCardYearExpiration(RequestCreditCard requestCreditCard) {
+    private void validRequestCreditCardYearExpiration(RequestCreditCardDTO requestCreditCardDTO) {
         String regexStringAnoExpiracao = "^[0-9]{4}";
         boolean yearCreditCardIsValid = false;
 
-        if (requestCreditCard.getYearExpiration().matches(regexStringAnoExpiracao)) {
+        if (requestCreditCardDTO.getYearExpiration().matches(regexStringAnoExpiracao)) {
             int yearNow = LocalDate.now().getYear();
-            int requestYear = Integer.parseInt(requestCreditCard.getYearExpiration());
+            int requestYear = Integer.parseInt(requestCreditCardDTO.getYearExpiration());
 
             boolean requestYearIsAfterOrEqualYearNow = requestYear >= yearNow;
             boolean requestYearIsBeforeOrEqualYearNowMinusFive = requestYear <= (yearNow + 5);

@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.builders;
 
 
-import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCard;
+import br.com.compass.filmes.cliente.dto.user.request.RequestCreditCardDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,65 +9,65 @@ import java.util.List;
 
 public class RequestCreditCardBuilder {
 
-    private RequestCreditCard requestCreditCard;
+    private RequestCreditCardDTO requestCreditCardDTO;
 
     public RequestCreditCardBuilder() {
     }
 
     public static RequestCreditCardBuilder one() {
         RequestCreditCardBuilder builder = new RequestCreditCardBuilder();
-        builder.requestCreditCard = new RequestCreditCard();
+        builder.requestCreditCardDTO = new RequestCreditCardDTO();
         int yearNow = LocalDate.now().getYear();
         String yearNowString = Integer.toString(yearNow);
 
-        builder.requestCreditCard.setNumber("5181652903041943");
-        builder.requestCreditCard.setHolderName("Jetosvaldo");
-        builder.requestCreditCard.setBrand("MASTERCARD");
-        builder.requestCreditCard.setSecurityCode("613");
-        builder.requestCreditCard.setMonthExpiration("8");
-        builder.requestCreditCard.setYearExpiration(yearNowString);
+        builder.requestCreditCardDTO.setNumber("5181652903041943");
+        builder.requestCreditCardDTO.setHolderName("Jetosvaldo");
+        builder.requestCreditCardDTO.setBrand("MASTERCARD");
+        builder.requestCreditCardDTO.setSecurityCode("613");
+        builder.requestCreditCardDTO.setMonthExpiration("8");
+        builder.requestCreditCardDTO.setYearExpiration(yearNowString);
 
         return builder;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardNumber(String clientCreditCardNumber) {
-        this.requestCreditCard.setNumber(clientCreditCardNumber);
+    public RequestCreditCardBuilder withCreditCardNumber(String creditCardNumber) {
+        this.requestCreditCardDTO.setNumber(creditCardNumber);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardHolderName(String clientCreditCardHolderName) {
-        this.requestCreditCard.setHolderName(clientCreditCardHolderName);
+    public RequestCreditCardBuilder withCreditCardHolderName(String creditCardHolderName) {
+        this.requestCreditCardDTO.setHolderName(creditCardHolderName);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardBrand(String clientCreditCardBrand) {
-        this.requestCreditCard.setBrand(clientCreditCardBrand);
+    public RequestCreditCardBuilder withCreditCardBrand(String creditCardBrand) {
+        this.requestCreditCardDTO.setBrand(creditCardBrand);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardSecurityCode(String clientCreditCardSecurityCode) {
-        this.requestCreditCard.setSecurityCode(clientCreditCardSecurityCode);
+    public RequestCreditCardBuilder withCreditCardSecurityCode(String creditCardSecurityCode) {
+        this.requestCreditCardDTO.setSecurityCode(creditCardSecurityCode);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardMonthExpiration(String clientCreditCardMonthExpiration) {
-        this.requestCreditCard.setMonthExpiration(clientCreditCardMonthExpiration);
+    public RequestCreditCardBuilder withCreditCardMonthExpiration(String creditCardMonthExpiration) {
+        this.requestCreditCardDTO.setMonthExpiration(creditCardMonthExpiration);
         return this;
     }
 
-    public RequestCreditCardBuilder withClientCreditCardYearExpiration(String clientCreditCardYearExpiration) {
-        this.requestCreditCard.setYearExpiration(clientCreditCardYearExpiration);
+    public RequestCreditCardBuilder withCreditCardYearExpiration(String creditCardYearExpiration) {
+        this.requestCreditCardDTO.setYearExpiration(creditCardYearExpiration);
         return this;
     }
 
-    public RequestCreditCard now() {
-        return this.requestCreditCard;
+    public RequestCreditCardDTO now() {
+        return this.requestCreditCardDTO;
     }
 
-    public List<RequestCreditCard> list() {
-        List<RequestCreditCard> creditCardList = new ArrayList<>();
-        creditCardList.add(this.requestCreditCard);
-        creditCardList.add(this.requestCreditCard);
+    public List<RequestCreditCardDTO> list() {
+        List<RequestCreditCardDTO> creditCardList = new ArrayList<>();
+        creditCardList.add(this.requestCreditCardDTO);
+        creditCardList.add(this.requestCreditCardDTO);
         return creditCardList;
     }
 }
