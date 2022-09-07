@@ -1,6 +1,7 @@
 package br.com.compass.filmes.cliente.dto.user.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -22,6 +23,7 @@ public class RequestUser {
     private String password;
     @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonProperty("birth_date")
     private LocalDate birthDate;
     @CPF
     @NotNull
