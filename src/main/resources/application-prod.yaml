@@ -12,4 +12,4 @@ spring:
 
 custom:
   movie-search-url: https://moviemanagerapi.herokuapp.com/search
-  allocation-history-url: falta
+  allocation-history-url: https://movieallocationhistory.herokuapp.com/api/allocation-history
