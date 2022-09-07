@@ -1,13 +1,13 @@
 package br.com.compass.filmes.cliente.service;
 
-import br.com.compass.filmes.cliente.dto.apiAllocationHistory.RequestAllocation;
-import br.com.compass.filmes.cliente.dto.apiAllocationHistory.RequestAllocationMovie;
+import br.com.compass.filmes.cliente.dto.apiAllocationHistory.request.RequestAllocation;
+import br.com.compass.filmes.cliente.dto.apiAllocationHistory.request.RequestAllocationMovie;
 import br.com.compass.filmes.cliente.dto.apiMovieManager.RequestMoviePayment;
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPayment;
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCreditCard;
 import br.com.compass.filmes.cliente.dto.apiPayment.request.RequestPaymentCustomer;
 import br.com.compass.filmes.cliente.dto.apiPayment.response.*;
-import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseMovieById;
+import br.com.compass.filmes.cliente.dto.apiMovie.ResponseMovieById;
 import br.com.compass.filmes.cliente.entities.UserEntity;
 import br.com.compass.filmes.cliente.entities.CreditCardEntity;
 import br.com.compass.filmes.cliente.enums.UserEnum;

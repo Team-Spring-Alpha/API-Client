@@ -1,4 +1,4 @@
-package br.com.compass.filmes.cliente.dto.user.response.apiMovie;
+package br.com.compass.filmes.cliente.dto.apiMovie;
 
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;

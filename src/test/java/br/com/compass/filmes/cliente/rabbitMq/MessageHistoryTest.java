@@ -1,7 +1,7 @@
 package br.com.compass.filmes.cliente.rabbitMq;
 
-import br.com.compass.filmes.cliente.dto.apiAllocationHistory.RequestAllocation;
-import br.com.compass.filmes.cliente.dto.apiAllocationHistory.RequestAllocationMovie;
+import br.com.compass.filmes.cliente.dto.apiAllocationHistory.request.RequestAllocation;
+import br.com.compass.filmes.cliente.dto.apiAllocationHistory.request.RequestAllocationMovie;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -11,8 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = MessageHistory.class)
 class MessageHistoryTest {
