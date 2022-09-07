@@ -1,6 +1,6 @@
 package br.com.compass.filmes.cliente.controller;
 
-import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseApiMovieManager;
+import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseApiMovieManager;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import br.com.compass.filmes.cliente.service.MovieService;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/api/movie_search")
 public class MovieSearchController {
     @Autowired
-    MovieService service;
+    private MovieService service;
 
     @GetMapping("/{id}/recommendations")
     public ResponseEntity<List<ResponseApiMovieManager>> getRecommendations(@PathVariable Long id) {

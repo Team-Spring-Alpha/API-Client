@@ -1,6 +1,6 @@
 package br.com.compass.filmes.cliente.service;
 
-import br.com.compass.filmes.cliente.dto.client.response.apiMovie.ResponseApiMovieManager;
+import br.com.compass.filmes.cliente.dto.user.response.apiMovie.ResponseApiMovieManager;
 import br.com.compass.filmes.cliente.enums.GenresEnum;
 import br.com.compass.filmes.cliente.enums.ProvidersEnum;
 import br.com.compass.filmes.cliente.proxy.MovieSearchProxy;
@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class MovieService {
     @Autowired
-    MovieSearchProxy movieSearchProxy;
+    private MovieSearchProxy movieSearchProxy;
 
     public List<ResponseApiMovieManager> findMoviesRecommendations(Long movieId) {
         try {
@@ -30,6 +30,4 @@ public class MovieService {
                                                        List<String> moviePeoples, String movieName) {
         return movieSearchProxy.getMovieSearchByFilters(movieGenre, dateGte, dateLte, movieProvider, moviePeoples, movieName);
     }
-
-
 }

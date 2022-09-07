@@ -1,0 +1,21 @@
+.env:
+  directory: .
+  filename: .env
+  prefix: ""
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  data:
+    mongodb:
+      uri: ${URI}
+      database: FilmesApollo70
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ${RABBITUSERNAME}
+    password: ${RABBITPASSWORD}
+
+custom:
+  movie-search-url: http://localhost:8081/search
+  allocation-history-url: http://localhost:8082/api/allocation-history
