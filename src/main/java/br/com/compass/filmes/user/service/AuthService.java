@@ -2,6 +2,7 @@ package br.com.compass.filmes.user.service;
 
 import br.com.compass.filmes.user.dto.security.AccountCredentials;
 import br.com.compass.filmes.user.dto.security.Token;
+import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.security.jwt.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +29,13 @@ public class AuthService {
 
     public ResponseEntity signin(AccountCredentials data) {
         try {
-            var email = data.getEmail();
-            var password = data.getPassword();
+            String email = data.getEmail();
+            String password = data.getPassword();
 
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password));
 
-            var user = repository.findByEmail(email);
+            UserEntity user = repository.findByEmail(email);
             var tokenResponse = new Token();
             if (user != null) {
                 tokenResponse = tokenProvider.createAccessToken(email, user.getRoles());

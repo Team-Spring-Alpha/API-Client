@@ -3,6 +3,7 @@ package br.com.compass.filmes.user.entities;
 import br.com.compass.filmes.user.enums.GenresEnum;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +29,7 @@ public class UserEntity implements UserDetails, Serializable {
     @Field("userCpf")
     private String cpf;
     @Field("userEmail")
+    @Indexed(unique = true)
     private String email;
     @Field("userPassword")
     private String password;
@@ -80,7 +82,7 @@ public class UserEntity implements UserDetails, Serializable {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isBlocked;
     }
 
 }
