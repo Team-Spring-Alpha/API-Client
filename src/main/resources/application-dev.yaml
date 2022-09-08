@@ -9,6 +9,9 @@ security:
       secret-key: AwssW321F
       expire-length: 3600000
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   config:
     import: optional:file:.env[.properties]
   data:
