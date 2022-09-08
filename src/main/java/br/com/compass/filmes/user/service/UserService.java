@@ -40,7 +40,6 @@ public class UserService implements UserDetailsService {
         validListOfRequestCreditCards(requestUserDTO);
 
         UserEntity user = modelMapper.map(requestUserDTO, UserEntity.class);
-        //user.setPassword(encriptPasswordUtil.Encript(user.getPassword()));
         user.setPassword(encriptPasswordUtil.encryptToPbkdf2(user.getPassword()));
 
         UserEntity saveUser = userRepository.save(user);
