@@ -1,14 +1,14 @@
 package br.com.compass.filmes.user.service;
 
+import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
 import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
 import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
-import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
 import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
-import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
 import br.com.compass.filmes.user.util.ValidateRequestCreditCardUtil;
+import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -40,7 +40,6 @@ public class UserService implements UserDetailsService {
         validListOfRequestCreditCards(requestUserDTO);
 
         UserEntity user = modelMapper.map(requestUserDTO, UserEntity.class);
-        //user.setPassword(encriptPasswordUtil.Encript(user.getPassword()));
         user.setPassword(encriptPasswordUtil.encryptToPbkdf2(user.getPassword()));
 
         UserEntity saveUser = userRepository.save(user);
@@ -68,6 +67,9 @@ public class UserService implements UserDetailsService {
 
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(requestUserUpdateDTO, userEntity);
+        if (requestUserUpdateDTO.getPassword() != null) {
+            userEntity.setPassword(encriptPasswordUtil.encryptToPbkdf2(requestUserUpdateDTO.getPassword()));
+        }
         UserEntity savedUserEntity = userRepository.save(userEntity);
         return modelMapper.map(savedUserEntity, ResponseUserDTO.class);
     }
