@@ -23,6 +23,7 @@ public class SpringFoxConfig {
                     .apis(RequestHandlerSelectors.basePackage("br.com.compass.filmes.user.controller"))
                     .paths(PathSelectors.regex("/api.*"))
                     .build()
+                .useDefaultResponseMessages(false)
                 .apiInfo(metaData());
     }
 
