@@ -53,9 +53,11 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(
                         "/auth/signin",
-                        "/auth/refresh"
+                        "/auth/refresh",
+                        "/api/user"
                 ).permitAll()
-                .antMatchers("/api/movie-payment").authenticated()
+                .anyRequest().authenticated()
+                //.antMatchers("/api/movie-payment").authenticated()
                 .and()
                 .cors()
                 .and()

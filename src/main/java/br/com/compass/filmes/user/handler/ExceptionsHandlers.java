@@ -13,8 +13,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestControllerAdvice
@@ -55,7 +58,6 @@ public class ExceptionsHandlers {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
-
     @ExceptionHandler(RentAndBuyMoviesEmptyException.class)
     public ResponseEntity<ExceptionResponseDto> handlerRentAndBuyMoviesEmptyException(RentAndBuyMoviesEmptyException rentAndBuyMoviesEmptyException) {
         ExceptionResponseDto responseDto = new ExceptionResponseDto( "movies buy list and rent list is empty. Either list must be filled", "movies");
@@ -69,21 +71,18 @@ public class ExceptionsHandlers {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
-
     @ExceptionHandler(BuyMovieNotFoundException.class)
     public ResponseEntity<ExceptionResponseDto> handlerBuyMovieNotFoundException(BuyMovieNotFoundException buyMovieNotFoundException) {
         ExceptionResponseDto responseDto = new ExceptionResponseDto(buyMovieNotFoundException.getMessage(), "movie.buy");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
-
     @ExceptionHandler(RentMovieNotFoundException.class)
     public ResponseEntity<ExceptionResponseDto> handlerRentMovieNotFoundException(RentMovieNotFoundException rentMovieNotFoundException) {
         ExceptionResponseDto responseDto = new ExceptionResponseDto(rentMovieNotFoundException.getMessage(), "movie.rent");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
-
     @ExceptionHandler(MovieNotFoundException.class)
     public ResponseEntity<ExceptionResponseDto> handlerMovieNotFoundException(MovieNotFoundException movieNotFoundException) {
         ExceptionResponseDto responseDto = new ExceptionResponseDto(movieNotFoundException.getMessage(), "movie");
@@ -117,5 +116,43 @@ public class ExceptionsHandlers {
         ExceptionResponseDto responseDto = new ExceptionResponseDto("must be a valid year, and between year now and year now + 5", "cards.security_code");
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+/*
+    @ExceptionHandler(Exception.class)
+    public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
+    }
+
+ */
+
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationExceptions(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleNotFoundExceptions(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(RequiredObjectisNullException.class)
+    public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 }
