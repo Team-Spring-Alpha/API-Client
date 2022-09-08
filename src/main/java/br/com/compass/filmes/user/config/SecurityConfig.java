@@ -1,21 +1,23 @@
 package br.com.compass.filmes.user.config;
 
-import br.com.compass.filmes.user.security.jwt.JwtConfigurer;
+import br.com.compass.filmes.user.security.jwt.CustomAuthenticationEntryPoint;
+import br.com.compass.filmes.user.security.jwt.JwtTokenFilter;
 import br.com.compass.filmes.user.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +26,15 @@ import java.util.Map;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtTokenProvider tokenProvider;
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -39,30 +46,20 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .httpBasic().disable()
-                .csrf().disable()
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().
+                antMatchers("/api/movie-payment").authenticated()
+                .anyRequest().permitAll()
+                .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers(
-//                        "/auth/signin",
-//                        "/auth/refresh"
-//                        "/api/user"
-                ).permitAll()
-//                .anyRequest().authenticated()
-                .antMatchers("/api/movie-payment").authenticated()
-                .and()
-                .cors()
-                .and()
-                .apply(new JwtConfigurer(tokenProvider));
+                .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
+                .and().addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
     }
 }

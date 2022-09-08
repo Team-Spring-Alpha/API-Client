@@ -1,6 +1,7 @@
 package br.com.compass.filmes.user.handler;
 
 import br.com.compass.filmes.user.exceptions.*;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -117,18 +117,6 @@ public class ExceptionsHandlers {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
     }
-/*
-    @ExceptionHandler(Exception.class)
-    public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception ex, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(
-                new Date(),
-                ex.getMessage(),
-                request.getDescription(false));
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
-    }
-
- */
-
     @ExceptionHandler(InvalidJwtAuthenticationException.class)
     public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationExceptions(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
@@ -154,5 +142,12 @@ public class ExceptionsHandlers {
                 ex.getMessage(),
                 request.getDescription(false));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(UserAuthInvalidException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerUserAuthInvalidException(UserAuthInvalidException userAuthInvalidException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(userAuthInvalidException.getMessage(), "email or password incorrect");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
     }
 }

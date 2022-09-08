@@ -1,37 +1,45 @@
 package br.com.compass.filmes.user.security.jwt;
 
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.security.auth.login.CredentialExpiredException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @AllArgsConstructor
-@NoArgsConstructor
-public class JwtTokenFilter extends GenericFilterBean {
-
-    @Autowired
+public class JwtTokenFilter extends OncePerRequestFilter {
     private JwtTokenProvider tokenProvider;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-        String token = tokenProvider.resolveToken((HttpServletRequest) request);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String token = tokenProvider.resolveToken(request);
         if (token != null && tokenProvider.validateToken(token)) {
             Authentication auth = tokenProvider.getAuthentication(token);
             if (auth != null) {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
+
+//    @Override
+//    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+//            throws IOException, ServletException {
+//        String token = tokenProvider.resolveToken((HttpServletRequest) request);
+//        if (token != null && tokenProvider.validateToken(token)) {
+//            Authentication auth = tokenProvider.getAuthentication(token);
+//            if (auth != null) {
+//                SecurityContextHolder.getContext().setAuthentication(auth);
+//            }
+//        }
+//        chain.doFilter(request, response);
+//    }
 }

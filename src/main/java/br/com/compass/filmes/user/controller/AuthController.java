@@ -20,10 +20,10 @@ public class AuthController {
 
     @PostMapping(value = "/signin")
     public ResponseEntity signin(@RequestBody AccountCredentials data) {
-        if (checkIfParamsIsNotNull(data))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
+        if (checkIfParamsIsNull(data))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         var token = authService.signin(data);
-        if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
+        if (token == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         return token;
     }
 
@@ -31,19 +31,19 @@ public class AuthController {
     @PutMapping(value = "/refresh/{username}")
     public ResponseEntity refreshToken(@PathVariable("email") String email,
                                        @RequestHeader("Authorization") String refreshToken) {
-        if (checkIfParamsIsNotNull(email, refreshToken))
+        if (checkIfParamsIsNull(email, refreshToken))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         var token = authService.refreshToken(email, refreshToken);
         if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         return token;
     }
 
-    private boolean checkIfParamsIsNotNull(String username, String refreshToken) {
+    private boolean checkIfParamsIsNull(String username, String refreshToken) {
         return refreshToken == null || refreshToken.isBlank() ||
                 username == null || username.isBlank();
     }
 
-    private boolean checkIfParamsIsNotNull(AccountCredentials data) {
+    private boolean checkIfParamsIsNull(AccountCredentials data) {
         return data == null || data.getEmail() == null || data.getEmail().isBlank()
                 || data.getPassword() == null || data.getPassword().isBlank();
     }

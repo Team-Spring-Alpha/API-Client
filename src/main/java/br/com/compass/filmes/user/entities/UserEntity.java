@@ -82,7 +82,7 @@ public class UserEntity implements UserDetails, Serializable {
 
     @Override
     public boolean isEnabled() {
-        return this.isBlocked;
+        return !this.isBlocked;
     }
 
 }

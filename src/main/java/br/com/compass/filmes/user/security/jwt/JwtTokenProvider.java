@@ -1,7 +1,6 @@
 package br.com.compass.filmes.user.security.jwt;
 
 import br.com.compass.filmes.user.dto.security.Token;
-import br.com.compass.filmes.user.exceptions.InvalidJwtAuthenticationException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -107,14 +106,14 @@ public class JwtTokenProvider{
     }
 
     public boolean validateToken(String token) {
-        DecodedJWT decodedJWT = decodedToken(token);
         try {
+            DecodedJWT decodedJWT = decodedToken(token);
             if (decodedJWT.getExpiresAt().before(new Date())) {
-                return false;
+                throw new RuntimeException();
             }
             return true;
         } catch (Exception e) {
-            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token!");
+            return false;
         }
     }
 }

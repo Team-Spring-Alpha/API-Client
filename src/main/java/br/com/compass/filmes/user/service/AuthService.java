@@ -3,13 +3,13 @@ package br.com.compass.filmes.user.service;
 import br.com.compass.filmes.user.dto.security.AccountCredentials;
 import br.com.compass.filmes.user.dto.security.Token;
 import br.com.compass.filmes.user.entities.UserEntity;
+import br.com.compass.filmes.user.exceptions.UserAuthInvalidException;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.security.jwt.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class AuthService {
             }
             return ResponseEntity.ok(tokenResponse);
         } catch (Exception e) {
-            throw new BadCredentialsException("Invalid email / password supplied!");
+            throw new UserAuthInvalidException("Invalid email / password supplied!");
         }
     }
 
