@@ -7,6 +7,10 @@ import br.com.compass.filmes.user.dto.user.request.RequestCreditCardDTO;
 import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
 import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
+import br.com.compass.filmes.user.exceptions.CreditCardBrandInvalidException;
+import br.com.compass.filmes.user.exceptions.CreditCardMonthExpirationInvalidException;
+import br.com.compass.filmes.user.exceptions.CreditCardSecurityCodeInvalidException;
+import br.com.compass.filmes.user.exceptions.CreditCardYearExpirationInvalidException;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
 import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
@@ -91,7 +95,7 @@ class UserServiceTest {
                 .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardBrandInvalidException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
@@ -105,7 +109,7 @@ class UserServiceTest {
                 .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardSecurityCodeInvalidException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
@@ -119,7 +123,7 @@ class UserServiceTest {
                 .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardSecurityCodeInvalidException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
@@ -133,13 +137,13 @@ class UserServiceTest {
                 .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardMonthExpirationInvalidException.class, () -> userService.post(requestUserDTO));
         requestUserDTO.getCards().get(0).setMonthExpiration("teste");
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardMonthExpirationInvalidException.class, () -> userService.post(requestUserDTO));
         requestUserDTO.getCards().get(0).setMonthExpiration("13");
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardMonthExpirationInvalidException.class, () -> userService.post(requestUserDTO));
         requestUserDTO.getCards().get(0).setMonthExpiration("-3");
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardMonthExpirationInvalidException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
@@ -154,7 +158,7 @@ class UserServiceTest {
                 .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardYearExpirationInvalidException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
@@ -169,7 +173,7 @@ class UserServiceTest {
                 .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardYearExpirationInvalidException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
@@ -184,7 +188,7 @@ class UserServiceTest {
                 .withCreditCards(requestCreditCardDTO)
                 .now();
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> userService.post(requestUserDTO));
+        Assertions.assertThrows(CreditCardYearExpirationInvalidException.class, () -> userService.post(requestUserDTO));
     }
 
     @Test
