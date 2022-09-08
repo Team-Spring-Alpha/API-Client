@@ -1,4 +1,13 @@
+security:
+  jwt:
+    token:
+      secret-key: ${SECRETKEY}
+      expire-length: 3600000
+
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   data:
     mongodb:
       uri: ${URI}
