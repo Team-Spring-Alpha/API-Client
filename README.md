@@ -9,6 +9,7 @@
 
 * [Fluxo de Funcionamento da Aplicação](#fluxo-de-funcionamento-da-aplicação)
 * [Funcionalidades](#funcionalidades)
+* [Doc Swagger](#doc-swagger)
 * [Acesso ao Projeto](#acesso-ao-projeto)
 * [Tecnologias utilizadas](#tecnologias-utilizadas)
 * [Pessoas Desenvolvedoras do Projeto](#pessoas-desenvolvedoras)
@@ -41,6 +42,10 @@ Além dos microserviços informados acima o `User` também detém acesso a um [G
 | `GET` | /api/movie-manager/{id}/recommendations | Busca filmes recomendados conforme o id do filme passado como parâmetro |
 | `POST` | /api/movie-payment| Faz uma requisição de pagamento |
 | `GET` | /api/allocation-history/{userId} | Busca o histórico de um determinado usuário|
+
+## Doc Swagger
+
+Documentação da API utilizando o swagger: [Doc Swagger](https://userapollo70.herokuapp.com/swagger-ui/index.html)
 
 ## Tecnologias utilizadas
 - Spring Validation
