@@ -8,6 +8,7 @@ security:
     token:
       secret-key: AwssW321F
       expire-length: 3600000
+
 spring:
   mvc:
     pathmatch:
@@ -16,6 +17,7 @@ spring:
     import: optional:file:.env[.properties]
   data:
     mongodb:
+      auto-index-creation: true
       uri: ${URI}
       database: FilmesApollo70
   rabbitmq:

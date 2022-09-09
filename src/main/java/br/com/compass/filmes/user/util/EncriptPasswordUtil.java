@@ -31,7 +31,6 @@ public class EncriptPasswordUtil {
         DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
         passwordEncoder.setDefaultPasswordEncoderForMatches(new Pbkdf2PasswordEncoder());
 
-        String result = passwordEncoder.encode(beEncrypted);
-        return  result;
+        return passwordEncoder.encode(beEncrypted);
     }
 }

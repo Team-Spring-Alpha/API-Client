@@ -23,8 +23,8 @@ public class AllocationHistoryController {
 
     @ApiOperation(value = "return the allocation history from user")
     @ApiResponses(value = {
-            @ApiResponse(code = 404, message = "Not Found"),
-            @ApiResponse(code = 200, message = "Ok")
+            @ApiResponse(code = 200, message = "Ok"),
+            @ApiResponse(code = 404, message = "Not Found")
     })
     @GetMapping("/{userId}")
     public ResponseEntity<List<ResponseAllocationDTO>> findByUserId(@PathVariable String userId){

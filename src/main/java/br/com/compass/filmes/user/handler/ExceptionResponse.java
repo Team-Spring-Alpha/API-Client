@@ -1,14 +1,11 @@
 package br.com.compass.filmes.user.handler;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.Date;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Data
 @AllArgsConstructor
 public class ExceptionResponse {
     private Date date;

@@ -1,23 +1,22 @@
 package br.com.compass.filmes.user.service;
 
-import br.com.compass.filmes.user.dto.allocation.history.request.RequestAllocationDTO;
-import br.com.compass.filmes.user.dto.allocation.history.request.RequestAllocationMovieDTO;
-import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePaymentDTO;
-import br.com.compass.filmes.user.dto.payment.request.RequestPaymentDTO;
-import br.com.compass.filmes.user.dto.payment.request.RequestPaymentCreditCardDTO;
-import br.com.compass.filmes.user.dto.payment.request.RequestPaymentCustomerDTO;
-import br.com.compass.filmes.user.dto.payment.response.*;
-import br.com.compass.filmes.user.dto.movie.ResponseMovieByIdDTO;
-import br.com.compass.filmes.user.entities.UserEntity;
-import br.com.compass.filmes.user.entities.CreditCardEntity;
-import br.com.compass.filmes.user.enums.PaymentVendorEnum;
-import br.com.compass.filmes.user.enums.MovieLinks;
-import br.com.compass.filmes.user.exceptions.BuyMovieNotFoundException;
-import br.com.compass.filmes.user.exceptions.UserNotFoundException;
-import br.com.compass.filmes.user.exceptions.CreditCardNotFoundException;
-import br.com.compass.filmes.user.exceptions.RentMovieNotFoundException;
 import br.com.compass.filmes.user.client.GatewayProxy;
 import br.com.compass.filmes.user.client.MovieSearchProxy;
+import br.com.compass.filmes.user.dto.allocation.history.request.RequestAllocationDTO;
+import br.com.compass.filmes.user.dto.allocation.history.request.RequestAllocationMovieDTO;
+import br.com.compass.filmes.user.dto.movie.ResponseMovieByIdDTO;
+import br.com.compass.filmes.user.dto.movie.ResponseRentAndBuyDTO;
+import br.com.compass.filmes.user.dto.moviepayment.RequestMoviePaymentDTO;
+import br.com.compass.filmes.user.dto.moviepayment.RequestRentOrBuyDTO;
+import br.com.compass.filmes.user.dto.payment.request.RequestPaymentCreditCardDTO;
+import br.com.compass.filmes.user.dto.payment.request.RequestPaymentCustomerDTO;
+import br.com.compass.filmes.user.dto.payment.request.RequestPaymentDTO;
+import br.com.compass.filmes.user.dto.payment.response.*;
+import br.com.compass.filmes.user.entities.CreditCardEntity;
+import br.com.compass.filmes.user.entities.UserEntity;
+import br.com.compass.filmes.user.enums.MovieLinks;
+import br.com.compass.filmes.user.enums.PaymentVendorEnum;
+import br.com.compass.filmes.user.exceptions.*;
 import br.com.compass.filmes.user.producer.MessageHistoryProducer;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
@@ -45,19 +44,19 @@ public class MoviePaymentService {
     private final EncriptPasswordUtil encriptPasswordUtil;
     private final ValidateRequestMoviePaymentUtil validateRequestMoviePaymentUtil;
 
-    public ResponseGatewayReprovedDTO post(RequestMoviePaymentDTO requestMoviePaymentDTO) {
+    public ResponseGatewayReprovedDTO post(String emailUser, RequestMoviePaymentDTO requestMoviePaymentDTO) {
         validateRequestMoviePaymentUtil.validRequestMoviePayment(requestMoviePaymentDTO);
-        UserEntity userEntity = userRepository.findById(requestMoviePaymentDTO.getUserId()).orElseThrow(() -> new UserNotFoundException("userId: "+ requestMoviePaymentDTO.getUserId()));
+        UserEntity userEntity = userRepository.findByEmail(emailUser).orElseThrow(() -> new UserNotFoundException("userEmail: " + emailUser));
         CreditCardEntity creditCard = getCreditCard(requestMoviePaymentDTO, userEntity);
 
         List<ResponseMoviePaymentProcessDTO> moviePaymentProcessList = new ArrayList<>();
         Double amount = 0.0;
 
-        if (requestMoviePaymentDTO.getMovies().getBuy() != null) {
+        if (requestMoviePaymentDTO.getMoviesBuy() != null) {
             amount = processTheBuyMovieList(requestMoviePaymentDTO, moviePaymentProcessList, amount);
         }
 
-        if (requestMoviePaymentDTO.getMovies().getRent() != null) {
+        if (requestMoviePaymentDTO.getMoviesRent() != null) {
             amount = processTheRentMovieList(requestMoviePaymentDTO, moviePaymentProcessList, amount);
         }
 
@@ -90,16 +89,17 @@ public class MoviePaymentService {
     }
 
     private Double processTheRentMovieList(RequestMoviePaymentDTO requestMoviePaymentDTO, List<ResponseMoviePaymentProcessDTO> moviePaymentProcessList, Double amount) {
-        for (int i = 0; i < requestMoviePaymentDTO.getMovies().getRent().size(); i++) {
-            Long movieId = requestMoviePaymentDTO.getMovies().getRent().get(i);
-            ResponseMovieByIdDTO proxyMovieById = movieSearchProxy.getMovieById(requestMoviePaymentDTO.getMovies().getRent().get(i));
+        for (int i = 0; i < requestMoviePaymentDTO.getMoviesRent().size(); i++) {
+            RequestRentOrBuyDTO request = requestMoviePaymentDTO.getMoviesRent().get(i);
+            Long movieId = request.getId();
+            String movieStore = request.getStore();
+
+            ResponseMovieByIdDTO proxyMovieById = movieSearchProxy.getMovieById(movieId);
             String movieTitle = proxyMovieById.getMovieName();
             try {
-                String movieStore = proxyMovieById.getJustWatch().getRent().get(0).getStore();
-                Double rentPrice = proxyMovieById.getJustWatch().getRent().get(0).getPrice();
-                amount += rentPrice;
                 buildMoviesProcessList(movieId, movieTitle, movieStore, moviePaymentProcessList);
-
+                Double rentPrice = getThePriceFromTheStore(proxyMovieById.getJustWatch().getRent(), movieStore, movieId);;
+                amount += rentPrice;
             } catch (NullPointerException exception) {
                 throw new RentMovieNotFoundException("movie id: "+ movieId);
             }
@@ -108,15 +108,18 @@ public class MoviePaymentService {
     }
 
     private Double processTheBuyMovieList(RequestMoviePaymentDTO requestMoviePaymentDTO, List<ResponseMoviePaymentProcessDTO> moviePaymentProcessList, Double amount) {
-        for (int i = 0; i < requestMoviePaymentDTO.getMovies().getBuy().size(); i++) {
-            Long movieId = requestMoviePaymentDTO.getMovies().getBuy().get(i);
+        for (int i = 0; i < requestMoviePaymentDTO.getMoviesBuy().size(); i++) {
+            RequestRentOrBuyDTO request = requestMoviePaymentDTO.getMoviesBuy().get(i);
+            Long movieId = request.getId();
+            String movieStore = request.getStore();
+
             ResponseMovieByIdDTO proxyMovieById = movieSearchProxy.getMovieById(movieId);
             String movieTitle = proxyMovieById.getMovieName();
+
             try {
-                String movieStore = proxyMovieById.getJustWatch().getBuy().get(0).getStore();
-                Double buyPrice = proxyMovieById.getJustWatch().getBuy().get(0).getPrice();
-                amount += buyPrice;
                 buildMoviesProcessList(movieId, movieTitle, movieStore, moviePaymentProcessList);
+                Double buyPrice = getThePriceFromTheStore(proxyMovieById.getJustWatch().getBuy(), movieStore, movieId);
+                amount += buyPrice;
             } catch (NullPointerException exception) {
                 throw new BuyMovieNotFoundException("movie id: " + movieId);
             }
@@ -124,16 +127,22 @@ public class MoviePaymentService {
         return amount;
     }
 
+    private Double getThePriceFromTheStore(List<ResponseRentAndBuyDTO> rentAndBuyList, String movieStore, Long movieId) {
+        for (ResponseRentAndBuyDTO responseRentAndBuyDTO : rentAndBuyList) {
+            if (responseRentAndBuyDTO.getStore().equals(movieStore)) {
+                return responseRentAndBuyDTO.getPrice();
+            }
+        }
+        throw new StoreNotFoundException("Store: " + movieStore + " isnt selling the movie: " + movieId);
+    }
+
     private MovieLinks getMovieLinkFromlabel(String label) {
         return MovieLinks.valueOfLabel(label);
     }
 
     private void buildMoviesProcessList(Long movieId, String movieTitle, String movieStore, List<ResponseMoviePaymentProcessDTO> moviePaymentProcessList) {
-        ResponseMoviePaymentProcessDTO moviePaymentProcess = new ResponseMoviePaymentProcessDTO();
-        moviePaymentProcess.setMovieId(movieId);
-        moviePaymentProcess.setTitle(movieTitle);
         MovieLinks movieLinks = getMovieLinkFromlabel(movieStore);
-        moviePaymentProcess.setLink(movieLinks.getLink());
+        ResponseMoviePaymentProcessDTO moviePaymentProcess = new ResponseMoviePaymentProcessDTO(movieId, movieTitle, movieLinks.getLink(), movieStore);
         moviePaymentProcessList.add(moviePaymentProcess);
     }
     private List<RequestAllocationMovieDTO> getRequestAllocationMovies(List<ResponseMoviePaymentProcessDTO> response) {

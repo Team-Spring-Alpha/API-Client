@@ -1,12 +1,17 @@
 package br.com.compass.filmes.user.controller;
 
-import br.com.compass.filmes.user.dto.security.AccountCredentials;
+import br.com.compass.filmes.user.dto.security.AccountCredentialsDTO;
+import br.com.compass.filmes.user.dto.security.TokenDTO;
 import br.com.compass.filmes.user.service.AuthService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/auth")
@@ -18,33 +23,28 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @ApiOperation(value = "get access token to payment")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Ok"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
     @PostMapping(value = "/signin")
-    public ResponseEntity signin(@RequestBody AccountCredentials data) {
-        if (checkIfParamsIsNotNull(data))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
-        var token = authService.signin(data);
-        if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
-        return token;
+    public ResponseEntity<TokenDTO> signin(@Valid @RequestBody AccountCredentialsDTO data) {
+        TokenDTO tokenDTO = authService.signin(data);
+        return ResponseEntity.ok(tokenDTO);
     }
 
-
-    @PutMapping(value = "/refresh/{username}")
-    public ResponseEntity refreshToken(@PathVariable("email") String email,
-                                       @RequestHeader("Authorization") String refreshToken) {
-        if (checkIfParamsIsNotNull(email, refreshToken))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
-        var token = authService.refreshToken(email, refreshToken);
-        if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
-        return token;
-    }
-
-    private boolean checkIfParamsIsNotNull(String username, String refreshToken) {
-        return refreshToken == null || refreshToken.isBlank() ||
-                username == null || username.isBlank();
-    }
-
-    private boolean checkIfParamsIsNotNull(AccountCredentials data) {
-        return data == null || data.getEmail() == null || data.getEmail().isBlank()
-                || data.getPassword() == null || data.getPassword().isBlank();
+    @ApiOperation(value = "get refresh access token")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Ok"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "Not Found")
+    })
+    @PutMapping(value = "/refresh/{email}")
+    public ResponseEntity<TokenDTO> refreshToken(@PathVariable("email") String email,
+                                                 @RequestHeader("Authorization") String refreshToken) {
+        TokenDTO tokenDTO = authService.refreshToken(email, refreshToken);
+        return ResponseEntity.ok(tokenDTO);
     }
 }

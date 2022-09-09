@@ -10,6 +10,7 @@ spring:
       matching-strategy: ant_path_matcher
   data:
     mongodb:
+      auto-index-creation: true
       uri: ${URI}
       database: FilmesApollo70
   rabbitmq:

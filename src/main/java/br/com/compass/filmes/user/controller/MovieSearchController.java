@@ -28,8 +28,8 @@ public class MovieSearchController {
 
     @ApiOperation(value = "return a movie list by a movie recommedation")
     @ApiResponses(value = {
-        @ApiResponse(code = 404, message = "Not Found"),
-        @ApiResponse(code = 200, message = "Ok")
+        @ApiResponse(code = 200, message = "Ok"),
+        @ApiResponse(code = 404, message = "Not Found")
     })
     @GetMapping("/{id}/recommendations")
     public ResponseEntity<List<ResponseApiMovieManagerDTO>> getRecommendations(@PathVariable Long id) {

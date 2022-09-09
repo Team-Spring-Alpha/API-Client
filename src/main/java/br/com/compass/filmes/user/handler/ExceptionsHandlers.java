@@ -8,6 +8,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -57,7 +58,6 @@ public class ExceptionsHandlers {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
-
     @ExceptionHandler(RentAndBuyMoviesEmptyException.class)
     public ResponseEntity<ExceptionResponseDto> handlerRentAndBuyMoviesEmptyException(RentAndBuyMoviesEmptyException rentAndBuyMoviesEmptyException) {
         ExceptionResponseDto responseDto = new ExceptionResponseDto( "movies buy list and rent list is empty. Either list must be filled", "movies");
@@ -71,21 +71,18 @@ public class ExceptionsHandlers {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
-
     @ExceptionHandler(BuyMovieNotFoundException.class)
     public ResponseEntity<ExceptionResponseDto> handlerBuyMovieNotFoundException(BuyMovieNotFoundException buyMovieNotFoundException) {
         ExceptionResponseDto responseDto = new ExceptionResponseDto(buyMovieNotFoundException.getMessage(), "movie.buy");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
-
     @ExceptionHandler(RentMovieNotFoundException.class)
     public ResponseEntity<ExceptionResponseDto> handlerRentMovieNotFoundException(RentMovieNotFoundException rentMovieNotFoundException) {
         ExceptionResponseDto responseDto = new ExceptionResponseDto(rentMovieNotFoundException.getMessage(), "movie.rent");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
-
     @ExceptionHandler(MovieNotFoundException.class)
     public ResponseEntity<ExceptionResponseDto> handlerMovieNotFoundException(MovieNotFoundException movieNotFoundException) {
         ExceptionResponseDto responseDto = new ExceptionResponseDto(movieNotFoundException.getMessage(), "movie");
@@ -120,53 +117,25 @@ public class ExceptionsHandlers {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
     }
-//
-//    @ExceptionHandler(Exception.class)
-//    public final ResponseEntity<ExceptionResponse> handleAllExceptions(
-//            Exception ex, WebRequest request) {
-//
-//        ExceptionResponse exceptionResponse = new ExceptionResponse(
-//                new Date(),
-//                ex.getMessage(),
-//                request.getDescription(false));
-//
-//        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//
-//    @ExceptionHandler(ResourceNotFoundException.class)
-//    public final ResponseEntity<ExceptionResponse> handleNotFoundExceptions(
-//            Exception ex, WebRequest request) {
-//
-//        ExceptionResponse exceptionResponse = new ExceptionResponse(
-//                new Date(),
-//                ex.getMessage(),
-//                request.getDescription(false));
-//
-//        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
-//    }
-//
-//    @ExceptionHandler(RequiredObjectisNullException.class)
-//    public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(
-//            Exception ex, WebRequest request) {
-//
-//        ExceptionResponse exceptionResponse = new ExceptionResponse(
-//                new Date(),
-//                ex.getMessage(),
-//                request.getDescription(false));
-//
-//        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(InvalidJwtAuthenticationException.class)
-//    public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationExceptions(
-//            Exception ex, WebRequest request) {
-//
-//        ExceptionResponse exceptionResponse = new ExceptionResponse(
-//                new Date(),
-//                ex.getMessage(),
-//                request.getDescription(false));
-//
-//        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
-//    }
 
+    @ExceptionHandler(UserAuthInvalidException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerUserAuthInvalidException(UserAuthInvalidException userAuthInvalidException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(userAuthInvalidException.getMessage(), "email or password incorrect");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+
+    @ExceptionHandler(StoreNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerStoreNotFoundException(StoreNotFoundException storeNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(storeNotFoundException.getMessage(), "movie.store");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerUsernameNotFoundException(UsernameNotFoundException usernameNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(usernameNotFoundException.getMessage(),  "username.param");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
 }

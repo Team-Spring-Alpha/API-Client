@@ -1,10 +1,10 @@
 package br.com.compass.filmes.user.service;
 
 import br.com.compass.filmes.user.builders.*;
-import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
-import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
 import br.com.compass.filmes.user.dto.user.request.RequestCreditCardDTO;
 import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
+import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
 import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.exceptions.CreditCardBrandInvalidException;
@@ -13,12 +13,11 @@ import br.com.compass.filmes.user.exceptions.CreditCardSecurityCodeInvalidExcept
 import br.com.compass.filmes.user.exceptions.CreditCardYearExpirationInvalidException;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
-import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
 import br.com.compass.filmes.user.util.ValidateRequestCreditCardUtil;
+import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

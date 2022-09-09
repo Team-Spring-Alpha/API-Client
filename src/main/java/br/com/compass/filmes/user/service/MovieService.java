@@ -1,9 +1,9 @@
 package br.com.compass.filmes.user.service;
 
+import br.com.compass.filmes.user.client.MovieSearchProxy;
 import br.com.compass.filmes.user.dto.movie.ResponseApiMovieManagerDTO;
 import br.com.compass.filmes.user.enums.GenresEnum;
 import br.com.compass.filmes.user.enums.ProvidersEnum;
-import br.com.compass.filmes.user.client.MovieSearchProxy;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

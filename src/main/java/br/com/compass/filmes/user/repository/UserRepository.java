@@ -4,6 +4,8 @@ import br.com.compass.filmes.user.entities.UserEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface UserRepository extends MongoRepository<UserEntity, String> {
-    UserEntity findByEmail(@Param("email") String email);
+    Optional<UserEntity> findByEmail(@Param("email") String email);
 }

@@ -1,7 +1,10 @@
 package br.com.compass.filmes.user.builders;
 
-import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePaymentDTO;
-import br.com.compass.filmes.user.dto.movie.manager.RequestRentOrBuyDTO;
+import br.com.compass.filmes.user.dto.moviepayment.RequestMoviePaymentDTO;
+import br.com.compass.filmes.user.dto.moviepayment.RequestRentOrBuyDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RequestMoviePaymentBuilder {
 
@@ -14,18 +17,15 @@ public class RequestMoviePaymentBuilder {
         RequestMoviePaymentBuilder builder = new RequestMoviePaymentBuilder();
         builder.requestMoviePaymentDTO = new RequestMoviePaymentDTO();
 
-        RequestRentOrBuyDTO requestRentOrBuyDTO = RequestRentOrBuyBuilder.one().now();
+        RequestRentOrBuyDTO buyAndRent = RequestRentOrBuyBuilder.one().now();
+        List<RequestRentOrBuyDTO> buyAndRentList = new ArrayList<>();
+        buyAndRentList.add(buyAndRent);
 
-        builder.requestMoviePaymentDTO.setUserId("test");
         builder.requestMoviePaymentDTO.setCreditCardNumber("card test");
-        builder.requestMoviePaymentDTO.setMovies(requestRentOrBuyDTO);
+        builder.requestMoviePaymentDTO.setMoviesBuy(buyAndRentList);
+        builder.requestMoviePaymentDTO.setMoviesRent(buyAndRentList);
 
         return builder;
-    }
-
-    public RequestMoviePaymentBuilder withUserId(String userId) {
-        this.requestMoviePaymentDTO.setUserId(userId);
-        return this;
     }
 
     public RequestMoviePaymentBuilder withCreditCardNumber(String cardNumber) {
@@ -33,8 +33,13 @@ public class RequestMoviePaymentBuilder {
         return this;
     }
 
-    public RequestMoviePaymentBuilder withRentOrBuy(RequestRentOrBuyDTO rentOrBuy) {
-        this.requestMoviePaymentDTO.setMovies(rentOrBuy);
+    public RequestMoviePaymentBuilder withRentList(List<RequestRentOrBuyDTO> rentList) {
+        this.requestMoviePaymentDTO.setMoviesRent(rentList);
+        return this;
+    }
+
+    public RequestMoviePaymentBuilder withBuyList(List<RequestRentOrBuyDTO> buyList) {
+        this.requestMoviePaymentDTO.setMoviesBuy(buyList);
         return this;
     }
 

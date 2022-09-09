@@ -1,9 +1,6 @@
 package br.com.compass.filmes.user.builders;
 
-import br.com.compass.filmes.user.dto.movie.manager.RequestRentOrBuyDTO;
-
-import java.util.ArrayList;
-import java.util.List;
+import br.com.compass.filmes.user.dto.moviepayment.RequestRentOrBuyDTO;
 
 public class RequestRentOrBuyBuilder {
 
@@ -16,27 +13,19 @@ public class RequestRentOrBuyBuilder {
         RequestRentOrBuyBuilder builder = new RequestRentOrBuyBuilder();
         builder.requestRentOrBuyDTO = new RequestRentOrBuyDTO();
 
-        List<Long> buyList = new ArrayList<>();
-        buyList.add(1L);
-        buyList.add(2L);
-
-        List<Long> rentList = new ArrayList<>();
-        rentList.add(5L);
-        rentList.add(6L);
-
-        builder.requestRentOrBuyDTO.setBuy(buyList);
-        builder.requestRentOrBuyDTO.setRent(rentList);
+        builder.requestRentOrBuyDTO.setId(1L);
+        builder.requestRentOrBuyDTO.setStore("Netflix");
 
         return builder;
     }
 
-    public RequestRentOrBuyBuilder withBuyList(List<Long> buyList) {
-        this.requestRentOrBuyDTO.setBuy(buyList);
+    public RequestRentOrBuyBuilder withId(Long id) {
+        this.requestRentOrBuyDTO.setId(id);
         return this;
     }
 
-    public RequestRentOrBuyBuilder withRentList(List<Long> rentList) {
-        this.requestRentOrBuyDTO.setRent(rentList);
+    public RequestRentOrBuyBuilder withStore(String store) {
+        this.requestRentOrBuyDTO.setStore(store);
         return this;
     }
 

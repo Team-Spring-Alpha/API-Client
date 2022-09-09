@@ -1,22 +1,20 @@
-package br.com.compass.filmes.user.dto.movie.manager;
+package br.com.compass.filmes.user.dto.moviepayment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 public class RequestMoviePaymentDTO {
-
-    @NotNull
-    private RequestRentOrBuyDTO movies;
+    @JsonProperty("movies_buy")
+    private List<RequestRentOrBuyDTO> moviesBuy;
+    @JsonProperty("movies_rent")
+    private List<RequestRentOrBuyDTO> moviesRent;
     @CreditCardNumber
     @NotBlank
     @JsonProperty("credit_card_number")
     private String creditCardNumber;
-    @NotBlank
-    @JsonProperty("user_id")
-    private String userId;
 }
