@@ -15,10 +15,7 @@ import br.com.compass.filmes.user.dto.payment.response.ResponseProcessPaymentDTO
 import br.com.compass.filmes.user.entities.CreditCardEntity;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.enums.MovieLinks;
-import br.com.compass.filmes.user.exceptions.BuyMovieNotFoundException;
-import br.com.compass.filmes.user.exceptions.CreditCardNotFoundException;
-import br.com.compass.filmes.user.exceptions.RentMovieNotFoundException;
-import br.com.compass.filmes.user.exceptions.UserNotFoundException;
+import br.com.compass.filmes.user.exceptions.*;
 import br.com.compass.filmes.user.producer.MessageHistoryProducer;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
@@ -91,11 +88,14 @@ class MoviePaymentServiceTest {
     @Test
     @DisplayName("should throw buy movie not found when external api dont return where to buy that movie")
     void shouldThrowBuyMovieNotFoundExceptionWhenExternalApiReturnNullFromBuyProviderList() {
-        RequestRentOrBuyDTO rentOrBuy = RequestRentOrBuyBuilder.one().withRentList(null).now();
+        RequestRentOrBuyDTO buy = RequestRentOrBuyBuilder.one().now();
+        List<RequestRentOrBuyDTO> buyList = new ArrayList<>();
+        buyList.add(buy);
 
         RequestMoviePaymentDTO moviePayment = RequestMoviePaymentBuilder.one()
                 .withCreditCardNumber("test")
-                .withRentOrBuy(rentOrBuy)
+                .withBuyList(buyList)
+                .withRentList(null)
                 .now();
 
         UserEntity userEntity = buildClientEntityWithCreditCardNumber("test");
@@ -112,10 +112,14 @@ class MoviePaymentServiceTest {
     @Test
     @DisplayName("should throw rent movie not found when external api dont return where to rent that movie")
     void shouldThrowBuyMovieNotFoundExceptionWhenExternalApiReturnNullFromRentProviderList() {
-        RequestRentOrBuyDTO rentOrBuy = RequestRentOrBuyBuilder.one().withBuyList(null).now();
+        RequestRentOrBuyDTO rent = RequestRentOrBuyBuilder.one().now();
+        List<RequestRentOrBuyDTO> rentList = new ArrayList<>();
+        rentList.add(rent);
+
         RequestMoviePaymentDTO moviePayment = RequestMoviePaymentBuilder.one()
                 .withCreditCardNumber("test")
-                .withRentOrBuy(rentOrBuy)
+                .withRentList(rentList)
+                .withBuyList(null)
                 .now();
 
         UserEntity userEntity = buildClientEntityWithCreditCardNumber("test");
@@ -173,6 +177,30 @@ class MoviePaymentServiceTest {
 
     }
 
+    @Test
+    @DisplayName("should throw exception when store choosed is not selling that movie")
+    void shouldThrowExceptionWhenStoreChoosedNotSellThatMovie() {
+        String store = MovieLinks.APPLE_ITUNES.getLabel();
+
+        RequestRentOrBuyDTO buy = RequestRentOrBuyBuilder.one()
+                .withStore(store).withId(1L)
+                .now();
+        List<RequestRentOrBuyDTO> buyList = new ArrayList<>();
+        buyList.add(buy);
+
+        RequestMoviePaymentDTO moviePayment = RequestMoviePaymentBuilder.one()
+                .withBuyList(buyList)
+                .withCreditCardNumber("test").now();
+        UserEntity userEntity = buildClientEntityWithCreditCardNumber("test");
+
+        ResponseMovieByIdDTO responseMovieByIdDTO = buildResponseMovieById();
+
+
+        Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userEntity));
+        Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieByIdDTO);
+
+        Assertions.assertThrows(StoreNotFoundException.class, () -> moviePaymentService.post("teste", moviePayment));
+    }
 
 
     private UserEntity buildClientEntityWithCreditCardNumber(String creditCardNumber) {

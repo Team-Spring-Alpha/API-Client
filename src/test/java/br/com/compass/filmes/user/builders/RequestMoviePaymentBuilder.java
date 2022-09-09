@@ -39,7 +39,7 @@ public class RequestMoviePaymentBuilder {
     }
 
     public RequestMoviePaymentBuilder withBuyList(List<RequestRentOrBuyDTO> buyList) {
-        this.requestMoviePaymentDTO.setMoviesRent(rentList);
+        this.requestMoviePaymentDTO.setMoviesBuy(buyList);
         return this;
     }
 

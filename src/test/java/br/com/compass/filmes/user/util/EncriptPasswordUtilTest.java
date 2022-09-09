@@ -22,4 +22,14 @@ class EncriptPasswordUtilTest {
 
         Assertions.assertEquals(encryptedMd5Expected, encryptedMd5);
     }
+
+    @Test
+    @DisplayName("should encrypt to Pbkdf2")
+    void shouldEncryptToPbkdf2() {
+        String passwordToBeEncrypted = "0";
+
+        String stringEncrypted = encriptPasswordUtil.encryptToPbkdf2(passwordToBeEncrypted);
+
+        Assertions.assertNotEquals(passwordToBeEncrypted, stringEncrypted);
+    }
 }

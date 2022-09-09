@@ -14,7 +14,7 @@ public class RequestRentOrBuyBuilder {
         builder.requestRentOrBuyDTO = new RequestRentOrBuyDTO();
 
         builder.requestRentOrBuyDTO.setId(1L);
-        builder.requestRentOrBuyDTO.setStore("Microsoft Store");
+        builder.requestRentOrBuyDTO.setStore("Netflix");
 
         return builder;
     }

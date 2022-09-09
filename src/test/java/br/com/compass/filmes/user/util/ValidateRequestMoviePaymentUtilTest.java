@@ -26,12 +26,8 @@ class ValidateRequestMoviePaymentUtilTest {
     @Test
     @DisplayName("should throw rent and buy movies is empty when both list is null or empty")
     void shouldThrowRentAndBuyMoviesEmptyExceptionWhenBothListIsNullOrEmpty() {
-        RequestRentOrBuyDTO moviesBuyAndRent = RequestRentOrBuyBuilder.one()
-                .withBuyList(null)
-                .withRentList(new ArrayList<>())
-                .now();
-
-        requestMoviePaymentDTO.setMovies(moviesBuyAndRent);
+        requestMoviePaymentDTO.setMoviesBuy(null);
+        requestMoviePaymentDTO.setMoviesRent(new ArrayList<>());
 
         Assertions.assertThrows(RentAndBuyMoviesEmptyException.class,
                 () -> validateRequestMoviePaymentUtil.validRequestMoviePayment(requestMoviePaymentDTO));
@@ -40,16 +36,11 @@ class ValidateRequestMoviePaymentUtilTest {
     @Test
     @DisplayName("should pass when either list is not empty or null")
     void shouldPassWhenEitherRentOrBuyListIsNotEmptyOrNull() {
-        List<Long> buyList = new ArrayList<>();
-        buyList.add(2L);
+        RequestRentOrBuyDTO buyDTO = RequestRentOrBuyBuilder.one().now();
+        List<RequestRentOrBuyDTO> buyList = new ArrayList<>();
+        buyList.add(buyDTO);
 
-        RequestRentOrBuyDTO moviesBuyAndRent = RequestRentOrBuyBuilder
-                .one()
-                .withRentList(null)
-                .withBuyList(buyList)
-                .now();
-
-        requestMoviePaymentDTO.setMovies(moviesBuyAndRent);
+        requestMoviePaymentDTO.setMoviesBuy(buyList);
 
         validateRequestMoviePaymentUtil.validRequestMoviePayment(requestMoviePaymentDTO);
     }
