@@ -19,7 +19,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setStatus(401);
 
         ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(new ExceptionResponseDto("Access denied! TokenDTO invalid or expired", "token")
+        response.getWriter().write(mapper.writeValueAsString(new ExceptionResponseDto("Access denied! Token invalid or expired", "token")
         ));
     }
 }

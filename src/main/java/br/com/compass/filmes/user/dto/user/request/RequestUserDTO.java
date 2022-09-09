@@ -39,5 +39,5 @@ public class RequestUserDTO {
     @Size(min = 1)
     private List<@Valid RequestCreditCardDTO> cards;
     @NotNull
-    private List<String> category;
+    private List<String> categories;
 }

@@ -27,8 +27,9 @@ public class UserController {
 
     @ApiOperation(value = "create a user")
     @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Created"),
             @ApiResponse(code = 400, message = "Bad Request"),
-            @ApiResponse(code = 201, message = "Created")
+            @ApiResponse(code = 409, message = "Conflict")
     })
     @PostMapping
     @Transactional

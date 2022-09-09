@@ -5,12 +5,14 @@ import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
 import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
 import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
+import br.com.compass.filmes.user.exceptions.EmailAlreadyInUseException;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
 import br.com.compass.filmes.user.util.ValidateRequestCreditCardUtil;
 import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -41,9 +43,12 @@ public class UserService implements UserDetailsService {
 
         UserEntity user = modelMapper.map(requestUserDTO, UserEntity.class);
         user.setPassword(encriptPasswordUtil.encryptToPbkdf2(user.getPassword()));
-
-        UserEntity saveUser = userRepository.save(user);
-        return modelMapper.map(saveUser, ResponseUserDTO.class);
+        try {
+            UserEntity saveUser = userRepository.save(user);
+            return modelMapper.map(saveUser, ResponseUserDTO.class);
+        } catch (DuplicateKeyException duplicateKeyException) {
+            throw new EmailAlreadyInUseException();
+        }
     }
 
     private void validListOfRequestCreditCards(RequestUserDTO requestUserDTO) {
@@ -70,8 +75,12 @@ public class UserService implements UserDetailsService {
         if (requestUserUpdateDTO.getPassword() != null) {
             userEntity.setPassword(encriptPasswordUtil.encryptToPbkdf2(requestUserUpdateDTO.getPassword()));
         }
-        UserEntity savedUserEntity = userRepository.save(userEntity);
-        return modelMapper.map(savedUserEntity, ResponseUserDTO.class);
+        try {
+            UserEntity savedUserEntity = userRepository.save(userEntity);
+            return modelMapper.map(savedUserEntity, ResponseUserDTO.class);
+        } catch (DuplicateKeyException duplicateKeyException) {
+            throw new EmailAlreadyInUseException();
+        }
     }
 
     public ResponseUserDTO setStatusUserAccount(String id, RequestSetStatusUserAccountDTO requestSetStatusUserAccountDTO){

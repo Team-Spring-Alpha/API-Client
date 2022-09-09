@@ -26,7 +26,7 @@ public class RequestUserBuilder {
 
         List<String> categoryList = new ArrayList<>();
         categoryList.add("ACAO");
-        builder.requestUserDTO.setCategory(categoryList);
+        builder.requestUserDTO.setCategories(categoryList);
 
         return builder;
     }
@@ -62,7 +62,7 @@ public class RequestUserBuilder {
     }
 
     public RequestUserBuilder withCategory(List<String> clientCategory) {
-        this.requestUserDTO.setCategory(clientCategory);
+        this.requestUserDTO.setCategories(clientCategory);
         return this;
     }
 

@@ -18,7 +18,7 @@ public class ValidateRequestUserUtil {
 
     private void validCategory(RequestUserDTO requestUserDTO) {
         try {
-            List<GenresEnum> categoriesList = requestUserDTO.getCategory().stream().map(
+            List<GenresEnum> categoriesList = requestUserDTO.getCategories().stream().map(
                     GenresEnum::valueOf
             ).collect(Collectors.toList());
         } catch (IllegalArgumentException exception) {

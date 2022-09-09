@@ -93,7 +93,7 @@ public class UserEntityBuilder {
         this.userEntity.setBlocked(false);
         this.userEntity.setBirthDate(requestUserDTO.getBirthDate());
 
-        this.userEntity.setCategories(requestUserDTO.getCategory().stream().map(
+        this.userEntity.setCategories(requestUserDTO.getCategories().stream().map(
                 GenresEnum::valueOf
         ).collect(Collectors.toList()));
 
