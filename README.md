@@ -5,16 +5,6 @@
 
 <p align="center">O projeto Apollo70 Filmes consiste em uma aplicação de uma locadora de filmes. A aplicação é dividida em microserviços que detém as funcionalidades necessárias para o usuário ter acesso a um catálogo de filmes disponíveis para compra e alocação.<p>
 
- ## Índice 
-
-* [Fluxo de Funcionamento da Aplicação](#fluxo-de-funcionamento-da-aplicação)
-* [Funcionalidades](#funcionalidades)
-* [Doc Swagger](#doc-swagger)
-* [Acesso ao Projeto](#acesso-ao-projeto)
-* [Tecnologias utilizadas](#tecnologias-utilizadas)
-* [Pessoas Desenvolvedoras do Projeto](#pessoas-desenvolvedoras)
-* [Conclusão](#conclusão)
-
 ## Fluxo de Funcionamento da Aplicação
 Além do microserviço `User` há outros dois responsáveis pelo gerenciamento dos filmes e a gravação do histórico de compra e alocação, respectivamente:
 
@@ -37,15 +27,13 @@ Além dos microserviços informados acima o `User` também detém acesso a um [G
 | `GET` | /api/user | Busca todos os usuários cadastrados. |
 | `GET` | /api/user/{id} | Busca o registro de um usuário. |
 | `PATCH` | /api/user/{id} | Atualiza o registro de um usuário. |
-| `PATCH` | /api/user/account{id} | Define o registro de um usuário como bloqueado. Usuários como registro bloqueado não podem ter acesso aos filmes e nem comprar ou alocar algum. |
-| `GET` | /api/movie-manager/movie-search/?{filtros}| Busca por filmes com os filtros de nome, gênero, stream, data de lançamento e atores |
-| `GET` | /api/movie-manager/{id}/recommendations | Busca filmes recomendados conforme o id do filme passado como parâmetro |
-| `POST` | /api/movie-payment| Faz uma requisição de pagamento |
-| `GET` | /api/allocation-history/{userId} | Busca o histórico de um determinado usuário|
-
-## Doc Swagger
-
-Documentação da API utilizando o swagger: [Doc Swagger](https://userapollo70.herokuapp.com/swagger-ui/index.html)
+| `PATCH` | /api/user/account{id} | Define o registro de um usuário como bloqueado. Usuários com registro bloqueado não podem se autenticar e consequentemente não podem alocar ou comprar filmes. |
+| `GET` | /api/movie-manager/movie-search/?{filtros}| Busca por filmes com os filtros de nome, gênero, stream, data de lançamento e atores. |
+| `GET` | /api/movie-manager/{id}/recommendations | Busca filmes recomendados conforme o id do filme passado como parâmetro. |
+| `POST` | /api/auth/signin | Faz a autenticação do usuário e retorna um token de acesso. O usuário só poderá efetuar a alocação/compra de um filme se ele for autenticado. |
+| `GET` | /api/auth/refresh/{email} | Faz o refresh do token de acesso. |
+| `POST` | /api/movie-payment| Faz uma requisição de pagamento. |
+| `PUT` | /api/allocation-history/{userId} | Busca o histórico de um determinado usuário. |
 
 ## Tecnologias utilizadas
 - Spring Validation
@@ -60,5 +48,4 @@ Documentação da API utilizando o swagger: [Doc Swagger](https://userapollo70.h
 - Swagger
 - JWT
 
-## Pessoas Desenvolvedoras do Projeto
-
+> Para saber mais acesse a [Documentação](https://userapollo70.herokuapp.com/swagger-ui/index.html)
