@@ -7,10 +7,7 @@ import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
 import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
 import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
-import br.com.compass.filmes.user.exceptions.CreditCardBrandInvalidException;
-import br.com.compass.filmes.user.exceptions.CreditCardMonthExpirationInvalidException;
-import br.com.compass.filmes.user.exceptions.CreditCardSecurityCodeInvalidException;
-import br.com.compass.filmes.user.exceptions.CreditCardYearExpirationInvalidException;
+import br.com.compass.filmes.user.exceptions.*;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
 import br.com.compass.filmes.user.util.ValidateRequestCreditCardUtil;
@@ -24,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -292,5 +290,28 @@ class UserServiceTest {
     public void shouldNotFindUserById(){
         Assertions.assertThrows(ResponseStatusException.class, () -> userService
                 .returnClientById("2"));
+    }
+
+    @Test
+    @DisplayName("should throw exception when create a user with email already in use")
+    void shouldThrowExceptionWhenCreateAUserWithEmailAlreadyInUse() {
+        RequestUserDTO requestUserDTO = RequestUserBuilder.one().now();
+
+        Mockito.when(userRepository.save(any())).thenThrow(new DuplicateKeyException("duplicate email"));
+
+        Assertions.assertThrows(EmailAlreadyInUseException.class, () -> userService.post(requestUserDTO));
+    }
+
+    @Test
+    @DisplayName("should throw exception when update a user with email already in use")
+    void shouldThrowExceptionWhenUpdateAUserWithEmailAlreadyInUse() {
+        RequestUserUpdateDTO requestUserUpdateDTO = new RequestUserUpdateDTO();
+
+        UserEntity userEntity = UserEntityBuilder.one().now();
+
+        Mockito.when(userRepository.findById("test")).thenReturn(Optional.ofNullable(userEntity));
+        Mockito.when(userRepository.save(any())).thenThrow(new DuplicateKeyException("duplicate email"));
+
+        Assertions.assertThrows(EmailAlreadyInUseException.class, () -> userService.patch("test", requestUserUpdateDTO));
     }
 }

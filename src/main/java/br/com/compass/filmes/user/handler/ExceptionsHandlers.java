@@ -138,4 +138,11 @@ public class ExceptionsHandlers {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
+
+    @ExceptionHandler(EmailAlreadyInUseException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerEmailAlreadyInUseException(EmailAlreadyInUseException emailAlreadyInUseException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto("Email Already In Use",  "email");
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(responseDto);
+    }
 }
