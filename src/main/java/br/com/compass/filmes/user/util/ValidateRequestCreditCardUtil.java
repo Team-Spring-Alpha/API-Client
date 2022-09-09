@@ -6,9 +6,7 @@ import br.com.compass.filmes.user.exceptions.CreditCardBrandInvalidException;
 import br.com.compass.filmes.user.exceptions.CreditCardMonthExpirationInvalidException;
 import br.com.compass.filmes.user.exceptions.CreditCardSecurityCodeInvalidException;
 import br.com.compass.filmes.user.exceptions.CreditCardYearExpirationInvalidException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.Arrays;

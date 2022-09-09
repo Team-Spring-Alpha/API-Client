@@ -3,11 +3,21 @@
   filename: .env
   prefix: ""
 
+security:
+  jwt:
+    token:
+      secret-key: AwssW321F
+      expire-length: 3600000
+
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   config:
     import: optional:file:.env[.properties]
   data:
     mongodb:
+      auto-index-creation: true
       uri: ${URI}
       database: FilmesApollo70
   rabbitmq:

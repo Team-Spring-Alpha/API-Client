@@ -4,6 +4,9 @@ import br.com.compass.filmes.user.dto.movie.ResponseApiMovieManagerDTO;
 import br.com.compass.filmes.user.enums.GenresEnum;
 import br.com.compass.filmes.user.enums.ProvidersEnum;
 import br.com.compass.filmes.user.service.MovieService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +26,18 @@ public class MovieSearchController {
     @Autowired
     private MovieService service;
 
+    @ApiOperation(value = "return a movie list by a movie recommedation")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Ok"),
+        @ApiResponse(code = 404, message = "Not Found")
+    })
     @GetMapping("/{id}/recommendations")
     public ResponseEntity<List<ResponseApiMovieManagerDTO>> getRecommendations(@PathVariable Long id) {
         List<ResponseApiMovieManagerDTO> responseApiMovieManagerDTOList = service.findMoviesRecommendations(id);
         return ResponseEntity.ok(responseApiMovieManagerDTOList);
     }
 
+    @ApiOperation(value = "return a movie list")
     @GetMapping("/movie-search")
     public ResponseEntity<List<ResponseApiMovieManagerDTO>> getMovieByFilters
             (@RequestParam(required = false, name = "movie_genrer") GenresEnum movieGenre,

@@ -1,17 +1,20 @@
 package br.com.compass.filmes.user.service;
 
+import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
 import br.com.compass.filmes.user.dto.user.request.RequestUserDTO;
 import br.com.compass.filmes.user.dto.user.request.RequestUserUpdateDTO;
-import br.com.compass.filmes.user.dto.user.request.RequestSetStatusUserAccountDTO;
 import br.com.compass.filmes.user.dto.user.response.ResponseUserDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
-import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
 import br.com.compass.filmes.user.util.ValidateRequestCreditCardUtil;
+import br.com.compass.filmes.user.util.ValidateRequestUserUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -37,7 +40,7 @@ public class UserService {
         validListOfRequestCreditCards(requestUserDTO);
 
         UserEntity user = modelMapper.map(requestUserDTO, UserEntity.class);
-        user.setPassword(encriptPasswordUtil.Encript(user.getPassword()));
+        user.setPassword(encriptPasswordUtil.encryptToPbkdf2(user.getPassword()));
 
         UserEntity saveUser = userRepository.save(user);
         return modelMapper.map(saveUser, ResponseUserDTO.class);
@@ -64,6 +67,9 @@ public class UserService {
 
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(requestUserUpdateDTO, userEntity);
+        if (requestUserUpdateDTO.getPassword() != null) {
+            userEntity.setPassword(encriptPasswordUtil.encryptToPbkdf2(requestUserUpdateDTO.getPassword()));
+        }
         UserEntity savedUserEntity = userRepository.save(userEntity);
         return modelMapper.map(savedUserEntity, ResponseUserDTO.class);
     }
@@ -74,5 +80,11 @@ public class UserService {
         userEntity.setBlocked(userIsBlocked);
         userRepository.save(userEntity);
         return modelMapper.map(userEntity, ResponseUserDTO.class);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Email " + email + " not found!"));
     }
 }
