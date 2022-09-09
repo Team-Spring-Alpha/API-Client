@@ -1,24 +1,24 @@
 package br.com.compass.filmes.user.service;
 
 import br.com.compass.filmes.user.builders.*;
-import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePaymentDTO;
-import br.com.compass.filmes.user.dto.movie.manager.RequestRentOrBuyDTO;
+import br.com.compass.filmes.user.client.GatewayProxy;
+import br.com.compass.filmes.user.client.MovieSearchProxy;
+import br.com.compass.filmes.user.dto.movie.ResponseJustWatchDTO;
+import br.com.compass.filmes.user.dto.movie.ResponseMovieByIdDTO;
+import br.com.compass.filmes.user.dto.movie.ResponseRentAndBuyDTO;
+import br.com.compass.filmes.user.dto.moviepayment.RequestMoviePaymentDTO;
+import br.com.compass.filmes.user.dto.moviepayment.RequestRentOrBuyDTO;
 import br.com.compass.filmes.user.dto.payment.response.ResponseAuthDTO;
 import br.com.compass.filmes.user.dto.payment.response.ResponseGatewayReprovedDTO;
 import br.com.compass.filmes.user.dto.payment.response.ResponsePaymentDTO;
 import br.com.compass.filmes.user.dto.payment.response.ResponseProcessPaymentDTO;
-import br.com.compass.filmes.user.dto.movie.ResponseJustWatchDTO;
-import br.com.compass.filmes.user.dto.movie.ResponseMovieByIdDTO;
-import br.com.compass.filmes.user.dto.movie.ResponseRentAndBuyDTO;
-import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.entities.CreditCardEntity;
+import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.enums.MovieLinks;
 import br.com.compass.filmes.user.exceptions.BuyMovieNotFoundException;
-import br.com.compass.filmes.user.exceptions.UserNotFoundException;
 import br.com.compass.filmes.user.exceptions.CreditCardNotFoundException;
 import br.com.compass.filmes.user.exceptions.RentMovieNotFoundException;
-import br.com.compass.filmes.user.client.GatewayProxy;
-import br.com.compass.filmes.user.client.MovieSearchProxy;
+import br.com.compass.filmes.user.exceptions.UserNotFoundException;
 import br.com.compass.filmes.user.producer.MessageHistoryProducer;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.util.EncriptPasswordUtil;
@@ -67,13 +67,12 @@ class MoviePaymentServiceTest {
     private ValidateRequestMoviePaymentUtil validateRequestMoviePaymentUtil;
 
     @Test
-    @DisplayName("should throw user not found exception when not found a user by id")
+    @DisplayName("should throw user not found exception when not found a user by email")
     void shoudThrowUserNotFoundWhenNotFoundAUser() {
         UserEntity userEntity = UserEntityBuilder.one().withId("1L").now();
         RequestMoviePaymentDTO requestMoviePaymentDTO = new RequestMoviePaymentDTO();
-        requestMoviePaymentDTO.setUserId("2L");
 
-        Assertions.assertThrows(UserNotFoundException.class, () -> moviePaymentService.post(requestMoviePaymentDTO));
+        Assertions.assertThrows(UserNotFoundException.class, () -> moviePaymentService.post("email Teste", requestMoviePaymentDTO));
     }
 
     @Test
@@ -83,9 +82,9 @@ class MoviePaymentServiceTest {
         requestMoviePaymentDTO.setCreditCardNumber("not found");
         UserEntity userEntity = UserEntityBuilder.one().now();
 
-        Mockito.when(userRepository.findById(any())).thenReturn(Optional.ofNullable(userEntity));
+        Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.ofNullable(userEntity));
 
-        Assertions.assertThrows(CreditCardNotFoundException.class, () -> moviePaymentService.post(requestMoviePaymentDTO));
+        Assertions.assertThrows(CreditCardNotFoundException.class, () -> moviePaymentService.post("teste", requestMoviePaymentDTO));
     }
 
 
@@ -104,10 +103,10 @@ class MoviePaymentServiceTest {
         ResponseMovieByIdDTO responseMovieByIdDTO = buildResponseMovieById();
         responseMovieByIdDTO.getJustWatch().setBuy(null);
 
-        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
+        Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieByIdDTO);
 
-        Assertions.assertThrows(BuyMovieNotFoundException.class, () -> moviePaymentService.post(moviePayment));
+        Assertions.assertThrows(BuyMovieNotFoundException.class, () -> moviePaymentService.post("teste", moviePayment));
     }
 
     @Test
@@ -124,10 +123,10 @@ class MoviePaymentServiceTest {
         ResponseMovieByIdDTO responseMovieByIdDTO = buildResponseMovieById();
         responseMovieByIdDTO.getJustWatch().setRent(null);
 
-        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
+        Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieByIdDTO);
 
-        Assertions.assertThrows(RentMovieNotFoundException.class, () -> moviePaymentService.post(moviePayment));
+        Assertions.assertThrows(RentMovieNotFoundException.class, () -> moviePaymentService.post("teste", moviePayment));
     }
 
     @Test
@@ -141,12 +140,12 @@ class MoviePaymentServiceTest {
         ResponseAuthDTO responseAuthDTO = ResponseAuthBuilder.one().now();
         ResponsePaymentDTO responsePaymentDTO = buildResponsePaymentFailed();
 
-        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
+        Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieByIdDTO);
         Mockito.when(gatewayProxy.getAuthToken(any())).thenReturn(responseAuthDTO);
         Mockito.when(gatewayProxy.getPayment(any(), any())).thenReturn(responsePaymentDTO);
 
-        ResponseGatewayReprovedDTO responseGatewayReprovedDTO = moviePaymentService.post(moviePayment);
+        ResponseGatewayReprovedDTO responseGatewayReprovedDTO = moviePaymentService.post("teste", moviePayment);
 
         Assertions.assertEquals(responsePaymentDTO.getStatus(), responseGatewayReprovedDTO.getPaymentStatus());
         Assertions.assertEquals(responsePaymentDTO.getAuthorization().getReasonMessage(), responseGatewayReprovedDTO.getCause());
@@ -163,12 +162,12 @@ class MoviePaymentServiceTest {
         ResponseAuthDTO responseAuthDTO = ResponseAuthBuilder.one().now();
         ResponsePaymentDTO responsePaymentDTO = buildResponsePaymentApproved();
 
-        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(userEntity));
+        Mockito.when(userRepository.findByEmail(any())).thenReturn(Optional.of(userEntity));
         Mockito.when(movieSearchProxy.getMovieById(any())).thenReturn(responseMovieByIdDTO);
         Mockito.when(gatewayProxy.getAuthToken(any())).thenReturn(responseAuthDTO);
         Mockito.when(gatewayProxy.getPayment(any(), any())).thenReturn(responsePaymentDTO);
 
-        ResponseGatewayReprovedDTO responseGatewayApproved = moviePaymentService.post(moviePayment);
+        ResponseGatewayReprovedDTO responseGatewayApproved = moviePaymentService.post("teste", moviePayment);
         Assertions.assertEquals(responsePaymentDTO.getStatus(), responseGatewayApproved.getPaymentStatus());
         Assertions.assertEquals(responsePaymentDTO.getAuthorization().getReasonMessage(), responseGatewayApproved.getCause());
 

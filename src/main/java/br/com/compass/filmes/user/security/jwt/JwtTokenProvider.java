@@ -1,6 +1,6 @@
 package br.com.compass.filmes.user.security.jwt;
 
-import br.com.compass.filmes.user.dto.security.Token;
+import br.com.compass.filmes.user.dto.security.TokenDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -40,16 +40,16 @@ public class JwtTokenProvider{
         algorithm = Algorithm.HMAC256(secretKey.getBytes());
     }
 
-    public Token createAccessToken(String email, List<String> roles) {
+    public TokenDTO createAccessToken(String email, List<String> roles) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
         var accessToken = getAccessToken(email, roles, now, validity);
         var refreshToken = getRefreshToken(email, roles, now);
 
-        return new Token(email, true, now, validity, accessToken, refreshToken);
+        return new TokenDTO(email, true, now, validity, accessToken, refreshToken);
     }
 
-    public Token refreshToken(String refreshToken) {
+    public TokenDTO refreshToken(String refreshToken) {
         if (refreshToken.contains("Bearer ")) refreshToken =
                 refreshToken.substring("Bearer ".length());
 

@@ -1,20 +1,21 @@
 package br.com.compass.filmes.user.service;
 
-import br.com.compass.filmes.user.dto.security.AccountCredentials;
-import br.com.compass.filmes.user.dto.security.Token;
+import br.com.compass.filmes.user.dto.security.AccountCredentialsDTO;
+import br.com.compass.filmes.user.dto.security.TokenDTO;
 import br.com.compass.filmes.user.entities.UserEntity;
 import br.com.compass.filmes.user.exceptions.UserAuthInvalidException;
 import br.com.compass.filmes.user.repository.UserRepository;
 import br.com.compass.filmes.user.security.jwt.JwtTokenProvider;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-@Slf4j
+import java.util.Objects;
+
 @Service
 public class AuthService {
 
@@ -27,7 +28,7 @@ public class AuthService {
     @Autowired
     private UserRepository repository;
 
-    public ResponseEntity signin(AccountCredentials data) {
+    public TokenDTO signin(AccountCredentialsDTO data) {
         try {
             String email = data.getEmail();
             String password = data.getPassword();
@@ -35,27 +36,27 @@ public class AuthService {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password));
 
-            UserEntity user = repository.findByEmail(email);
-            var tokenResponse = new Token();
-            if (user != null) {
-                tokenResponse = tokenProvider.createAccessToken(email, user.getRoles());
-            } else {
-                throw new UsernameNotFoundException("Email " + email + " not found!");
-            }
-            return ResponseEntity.ok(tokenResponse);
+            UserEntity user = repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email " + email + " not found!"));
+            return tokenProvider.createAccessToken(email, user.getRoles());
         } catch (Exception e) {
             throw new UserAuthInvalidException("Invalid email / password supplied!");
         }
     }
 
-    public ResponseEntity refreshToken(String email, String refreshToken) {
-        var user = repository.findByEmail(email);
-        var tokenResponse = new Token();
-        if (user != null) {
-            tokenResponse = tokenProvider.refreshToken(refreshToken);
-        } else {
-            throw new UsernameNotFoundException("Email " + email + " not found!");
+    public TokenDTO refreshToken(String email, String refreshToken) {
+        boolean isInvalidParams = allParamsIsNull(email, refreshToken);
+        if (isInvalidParams) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(tokenResponse);
+        UserEntity user = repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email " + email + " not found!"));
+        try {
+            return tokenProvider.refreshToken(refreshToken);
+        } catch (Exception exception) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private boolean allParamsIsNull(String email, String refreshToken) {
+        return Objects.isNull(email) || email.isBlank() || Objects.isNull(refreshToken) || refreshToken.isBlank();
     }
 }

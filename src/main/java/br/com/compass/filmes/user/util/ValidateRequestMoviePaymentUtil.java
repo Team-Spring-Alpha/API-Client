@@ -1,6 +1,6 @@
 package br.com.compass.filmes.user.util;
 
-import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePaymentDTO;
+import br.com.compass.filmes.user.dto.moviepayment.RequestMoviePaymentDTO;
 import br.com.compass.filmes.user.exceptions.RentAndBuyMoviesEmptyException;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +17,10 @@ public class ValidateRequestMoviePaymentUtil {
     }
 
     private boolean isRentListEmptyOrNull(RequestMoviePaymentDTO requestMoviePaymentDTO) {
-        return requestMoviePaymentDTO.getMovies().getRent() == null || requestMoviePaymentDTO.getMovies().getRent().isEmpty();
+        return requestMoviePaymentDTO.getMoviesRent() == null || requestMoviePaymentDTO.getMoviesRent().isEmpty();
     }
 
     private boolean isBuyListEmptyOrNull(RequestMoviePaymentDTO requestMoviePaymentDTO) {
-        return requestMoviePaymentDTO.getMovies().getBuy() == null || requestMoviePaymentDTO.getMovies().getBuy().isEmpty();
+        return requestMoviePaymentDTO.getMoviesBuy() == null || requestMoviePaymentDTO.getMoviesBuy().isEmpty();
     }
 }

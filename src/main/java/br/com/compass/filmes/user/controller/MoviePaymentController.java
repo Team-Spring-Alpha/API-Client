@@ -1,6 +1,6 @@
 package br.com.compass.filmes.user.controller;
 
-import br.com.compass.filmes.user.dto.movie.manager.RequestMoviePaymentDTO;
+import br.com.compass.filmes.user.dto.moviepayment.RequestMoviePaymentDTO;
 import br.com.compass.filmes.user.dto.payment.response.ResponseGatewayReprovedDTO;
 import br.com.compass.filmes.user.service.MoviePaymentService;
 import io.swagger.annotations.ApiOperation;
@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +31,9 @@ public class MoviePaymentController {
             @ApiResponse(code = 404, message = "Not Found")
     })
     @PostMapping
-    public ResponseEntity<ResponseGatewayReprovedDTO> post(@Valid @RequestBody RequestMoviePaymentDTO requestMoviePaymentDTO){
-        ResponseGatewayReprovedDTO responseGateway = moviePaymentService.post(requestMoviePaymentDTO);
+    public ResponseEntity<ResponseGatewayReprovedDTO> post(Authentication authentication, @Valid @RequestBody RequestMoviePaymentDTO requestMoviePaymentDTO){
+        String emailUser = authentication.getName();
+        ResponseGatewayReprovedDTO responseGateway = moviePaymentService.post(emailUser, requestMoviePaymentDTO);
         if(responseGateway.getPaymentStatus().equals("REPROVED")){
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(responseGateway);
         }

@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Token {
+public class TokenDTO {
 
     private String email;
     private Boolean authenticated;

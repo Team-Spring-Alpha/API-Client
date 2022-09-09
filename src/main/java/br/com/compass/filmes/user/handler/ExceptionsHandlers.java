@@ -1,7 +1,6 @@
 package br.com.compass.filmes.user.handler;
 
 import br.com.compass.filmes.user.exceptions.*;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -9,6 +8,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -149,5 +149,19 @@ public class ExceptionsHandlers {
         ExceptionResponseDto responseDto = new ExceptionResponseDto(userAuthInvalidException.getMessage(), "email or password incorrect");
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+
+    @ExceptionHandler(StoreNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerStoreNotFoundException(StoreNotFoundException storeNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(storeNotFoundException.getMessage(), "movie.store");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handlerUsernameNotFoundException(UsernameNotFoundException usernameNotFoundException) {
+        ExceptionResponseDto responseDto = new ExceptionResponseDto(usernameNotFoundException.getMessage(),  "username.param");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
     }
 }
