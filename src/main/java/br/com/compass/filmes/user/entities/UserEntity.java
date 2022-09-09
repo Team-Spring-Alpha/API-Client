@@ -42,6 +42,10 @@ public class UserEntity implements UserDetails, Serializable {
     @Field("userCategories")
     private List<GenresEnum> categories;
 
+    @Field("permission")
+    private List<Permission> permissions;
+
+    /*
     public List<String> getRoles() {
         List<String> roles = new ArrayList<>();
         roles.add(getAuthorities().toString());
@@ -54,6 +58,23 @@ public class UserEntity implements UserDetails, Serializable {
         list.add(new SimpleGrantedAuthority("ROLE_USER"));
         return list;
     }
+
+
+     */
+
+    public List<String> getRoles() {
+        List<String> roles = new ArrayList<>();
+        for (Permission permission : permissions) {
+            roles.add(permission.getDescription());
+        }
+        return roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.permissions;
+    }
+
 
     @Override
     public String getPassword() {
